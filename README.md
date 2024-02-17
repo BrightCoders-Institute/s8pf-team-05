@@ -107,3 +107,18 @@ Crea una aplicación que facilite la gestión de propiedades y arrendamientos pa
 #### Won't Have (No tendrá):
 - Funcionalidades avanzadas no esenciales para el MVP.
 - Mejoras de rendimiento o características adicionales que no son críticas para la funcionalidad básica de la aplicación.
+
+### Diseño de Aplicación.
+![Date](./design/Date.png)
+![Detail](./design/Detail.png)
+![Home](./design/Home.png)
+![Inbox](./design/Inbox.png)
+![Profile](./design/Profile.png)
+![SelectCity](./design/SelectCity.png)
+![SignIn](./design/SignIn.png)
+![Trips](./design/Trips.png)
+![WishList](./design/WishList.png)
+
+### Modelado de Base de Datos.
+
+![DataBase](./design/Diagrama%20Nosql%20Erbienvi.jpeg)
