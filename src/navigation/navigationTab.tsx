@@ -11,18 +11,19 @@ import Trips from '../screens/Trips';
 import Wishlist from '../screens/Wishlist';
 
 
+
 const MyStack = () => {
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
   return (
     <Tab.Navigator
-    initialRouteName='Home'
+    //initialRouteName="Home"
     screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#6F2DBD'
+        headerShown: true, //false
+        tabBarActiveTintColor: '#6F2DBD',
         }}>
-        
+
         {/* Inbox */}
         <Tab.Screen
             options={{
