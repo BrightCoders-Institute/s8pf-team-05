@@ -3,11 +3,9 @@ import React, {useState} from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Carousel from 'react-native-snap-carousel';
 import SearchBar from '../components/Explore/SearchBar';
+import CategoryButton from '../components/Explore/CategoryButton';
 
 const Explore = () => {
-  const goToSelectCity = () => {
-    console.log('go to select city');
-  };
 
   const goToCategory = (category: string) => {
     console.log('go to category: ', category);
@@ -76,19 +74,13 @@ const Explore = () => {
         <View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer}>
             {categories.map((category, index) => (
-              <TouchableOpacity
+              <CategoryButton
                 key={index}
+                name={category.name}
+                icon={category.icon}
                 onPress={() => goToCategory(category.name)}
-                style={[
-                  styles.categoryButton,
-                  selectedCategory === category.name && styles.selectedCategoryButton,
-                ]}
-              >
-                <View style={styles.categoryContent}>
-                  <Icon name={category.icon} size={24} color="black" style={styles.categoryIcon} />
-                  <Text style={styles.categoryText}>{category.name}</Text>
-                </View>
-              </TouchableOpacity>
+                isSelected={category.name === selectedCategory}
+              />
             ))}
           </ScrollView>
           <View >
