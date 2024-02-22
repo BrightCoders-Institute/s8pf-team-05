@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import SelectCity from '../screens/SelectCity'
 import MyStack from './navigationTab';
+import Home from '../screens/Home';
 
 
 
@@ -13,7 +14,7 @@ const Navigate = () => {
 const Stack = createNativeStackNavigator();
 
   return (
-    <Stack.Navigator
+    <Stack.Navigator initialRouteName='SelectCity'
         screenOptions={{
             headerShown: false,
             }}
@@ -26,6 +27,10 @@ const Stack = createNativeStackNavigator();
             <Stack.Screen
                 name='SelectCity'
                 component={SelectCity}
+            />
+            <Stack.Screen
+                name='Home'
+                component={Home}
             />
     </Stack.Navigator>
   )
