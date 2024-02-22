@@ -3,7 +3,12 @@ import React from 'react'
 import {useState} from 'react'
 import { StyleSheet, Text, View, TextInput} from 'react-native'
 
-const InputUser = ({placeholder, secure, value,}) => {
+interface InputUserProps {
+    placeholder: string;
+    secure: boolean;
+    value: string;
+
+const InputUser = ({placeholder, secure, value,}: InputUserProps) => {
     const [isFocused, setIsFocused] = useState(false);
 
   return (

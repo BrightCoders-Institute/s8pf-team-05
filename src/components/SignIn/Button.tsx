@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     },
     signinBtn: {
         alignItems: 'center',
-        width: 310,
+        width: 320,
         height: 45,
         backgroundColor: '#6F2DBD',
         borderRadius: 8,

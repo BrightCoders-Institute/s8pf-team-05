@@ -1,11 +1,12 @@
-/* eslint-disable */
+
 import React from 'react'
 import {useState} from 'react'
 import { StyleSheet, Text, View, TextInput} from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const InputPassword = ({placeholder, secure, value,}) => {
     const [isFocused, setIsFocused] = useState(false);
-
+    const [passwordVisible, setPasswordVisible] = useState(true)
   return (
     <View style={styles.input_container}>
         <TextInput style={[styles.input_text, isFocused ? styles.isActive: styles.inActive,]}
@@ -13,9 +14,11 @@ const InputPassword = ({placeholder, secure, value,}) => {
             //value={value}
             placeholder={placeholder}
             placeholderTextColor={'#7C7C7C'}
-            secureTextEntry={secure}
+            secureTextEntry={passwordVisible}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}/>
+            onBlur={() => setIsFocused(false)}
+            />
+            <Icon name={passwordVisible ? "eye-off" : "eye"} size={27} color="#A663CC" style={styles.icon} onPress={() => setPasswordVisible(!passwordVisible)}/>
     </View>
   )
 }
@@ -23,7 +26,7 @@ const InputPassword = ({placeholder, secure, value,}) => {
 const styles = StyleSheet.create({
     input_container: {
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-end',
     },
     input_text: {
         height: 60,
@@ -43,7 +46,12 @@ const styles = StyleSheet.create({
     },
     inActive:{
         borderTopWidth: 0,
-    }
+    },
+    icon: {
+        textAlign: 'center',
+        position: 'absolute',
+        paddingRight: 12,
+    },
 })
 
 export default InputPassword
