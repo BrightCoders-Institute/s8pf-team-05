@@ -2,6 +2,7 @@ import { View, TouchableOpacity, Text, ScrollView, StyleSheet, Image } from 'rea
 import React, {useState} from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Carousel from 'react-native-snap-carousel';
+import SearchBar from '../components/Explore/SearchBar';
 
 const Explore = () => {
   const goToSelectCity = () => {
@@ -39,12 +40,16 @@ const Explore = () => {
 
     return properties.map(property => (
       <View key={property.id} style={styles.propertyContainer}>
-        <Carousel
-          data={property.images}
-          renderItem={renderItem}
-          sliderWidth={310}
-          itemWidth={300}
-        />
+        <View style={styles.carouselCont}>
+
+          <Carousel
+            data={property.images}
+            renderItem={renderItem}
+            sliderWidth={300}
+            itemWidth={300}
+            
+          />
+        </View>
         <View style={styles.favoriteButtonContainer}>
           <TouchableOpacity style={styles.favoriteButton}>
             <Icon name="heart" size={24} color="red" />
@@ -66,12 +71,7 @@ const Explore = () => {
   return (
     <ScrollView >
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TouchableOpacity onPress={goToSelectCity} style={styles.searchButton}>
-          <Icon name="search" size={20} />
-          <Text style={styles.buttonText}>Where you going?</Text>
-        </TouchableOpacity>
-      </View>
+      <SearchBar />
       <View>
         <View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer}>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    paddingTop: 50,
+    paddingTop: 20,
   },
   searchContainer: {
     marginHorizontal: 35,
@@ -128,6 +128,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     elevation: 4, 
+  },
+  carouselCont: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     marginLeft: 10,
@@ -162,6 +167,7 @@ const styles = StyleSheet.create({
     
   },
   propertiesContainer: {
+    flex: 1,
     alignContent: 'center',
     marginTop: 20,
     marginHorizontal: 35,
@@ -171,6 +177,8 @@ const styles = StyleSheet.create({
   },
   propertyInfo: {
     marginTop: 10,
+    width: 290,
+    alignSelf: 'center',
   },
   propertyLocation: {
     fontSize: 16,
@@ -193,7 +201,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   slide: {
-    width: 305,
+    width: 300,
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
