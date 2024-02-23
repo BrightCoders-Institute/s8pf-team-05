@@ -9,6 +9,7 @@ import Inbox from '../screens/Inbox';
 import Profile from '../screens/Profile';
 import Trips from '../screens/Trips';
 import Wishlist from '../screens/Wishlist';
+import Explore from '../screens/Explore';
 
 
 const MyStack = () => {
@@ -51,7 +52,7 @@ const Tab = createBottomTabNavigator();
                     ),
                 }}
             name='Explore'
-            component={Home}
+            component={Explore}
         />
         {/* Wishlist */}
         <Tab.Screen
