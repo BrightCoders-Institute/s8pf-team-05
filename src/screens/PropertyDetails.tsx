@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
 import HostInfo from '../components/PropertyDetails/HostInfo';
+import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
 
 const PropertyDetailsScreen: React.FC = () => {
     const propertyImages = ['https://i.pinimg.com/564x/d6/18/18/d618188c4722ca5cc938ee3dde7b09cc.jpg',
@@ -16,29 +17,39 @@ const PropertyDetailsScreen: React.FC = () => {
     const bathrooms = 2; 
     const averageRating = 4.5;
     const totalReviews = 10;
-    const hostName = 'Laura';
+    const hostName = 'Mar';
     const hostImage = require('../images/avatar-tpdne.jpg');
     const propertyDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+    const pricePerNight = '$1000';
+
+    const handleReservePress = () => {
+        console.log('Botón de reservar presionado');
+    };
+
     return (
-    <ScrollView style={styles.container}>
-        <View>
-            <CarouselComponent images={propertyImages} />
+        <View style={styles.container}>
+            <ScrollView>
+                <View>
+                    <CarouselComponent images={propertyImages} />
+                </View>
+                <View style={styles.propertyInfo}>
+                    <Text style={styles.propertyName}>{propertyName}</Text>
+                    <Text style={styles.propertyLocation}>{propertyLocation}</Text>
+                    <Text style={styles.propertyDetails}>
+                        Huespedes: {guests} · Habitaciones: {bedrooms} · Camas: {beds} · Baños: {bathrooms}
+                    </Text>
+                    <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
+                    <HostInfo hostName={hostName} hostImage={hostImage} />
+                </View>
+                <View style={styles.propertyDescription}>
+                    <Text style={styles.descriptionTitle}>Descripción:</Text>
+                    <Text style={styles.descriptionText}>{propertyDescription}</Text>
+                </View>
+            </ScrollView>
+            <View style={styles.bottomTab}>
+                <PropertyBottomTab pricePerNight={pricePerNight} onReservePress={handleReservePress} />
+            </View>
         </View>
-        <View style={styles.propertyInfo}>
-            <Text style={styles.propertyName}>{propertyName}</Text>
-            <Text style={styles.propertyLocation}>{propertyLocation}</Text>
-            <Text style={styles.propertyDetails}>
-                Huespedes: {guests} · Habitaciones: {bedrooms} · Camas: {beds} · Baños: {bathrooms}
-            </Text>
-            <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
-            <HostInfo hostName={hostName} hostImage={hostImage} />
-        </View>
-        <View style={styles.propertyDescription}>
-          <Text style={styles.descriptionTitle}>Descripción:</Text>
-          <Text style={styles.descriptionText}>{propertyDescription}</Text>
-        </View>
-    </ScrollView>
-    
     );
 };
 
@@ -66,15 +77,23 @@ const styles = StyleSheet.create({
     }, 
     propertyDescription: {
         margin: 20,
+        marginBottom: 100,
     },
     descriptionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 5,
+        color: 'black',
     },
-        descriptionText: {
+    descriptionText: {
         fontSize: 14,
-    },  
-  });
-  
+    },
+    bottomTab: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+});
+
 export default PropertyDetailsScreen;
