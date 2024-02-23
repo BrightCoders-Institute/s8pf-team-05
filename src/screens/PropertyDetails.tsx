@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import CarouselComponent from '../components/Carousel';
-import RatingBox from '../components/RatingBox';
+import CarouselComponent from '../components/PropertyDetails/Carousel';
+import RatingBox from '../components/PropertyDetails/RatingBox';
 
 const PropertyDetailsScreen: React.FC = () => {
     const propertyImages = ['https://i.pinimg.com/564x/d6/18/18/d618188c4722ca5cc938ee3dde7b09cc.jpg',
