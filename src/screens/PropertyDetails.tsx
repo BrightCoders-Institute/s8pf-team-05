@@ -18,6 +18,7 @@ const PropertyDetailsScreen: React.FC = () => {
     const totalReviews = 10;
     const hostName = 'Laura';
     const hostImage = require('../images/avatar-tpdne.jpg');
+    const propertyDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
     return (
     <ScrollView style={styles.container}>
         <View>
@@ -31,6 +32,10 @@ const PropertyDetailsScreen: React.FC = () => {
             </Text>
             <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
             <HostInfo hostName={hostName} hostImage={hostImage} />
+        </View>
+        <View style={styles.propertyDescription}>
+          <Text style={styles.descriptionTitle}>Descripción:</Text>
+          <Text style={styles.descriptionText}>{propertyDescription}</Text>
         </View>
     </ScrollView>
     
@@ -58,7 +63,18 @@ const styles = StyleSheet.create({
     propertyDetails: {
         fontSize: 14,
         marginTop: 5,
-    },    
+    }, 
+    propertyDescription: {
+        margin: 20,
+    },
+    descriptionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+        descriptionText: {
+        fontSize: 14,
+    },  
   });
   
 export default PropertyDetailsScreen;

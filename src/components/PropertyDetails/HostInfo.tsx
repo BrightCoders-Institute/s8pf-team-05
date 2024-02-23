@@ -39,10 +39,12 @@ const styles = StyleSheet.create({
   },
   hostName: {
     fontSize: 14,
+    color: 'gray',
   },
   hostTitle: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'black',
   },
   hostInfoContainer: {
     marginTop: 20,
