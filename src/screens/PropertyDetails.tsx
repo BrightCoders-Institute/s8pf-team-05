@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
+import HostInfo from '../components/PropertyDetails/HostInfo';
 
 const PropertyDetailsScreen: React.FC = () => {
     const propertyImages = ['https://i.pinimg.com/564x/d6/18/18/d618188c4722ca5cc938ee3dde7b09cc.jpg',
@@ -13,8 +14,10 @@ const PropertyDetailsScreen: React.FC = () => {
     const bedrooms = 2; 
     const beds = 3; 
     const bathrooms = 2; 
-    const averageRating = 4.5; // Ejemplo de calificación promedio
-    const totalReviews = 10; // Ejemplo de cantidad total de reseñas
+    const averageRating = 4.5;
+    const totalReviews = 10;
+    const hostName = 'Laura';
+    const hostImage = require('../images/avatar-tpdne.jpg');
     return (
     <ScrollView style={styles.container}>
         <View>
@@ -27,6 +30,7 @@ const PropertyDetailsScreen: React.FC = () => {
                 Huespedes: {guests} · Habitaciones: {bedrooms} · Camas: {beds} · Baños: {bathrooms}
             </Text>
             <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
+            <HostInfo hostName={hostName} hostImage={hostImage} />
         </View>
     </ScrollView>
     
