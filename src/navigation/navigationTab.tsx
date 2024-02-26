@@ -18,13 +18,14 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
   return (
+    
     <Tab.Navigator
     initialRouteName='Home'
     screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#6F2DBD'
         }}>
-        
+
         {/* Inbox */}
         <Tab.Screen
             options={{

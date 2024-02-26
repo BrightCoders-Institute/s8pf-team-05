@@ -1,7 +1,13 @@
+<<<<<<< HEAD
+import { StyleSheet, Text, View, Button } from 'react-native'
+import React from 'react'
+import { useNavigation } from '@react-navigation/native';
+=======
 /* eslint-disable */
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import InboxItem from '../components/Inbox/InboxItem'
+>>>>>>> e8435414829e74aeee2305c0d552ed9b1e5d0de5
 
 const Inbox = () => {
   const img1 = 'https://www.perfocal.com/blog/content/images/2021/01/Perfocal_17-11-2019_TYWFAQ_100_standard-3.jpg';
