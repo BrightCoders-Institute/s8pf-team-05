@@ -3,7 +3,6 @@ import React from 'react'
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-
 import SelectCity from '../screens/SelectCity'
 import MyStack from './navigationTab';
 import Home from '../screens/Home';
@@ -15,11 +14,11 @@ const Stack = createNativeStackNavigator();
 
   return (
     <Stack.Navigator initialRouteName='SelectCity'
+
         screenOptions={{
             headerShown: false,
             }}
     >
-
             <Stack.Screen
                 name='MyStack'
                 component={MyStack}
@@ -29,8 +28,8 @@ const Stack = createNativeStackNavigator();
                 component={SelectCity}
             />
             <Stack.Screen
-                name='Home'
-                component={Home}
+                name='Signin'
+                component={Signin}
             />
     </Stack.Navigator>
   )

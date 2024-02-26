@@ -3,14 +3,15 @@ import React from 'react'
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-
 import Home from '../screens/Home'
 import Inbox from '../screens/Inbox';
 import Profile from '../screens/Profile';
 import Trips from '../screens/Trips';
 import Wishlist from '../screens/Wishlist';
+
 import PropertyDetails from '../screens/PropertyDetails';
 import Explore from '../screens/Explore';
+
 
 
 const MyStack = () => {
@@ -18,7 +19,6 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
   return (
-    
     <Tab.Navigator
     initialRouteName='Home'
     screenOptions={{
@@ -34,7 +34,7 @@ const Tab = createBottomTabNavigator();
                     ),
             }}
             name='Inbox'
-            component={PropertyDetails}
+            component={Inbox}
         />
         {/* Trips */}
         <Tab.Screen
