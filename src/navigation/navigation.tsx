@@ -9,6 +9,7 @@ import Inbox from '../screens/Inbox';
 import Profile from '../screens/Profile';
 import Trips from '../screens/Trips';
 import Wishlist from '../screens/Wishlist';
+import PropertyDetails from '../screens/PropertyDetails';
 import Explore from '../screens/Explore';
 
 
@@ -32,7 +33,7 @@ const Tab = createBottomTabNavigator();
                     ),
             }}
             name='Inbox'
-            component={Inbox}
+            component={PropertyDetails}
         />
         {/* Trips */}
         <Tab.Screen
