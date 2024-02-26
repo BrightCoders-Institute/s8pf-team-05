@@ -8,7 +8,6 @@ import Navigate from './src/navigation/navi'
 const App = () => {
   return (
     <NavigationContainer>
-        <Navigate/>
       <MyStack />
     </NavigationContainer>
   );

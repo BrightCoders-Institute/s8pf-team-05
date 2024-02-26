@@ -7,6 +7,7 @@ interface InputUserProps {
     placeholder: string;
     secure: boolean;
     value: string;
+}
 
 const InputUser = ({placeholder, secure, value,}: InputUserProps) => {
     const [isFocused, setIsFocused] = useState(false);
