@@ -3,12 +3,14 @@ import React from 'react'
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-import Home from '../screens/Home';
+import Home from '../screens/Home'
 import Inbox from '../screens/Inbox';
 import Profile from '../screens/Profile';
 import Trips from '../screens/Trips';
 import Wishlist from '../screens/Wishlist';
+
+import PropertyDetails from '../screens/PropertyDetails';
+import Explore from '../screens/Explore';
 
 
 
@@ -18,10 +20,10 @@ const Tab = createBottomTabNavigator();
 
   return (
     <Tab.Navigator
-    initialRouteName="Home"
+    initialRouteName='Home'
     screenOptions={{
-        headerShown: true, //false
-        tabBarActiveTintColor: '#6F2DBD',
+        headerShown: false,
+        tabBarActiveTintColor: '#6F2DBD'
         }}>
 
         {/* Inbox */}
@@ -52,7 +54,7 @@ const Tab = createBottomTabNavigator();
                     ),
                 }}
             name='Explore'
-            component={Home}
+            component={Explore}
         />
         {/* Wishlist */}
         <Tab.Screen
