@@ -59,9 +59,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     label:{
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 5,
+        fontSize: 14,
         color: 'gray',
     },
     horizontalLine: {
