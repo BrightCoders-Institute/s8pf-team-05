@@ -11,7 +11,7 @@ import Wishlist from '../screens/Wishlist';
 
 import PropertyDetails from '../screens/PropertyDetails';
 import Explore from '../screens/Explore';
-
+import HostModeScreen from '../screens/HostMode';
 
 
 const MyStack = () => {
@@ -34,7 +34,7 @@ const Tab = createBottomTabNavigator();
                     ),
             }}
             name='Inbox'
-            component={Inbox}
+            component={HostModeScreen}
         />
         {/* Trips */}
         <Tab.Screen

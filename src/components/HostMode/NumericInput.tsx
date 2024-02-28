@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface NumericInputProps {
   label: string;
@@ -10,48 +11,64 @@ interface NumericInputProps {
 
 const NumericInput: React.FC<NumericInputProps> = ({ label, value, onIncrease, onDecrease }) => {
   return (
-    <View style={styles.inputContainer}>
-      <Text>{label}</Text>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.input}
-          value={value.toString()}
-          keyboardType="numeric"
-          onChangeText={value => {}}
-        />
-        <TouchableOpacity style={styles.button} onPress={onIncrease}>
-          <Text>+</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onDecrease}>
-          <Text>-</Text>
-        </TouchableOpacity>
-      </View>
+    <View>
+        <View style={styles.inputContainer}>
+            <Text style={styles.label}>{label}</Text>
+            <View style={styles.inputWrapper}>
+            
+                <TouchableOpacity style={styles.button} onPress={onIncrease}>
+                    <Icon name="add-circle-outline" size={30} color="gray" />
+                </TouchableOpacity>
+                <TextInput
+                style={styles.input}
+                value={value.toString()}
+                keyboardType="numeric"
+                onChangeText={value => {}}
+                />
+                <TouchableOpacity style={styles.button} onPress={onDecrease}>
+                    <Icon name="remove-circle-outline" size={30} color="gray" />
+                </TouchableOpacity>
+            </View>    
+        </View>
+        <View style={styles.horizontalLine}>
+        </View>
     </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    marginBottom: 20,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    flex: 1,
-  },
-  button: {
-    backgroundColor: 'lightgray',
-    borderRadius: 5,
-    padding: 10,
-    marginLeft: 10,
-  },
+    inputContainer: {
+        marginTop: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 5,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        
+    },
+    input: {
+        height: 40,
+        paddingHorizontal: 5,
+        textAlign: 'center',
+    },
+    button: {
+        backgroundColor: 'transparent',
+    },
+    label:{
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: 'gray',
+    },
+    horizontalLine: {
+        height: 1,
+        backgroundColor: 'gray',
+        marginTop: 3,
+    },
 });
 
 export default NumericInput;
