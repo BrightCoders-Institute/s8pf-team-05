@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     date_container:{
-        height: 550,
+        height: 460,
         marginVertical: 10,
         padding: 10,
         borderRadius: 15,

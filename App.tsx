@@ -3,6 +3,7 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import MyStack from './src/navigation/navigationTab'
 import Navigate from './src/navigation/navi'
+//import DateSelect from './src/screens/DateSelect'
 
 const App = () => {
   return (

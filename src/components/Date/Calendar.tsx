@@ -19,10 +19,10 @@ const Calendar: React.FC<CalendarProps> = ({start, end, onDateChange, clearDates
     const onDateChanges = (date:Date, type:string) => {
         if(type === 'END_DATE'){
             onDateChange(start, date)
-            console.log(date)
+            //console.log(date)
         }else{
             onDateChange(date, end)
-            console.log(date)
+            //console.log(date)
         }
     }
   return (
@@ -48,10 +48,10 @@ const Calendar: React.FC<CalendarProps> = ({start, end, onDateChange, clearDates
             selectedStartDate={selectedStartDate}
             selectedEndDate={selectedEndDate}
         />
-        <View>
+        {/* <View>
           <Text style={styles.date_txt}>START DATE:{start ? start.toDateString() : null}</Text>
           <Text style={styles.date_txt}>END DATE:{end ? end.toDateString() : null}</Text>
-        </View>
+        </View> */}
     </View>
   )
 }
