@@ -1,9 +1,9 @@
+
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import MyStack from './src/navigation/navigationTab'
 import Navigate from './src/navigation/navi'
-//import DateSelect from './src/screens/DateSelect'
 
 const App = () => {
   return (
@@ -14,5 +14,3 @@ const App = () => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({})
