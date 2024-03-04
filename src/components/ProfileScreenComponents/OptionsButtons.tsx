@@ -1,24 +1,27 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet, View, TouchableNativeFeedback} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 type Props = {
   icon: string;
   text: string;
+  onPress: () => void;
 };
 
-export default function OptionsButtons({icon, text}: Props) {
+export default function OptionsButtons({icon, text, onPress}: Props) {
   return (
-    <View style={styles.container}>
-      <Icon name={icon} size={30} color={'black'} />
-      <Text style={styles.text}>{text}</Text>
-      <Icon
-        style={styles.arrow}
-        name="chevron-forward-outline"
-        size={20}
-        color={'black'}
-      />
-    </View>
+    <TouchableNativeFeedback onPress={onPress}>
+      <View style={styles.container}>
+        <Icon name={icon} size={30} color={'black'} />
+        <Text style={styles.text}>{text}</Text>
+        <Icon
+          style={styles.arrow}
+          name="chevron-forward-outline"
+          size={20}
+          color={'black'}
+        />
+      </View>
+    </TouchableNativeFeedback>
   );
 }
 

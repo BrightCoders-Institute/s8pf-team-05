@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 import OptionsButtons from '../components/ProfileScreenComponents/OptionsButtons';
 
-const Profile = () => {
+const Profile = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -27,12 +27,26 @@ const Profile = () => {
       <OptionsButtons
         icon="person-circle-outline"
         text="Personal Information"
+        onPress={() => {
+          navigation.navigate('SelectCity'); //Cambiar a screen Personal Information
+        }}
       />
-      <OptionsButtons icon="shield-outline" text="Login & Security" />
-      <OptionsButtons icon="diamond-outline" text="Host mode" />
+      <OptionsButtons
+        icon="diamond-outline"
+        text="Host mode"
+        onPress={() => {
+          navigation.navigate('SelectCity'); //Cambiar a screen Host mode.
+        }}
+      />
 
       <View style={styles.logoutContainer}>
-        <Text style={styles.logout}>Log out</Text>
+        <Text
+          style={styles.logout}
+          onPress={() => {
+            navigation.replace('Signin');
+          }}>
+          Log out
+        </Text>
       </View>
     </View>
   );
