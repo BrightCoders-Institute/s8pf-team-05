@@ -1,3 +1,4 @@
+
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -6,7 +7,7 @@ const FavoriteButton: React.FC = () => {
     return (
         <View style={styles.favoriteButtonContainer}>
             <TouchableOpacity style={styles.favoriteButton}>
-                <Icon name="heart-outline" size={24} color="black" />
+                <Icon name="heart" size={24} color="rgba(68, 68, 68, 0.6)"/>
             </TouchableOpacity>
         </View>
     )
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
         top: 20, 
         right: 0, 
     },
-        favoriteButton: {
+    favoriteButton: {
         padding: 5,
     },
 })

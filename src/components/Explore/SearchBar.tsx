@@ -1,3 +1,4 @@
+
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,7 +11,7 @@ const SearchBar: React.FC = () => {
     return (
         <View style={styles.searchContainer}>
             <TouchableOpacity onPress={goToSelectCity} style={styles.searchButton}>
-            <Icon name="search" size={20} />
+            <Icon name="search" size={20} color={'#444444'}/>
             <Text style={styles.buttonText}>Where you going?</Text>
             </TouchableOpacity>
         </View>
@@ -37,7 +38,8 @@ const styles = StyleSheet.create({
       },
       buttonText: {
         marginLeft: 10,
-        fontSize: 18,
+        fontSize: 15,
+        color: '#444444',
       },
 })
 

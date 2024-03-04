@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import FavoriteButton from './FavoriteButton';
@@ -76,19 +77,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     propertyLocation: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: 'bold',
+        color: '#444444',
     },
     propertyDescription: {
-        fontSize: 14,
+        fontSize: 13,
         marginTop: 5,
+        color: '#7C7C7C',
     },
     propertyDateAvailable: {
-        fontSize: 14,
+        fontSize: 13,
+        color: '#7C7C7C',
     },
     propertyPrice: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: 'bold',
+        color: '#444444',
     },
     slide: {
         width: 300,

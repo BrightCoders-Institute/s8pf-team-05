@@ -1,3 +1,4 @@
+
 import { View, ScrollView, StyleSheet } from 'react-native';
 import React, {useState} from 'react'
 import SearchBar from '../components/Explore/SearchBar';
@@ -11,15 +12,14 @@ const Explore = () => {
     setSelectedCategory(category);
   };
 
-  const categories = [
-    { name: 'Departaments', icon: 'building', properties: [{ id: 1, name: 'Departamento 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },
-      { id: 2, name: 'Departamento 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
-    { name: 'Houses', icon: 'house-chimney', properties: [{ id: 2, name: 'Casa 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
-    { name: 'Pool', icon: 'house-flood-water', properties: [{ id: 3, name: 'Alberca 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
-    { name: 'Outside', icon: 'tree', properties: [{ id: 4, name: 'Outside 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
-    { name: 'Beach', icon: 'umbrella-beach', properties: [{ id: 5, name: 'Beach 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
-    { name: 'Mountain', icon: 'mountain', properties: [{ id: 6, name: 'Mountain 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
-  ];
+   const categories = [
+     { name: 'Departments', icon: 'building', properties: [{ id: 1, name: 'Departamento 1', images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnUjEpBQBRCCDixuTwwhrfyUrNC-R7NtKsNIALHAsIFA&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjjjvsVW47okDonu6jFJvJwUVLsuW7kfkcfeybdiu4LA&s', 'https://cdn-5.urmy.net/images/plans/DTE/bulk/4536/CleanShot-2022-01-17-at-16.13.42@2x.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5} ], },
+     { name: 'Houses', icon: 'house-chimney', properties: [{ id: 2, name: 'Casa 1', images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnUjEpBQBRCCDixuTwwhrfyUrNC-R7NtKsNIALHAsIFA&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjjjvsVW47okDonu6jFJvJwUVLsuW7kfkcfeybdiu4LA&s', 'https://cdn-5.urmy.net/images/plans/DTE/bulk/4536/CleanShot-2022-01-17-at-16.13.42@2x.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
+     { name: 'Pool', icon: 'house-flood-water', properties: [{ id: 3, name: 'Alberca 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
+     { name: 'Outside', icon: 'tree', properties: [{ id: 4, name: 'Outside 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
+     { name: 'Beach', icon: 'umbrella-beach', properties: [{ id: 5, name: 'Beach 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
+     { name: 'Mountain', icon: 'mountain', properties: [{ id: 6, name: 'Mountain 1', images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
+   ];
 
 
   const [selectedCategory, setSelectedCategory] = useState<string>(categories[0].name);
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     paddingBottom: 30,
+    backgroundColor: '#F3F3F3',
   },
   categoryContainer: {
     marginTop: 20,
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     marginTop: 20,
     marginHorizontal: 35,
+    backgroundColor: '#F3F3F3',
   },
 });
 

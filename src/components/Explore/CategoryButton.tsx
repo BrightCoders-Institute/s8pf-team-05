@@ -1,3 +1,4 @@
+
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -19,7 +20,7 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({ name, icon, onPress, is
             ]}
         >
             <View style={styles.categoryContent}>
-                <Icon name={icon} size={24} color="black" style={styles.categoryIcon} />
+                <Icon name={icon} size={22} color="black" style={styles.categoryIcon} />
                 <Text style={styles.categoryText}>{name}</Text>
             </View>
         </TouchableOpacity>
@@ -41,11 +42,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoryIcon: {
-        marginRight: 5,
+        marginBottom: 5,
+        color: '#444444',
+        textAlign: 'center',
+        alignItems: 'center',
     },
     categoryText: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 15,
+        //fontWeight: 'bold',
+        color: '#444444',
     },
 })
 
