@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     line_items: {
         width: 130,
         marginBottom: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: '#B4B2B2',
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#DBDADA',
     },
     line_txt: {
         borderBottomWidth: 0,

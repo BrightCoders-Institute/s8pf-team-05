@@ -14,7 +14,7 @@ const Navigate = () => {
 const Stack = createNativeStackNavigator();
 
   return (
-    <Stack.Navigator initialRouteName='MyStack'
+    <Stack.Navigator initialRouteName='Signin'
 
         screenOptions={{
             headerShown: false,

@@ -13,7 +13,7 @@ const InputPassword = ({placeholder, secure, value,}) => {
             //onChangeText={setValue}
             //value={value}
             placeholder={placeholder}
-            placeholderTextColor={'#7C7C7C'}
+            placeholderTextColor={'#B4B2B2'}
             secureTextEntry={passwordVisible}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
@@ -34,15 +34,15 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#000000',
         paddingHorizontal: 20,
-        borderWidth: 1,
-        borderColor: '#B4B2B2',
+        borderWidth: 1.5,
+        borderColor: '#DBDADA',
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
     },
     isActive: {
         borderWidth: 2,
         borderRadius: 8,
-        borderColor: '#000000',
+        borderColor: '#444444',
     },
     inActive:{
         borderTopWidth: 0,
