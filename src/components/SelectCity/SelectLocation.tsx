@@ -16,9 +16,9 @@ const SelectLocation = () => {
             data={city} 
             save="value"
             placeholder='Select a city'
-            boxStyles={{borderColor: '#B4B2B2', }}
+            boxStyles={{borderColor: '#DBDADA', }}
             inputStyles={{color: '#444444',}}
-            dropdownStyles={{borderColor: '#B4B2B2',}}
+            dropdownStyles={{borderColor: '#DBDADA',}}
             dropdownTextStyles={{color: '#444444',}}
             />
             <Text>{selected}</Text>

@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CardWish from '../components/whislistComponents/CardWish'

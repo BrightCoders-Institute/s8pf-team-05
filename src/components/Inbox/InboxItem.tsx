@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         flexWrap: 'nowrap',
-        borderBottomWidth: 1,
-        borderColor: '#B4B2B2',
+        borderBottomWidth: 1.5,
+        borderColor: '#DBDADA',
         marginTop: 22,
         paddingBottom: 10,
     },

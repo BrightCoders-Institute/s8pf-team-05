@@ -41,7 +41,8 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
   },
   card: {
     marginTop: 20,
@@ -67,8 +68,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   title: {
-    color: 'black',
-    fontSize: 30,
+    color: '#444444',
+    fontSize: 40,
     fontWeight: 'bold',
   },
   subTitle: {
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   rolUser: {
-    color: 'black',
+    color: '#444444',
     fontSize: 15,
     textAlign: 'center',
   },

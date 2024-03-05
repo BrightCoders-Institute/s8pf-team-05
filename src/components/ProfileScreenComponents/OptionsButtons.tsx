@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     marginLeft: 10,
-    color: 'black',
+    color: '#444444',
   },
   arrow: {},
 });
