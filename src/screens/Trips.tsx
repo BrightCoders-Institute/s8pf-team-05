@@ -66,20 +66,23 @@ const Trips = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 30,
+    flex: 1,
+    paddingLeft: 30,
+    paddingRight: 10,
+    paddingVertical: 20,
   },
   title: {
-    color: 'black',
-    fontSize: 30,
+    color: '#444444',
+    fontSize: 40,
     fontWeight: 'bold',
-    marginTop: 30,
     marginBottom: 20,
   },
   subTitle: {
-    color: 'black',
-    fontSize: 24,
+    color: '#444444',
+    fontSize: 30,
     fontWeight: 'bold',
     marginTop: 20,
+    marginBottom: 15,
   },
 });
 

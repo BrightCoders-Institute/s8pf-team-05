@@ -34,19 +34,25 @@ const styles = StyleSheet.create({
   },
   tripInformationContainer: {
     flex: 1,
-    marginLeft: 15,
+    marginLeft: 13,
     justifyContent: 'center',
   },
   place: {
-    color: 'black',
-    fontSize: 14,
+    color: '#444444',
+    fontSize: 15,
     fontWeight: 'bold',
   },
-  host: {fontSize: 12},
-  date: {fontSize: 12},
+  host: {
+    fontSize: 12,
+    color: '#7C7C7C',
+  },
+  date: {
+    fontSize: 11,
+    color: '#7C7C7C',
+  },
   img: {
-    width: 70,
-    height: 70,
+    width: 80,
+    height: 80,
     borderRadius: 15,
   },
 });
