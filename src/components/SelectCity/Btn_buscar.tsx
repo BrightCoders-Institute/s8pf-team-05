@@ -1,3 +1,4 @@
+
 import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -10,7 +11,7 @@ const Btn_buscar = () => {
         nav.navigate('Home')
     )}>
         <View style={styles.btn}>
-            <Text style={styles.text}>Buscar</Text>
+            <Text style={styles.text}>Search</Text>
         </View>
     </TouchableOpacity>
   )
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
     text:{
         color:'white',
         textAlign:'center',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 15,
     }
 })

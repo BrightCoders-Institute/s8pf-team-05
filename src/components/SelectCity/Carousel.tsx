@@ -1,3 +1,4 @@
+
 import { StyleSheet, Text, View, Image, Dimensions} from 'react-native'
 import React from 'react'
 import Carousel from 'react-native-snap-carousel';
@@ -34,7 +35,6 @@ export default CarouselComponent
 
 const styles = StyleSheet.create({
   imageContainer: {
-
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
