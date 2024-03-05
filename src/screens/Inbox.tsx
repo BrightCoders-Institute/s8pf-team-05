@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   first_container: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 70,
+    paddingVertical: 10,
   },
   second_container: {
     paddingHorizontal: 5,

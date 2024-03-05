@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     message: {
         fontSize: 15,
-        color: '#000000',
+        color: '#444444',
         fontWeight: '400',
     },
     date: {
