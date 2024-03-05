@@ -1,20 +1,21 @@
+/* eslint-disable */
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
 const CardWish = () => {
   return (
-    <>
+    <View>
         <View style={styles.container}>
             <View style={styles.img_container}>
                 <Image style={styles.img}source={{uri: 'https://hips.hearstapps.com/hmg-prod/images/casa-de-madera-de-diseno-moderno21-645b7b443ba61.jpg'}}/>
             </View>
-            <View style={styles.text}>
-                <Text style={{fontWeight:'bold'}}>Casa</Text>
-                <Text>Guardados: 2</Text>
+            <View style={styles.textContainer}>
+                <Text style={styles.cardTitle}>Casa</Text>
+                <Text style={styles.cardDescription}>Guardados: 2</Text>
             </View>
 
         </View>
-    </>
+    </View>
   )
 }
 
@@ -22,8 +23,9 @@ export default CardWish
 
 const styles = StyleSheet.create({
     container:{
-        width:'46%',
+        width:170,
         height:200,
+        marginBottom:10,
     },
     img:{
         width:'100%',
@@ -35,14 +37,21 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'80%',
         backgroundColor: 'white',
-        shadowColor: '#000',
-        shadowOpacity: 0.4,
         borderRadius: 15,
-        elevation: 15,
-        padding:3
+        elevation: 8,
+        padding:2
     },
-    text:{
-        marginLeft:10
+    textContainer:{
+        marginLeft:10,
+    },
+    cardTitle:{
+        fontSize: 15,
+        color: '#444444',
+        fontWeight:'bold'
+    },
+    cardDescription: {
+        fontSize: 12,
+        color: '#7C7C7C',
     }
 
 })
