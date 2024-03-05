@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NumericInput from '../components/HostMode/NumericInput';
+import HeaderNavigation from '../navigation/HeaderNavigation';
 
 const HostModeScreen: React.FC = () => {
   const [guests, setGuests] = React.useState(0);
@@ -31,6 +32,7 @@ const HostModeScreen: React.FC = () => {
 
   return (
     <ScrollView>
+      <HeaderNavigation whereNav='Profile'/>
       <View style={styles.container}>
         <Text style={styles.title}>Añadir nueva propiedad</Text>
         <View style={styles.formContainer}>

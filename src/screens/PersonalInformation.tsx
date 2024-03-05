@@ -3,11 +3,12 @@ import React from 'react'
 import Profilepicture from '../components/personalInfo/Profilepicture'
 import InfoPersonal from '../components/personalInfo/InfoPersonal'
 import  Icon  from 'react-native-vector-icons/AntDesign'
+import HeaderNavigation from '../navigation/HeaderNavigation'
 
 const PersonalInformation = () => {
   return (
     <View style={styles.container}>
-      <Icon name ='arrowleft' size={20} color={'black'}/>
+      <HeaderNavigation whereNav='Profile'/>
       <Text style={styles.text}>Personal information</Text>
       <View style={styles.profile}>
         <Profilepicture/>

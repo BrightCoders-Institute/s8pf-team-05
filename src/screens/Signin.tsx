@@ -13,7 +13,7 @@ const Signin = ({navigation}: any) => {
         <SigninInputs />
         <Button
           onPress={() => {
-            navigation.replace('NavigationTab');
+            navigation.replace('Main');
           }}
         />
         <LoginAccounts />

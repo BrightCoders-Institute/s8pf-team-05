@@ -28,14 +28,14 @@ const Profile = ({navigation}: any) => {
         icon="person-circle-outline"
         text="Personal Information"
         onPress={() => {
-          navigation.navigate('SelectCity'); //Cambiar a screen Personal Information
+          navigation.navigate('PersonalInformation'); //Cambiar a screen Personal Information
         }}
       />
       <OptionsButtons
         icon="diamond-outline"
         text="Host mode"
         onPress={() => {
-          navigation.navigate('SelectCity'); //Cambiar a screen Host mode.
+          navigation.navigate('HostModeScreen'); //Cambiar a screen Host mode.
         }}
       />
 

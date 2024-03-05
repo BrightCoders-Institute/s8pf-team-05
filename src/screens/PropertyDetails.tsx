@@ -4,6 +4,7 @@ import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
 import HostInfo from '../components/PropertyDetails/HostInfo';
 import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
+import HeaderNavigation from '../navigation/HeaderNavigation';
 
 const PropertyDetailsScreen: React.FC = ({route}: any) => {
   console.log(route.params);
@@ -32,6 +33,7 @@ const PropertyDetailsScreen: React.FC = ({route}: any) => {
 
   return (
     <View style={styles.container}>
+      <HeaderNavigation whereNav='Explore'/>
       <ScrollView>
         <View>
           <CarouselComponent images={propertyImages} />
