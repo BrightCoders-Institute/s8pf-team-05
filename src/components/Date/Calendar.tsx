@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     },
     date_txt: {
         fontSize: 10,
-        color: 'black',
+        color: '#444444',
         fontWeight: 'bold',
         marginVertical: 10,
         marginHorizontal: 10,
@@ -79,10 +79,12 @@ const styles = StyleSheet.create({
         borderColor: '#D8D6D6',
     },
     monthTitleStyle: {
+        color: '#000000',
         fontSize: 18, 
         fontWeight:'500'
     },
     yearTitleStyle: {
+        color: '#000000',
         fontSize: 18, 
         fontWeight:'500',
         marginLeft: 10,

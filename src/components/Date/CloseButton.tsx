@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const CloseButton = () => {
   return (
     <View style={styles.x_container}> 
-        <Icon name="close" size={25} color="#747474" style={styles.x_icon}/> 
+        <Icon name="close" size={25} color="#444444" style={styles.x_icon}/> 
     </View>
   )
 }
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 50,
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#A5A5A5',
+        borderWidth: 1.5,
+        borderColor: '#DBDADA',
     },
     x_icon:{
         textAlign: 'center',

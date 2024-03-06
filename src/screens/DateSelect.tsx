@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     },
     date_txt: {
         fontSize: 25,
-        color: 'black',
+        color: '#444444',
         fontWeight: 'bold',
         marginVertical: 10,
         marginHorizontal: 10,
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         padding: 10,
         borderRadius: 15,
-        borderWidth: 1,
-        borderColor: '#D8D6D6',
+        borderWidth: 1.5,
+        borderColor: '#DBDADA',
     },
     confirm_container:{
         flexDirection: 'row',

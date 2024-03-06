@@ -10,6 +10,7 @@ import Signin from '../screens/Signin';
 
 
 
+
 const Navigate = () => {
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +32,7 @@ const Stack = createNativeStackNavigator();
             <Stack.Screen
                 name='Signin'
                 component={Signin}
-            />
+            /> 
     </Stack.Navigator>
   )
 }
