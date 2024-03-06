@@ -16,8 +16,8 @@ const NumericInput: React.FC<NumericInputProps> = ({ label, value, onIncrease, o
             <Text style={styles.label}>{label}</Text>
             <View style={styles.inputWrapper}>
             
-                <TouchableOpacity style={styles.button} onPress={onIncrease}>
-                    <Icon name="add-circle-outline" size={30} color="gray" />
+                <TouchableOpacity style={styles.button} onPress={onDecrease}>
+                    <Icon name="remove-circle-outline" size={30} color="#A7A7A7" />
                 </TouchableOpacity>
                 <TextInput
                 style={styles.input}
@@ -25,8 +25,8 @@ const NumericInput: React.FC<NumericInputProps> = ({ label, value, onIncrease, o
                 keyboardType="numeric"
                 onChangeText={value => {}}
                 />
-                <TouchableOpacity style={styles.button} onPress={onDecrease}>
-                    <Icon name="remove-circle-outline" size={30} color="gray" />
+                <TouchableOpacity style={styles.button} onPress={onIncrease}>
+                    <Icon name="add-circle-outline" size={30} color="#A7A7A7" />
                 </TouchableOpacity>
             </View>    
         </View>
@@ -54,17 +54,18 @@ const styles = StyleSheet.create({
         height: 40,
         paddingHorizontal: 5,
         textAlign: 'center',
+        color: '#000000',
     },
     button: {
         backgroundColor: 'transparent',
     },
     label:{
         fontSize: 14,
-        color: 'gray',
+        color: '#000000',
     },
     horizontalLine: {
-        height: 1,
-        backgroundColor: 'gray',
+        height: 1.5,
+        backgroundColor: '#DBDADA',
         marginTop: 3,
     },
 });

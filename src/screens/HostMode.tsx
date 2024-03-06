@@ -32,14 +32,15 @@ const HostModeScreen: React.FC = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>Añadir nueva propiedad</Text>
+        <Text style={styles.title}>Add a new property</Text>
         <View style={styles.formContainer}>
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.input}
               value={propertyName}
               onChangeText={setPropertyName}
-              placeholder="Nombre de la propiedad"
+              placeholder="Property name"
+              placeholderTextColor={'#7C7C7C'}
             />
           </View>
 
@@ -48,31 +49,32 @@ const HostModeScreen: React.FC = () => {
               style={styles.input}
               value={propertyLocation}
               onChangeText={setPropertyLocation}
-              placeholder="Ubicación de la propiedad"
+              placeholder="Property location"
+              placeholderTextColor={'#7C7C7C'}
             />
           </View>
 
           {/* Resto de los campos de entrada numérica */}
           <NumericInput
-            label="Numero de huespedes"
+            label="Number of guests"
             value={guests}
             onIncrease={() => handleIncrease(setGuests)}
             onDecrease={() => handleDecrease(setGuests)}
           />
           <NumericInput
-            label="Numero de habitaciones"
+            label="Number of rooms"
             value={bedrooms}
             onIncrease={() => handleIncrease(setBedrooms)}
             onDecrease={() => handleDecrease(setBedrooms)}
           />
           <NumericInput
-            label="Numero de camas"
+            label="Number of beds"
             value={beds}
             onIncrease={() => handleIncrease(setBeds)}
             onDecrease={() => handleDecrease(setBeds)}
           />
           <NumericInput
-            label="Numero de baños"
+            label="Number of bathrooms"
             value={bathrooms}
             onIncrease={() => handleIncrease(setBathrooms)}
             onDecrease={() => handleDecrease(setBathrooms)}
@@ -82,7 +84,8 @@ const HostModeScreen: React.FC = () => {
               style={[styles.textArea]}
               value={propertyDescription}
               onChangeText={setPropertyDescription}
-              placeholder="Descripción de la propiedad"
+              placeholder="Property description"
+              placeholderTextColor={'#7C7C7C'}
               multiline
             />
             <View style={styles.line} />
@@ -90,13 +93,13 @@ const HostModeScreen: React.FC = () => {
 
           {/* Botón para agregar imágenes */}
           <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
-            <Text style={styles.addButtonText}>Agregar Imágenes</Text>
+            <Text style={styles.addButtonText}>Add Images</Text>
             <Icon name="attach" size={30} color="gray" />
           </TouchableOpacity>
 
           {/* Botón para agregar la propiedad */}
           <TouchableOpacity style={styles.addPropertyButton} onPress={handleAddProperty}>
-            <Text style={styles.addPropertyButtonText}>Agregar Propiedad</Text>
+            <Text style={styles.addPropertyButtonText}>Add property</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -112,7 +115,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
+    color: '#444444',
     fontWeight: 'bold',
     marginBottom: 20,
   },
@@ -126,8 +130,9 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 20,
     height: 40,
-    borderColor: 'gray',
-    borderBottomWidth: 1,
+    color: '#000000',
+    borderColor: '#DBDADA',
+    borderBottomWidth: 1.5,
     paddingHorizontal: 5,
     flex: 1,
   },
@@ -135,22 +140,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: '100%',
     height: 100,
-    borderColor: 'gray',
-    borderWidth: 1,
+    color: '#000000',
+    borderColor: '#DBDADA',
+    borderWidth: 1.5,
     borderRadius: 10,
     marginBottom: 10,
     paddingHorizontal: 10,
   },
   line: {
     height: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#DBDADA',
   },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    borderColor: 'gray',
-    borderWidth: 1,
+    borderColor: '#DBDADA',
+    borderWidth: 1.5,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -158,19 +164,22 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     marginRight: 10,
+    color: '#7C7C7C',
   },
   addPropertyButton: {
     backgroundColor: '#6F2DBD',
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginVertical: 20,
+    marginHorizontal: 15,
   },
   addPropertyButtonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '600',
     textAlign: 'center',
+    
   },
 });
 

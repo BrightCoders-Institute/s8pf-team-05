@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
     btn:{
         backgroundColor:'#6F2DBD',
         padding: 12,
-        borderRadius: 9,
+        borderRadius: 10,
 
     },
     text:{
         color:'white',
         textAlign:'center',
-        fontWeight: 'bold',
+        fontWeight: '600',
         fontSize: 15,
     }
 })

@@ -26,13 +26,15 @@ const styles = StyleSheet.create({
         width: 320,
         height: 45,
         backgroundColor: '#6F2DBD',
-        borderRadius: 8,
+        borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 15,
     },
     txt: {
         color: 'white',
         fontSize: 15,
+        fontWeight: '600',
+        textAlign: 'center',
     },
 })
 
