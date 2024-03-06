@@ -12,10 +12,10 @@ const renderStars = (rating: number) => {
 
     const stars = [];
     for (let i = 0; i < filledStars; i++) {
-      stars.push(<Icon key={i} name="star" size={16} color="black" />);
+      stars.push(<Icon key={i} name="star" size={16} color="#444444" />);
     }
     if (halfStar) {
-      stars.push(<Icon key="half-star" name="star-half-outline" size={16} color="black" />);
+      stars.push(<Icon key="half-star" name="star-half-outline" size={16} color="#444444" />);
     }
     return stars;
   };
@@ -33,7 +33,7 @@ const RatingBox: React.FC<RatingBoxProps> = ({ averageRating, totalReviews }) =>
           <View style={styles.verticalLine}></View>
           <View style={styles.rightContent}>
             <Text style={styles.totalReviews}>{totalReviews}</Text>
-            <Text style={styles.reviewsText}>Evaluaciones</Text>
+            <Text style={styles.reviewsText}>Evaluations</Text>
           </View>
         </View>
       );
@@ -41,13 +41,13 @@ const RatingBox: React.FC<RatingBoxProps> = ({ averageRating, totalReviews }) =>
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
+        marginTop: 25,
         flexDirection: 'row',
         alignItems: 'center',
         padding: 20,
         borderRadius: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
+        borderWidth: 1.5,
+        borderColor: '#DBDADA',
       },
       leftContent: {
         flex: 1,
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
       rightContent: {
         flex: 1,
         alignItems: 'center',
-
         justifyContent: 'center',
       },
       ratingContainer: {
@@ -70,20 +69,20 @@ const styles = StyleSheet.create({
         marginRight: 5,
       },
       averageRating: {
-        color: 'black',
+        color: '#444444',
         fontSize: 20,
         fontWeight: 'bold',
       },
       totalReviews: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'black',
+        color: '#444444',
       },
       verticalLine: {
         position: 'absolute',
         height: '100%',
-        width: 1,
-        backgroundColor: 'gray',
+        width: 1.5,
+        backgroundColor: '#DBDADA',
         top: '45%',
         bottom: '50%',
         left: '56%',
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
       },
       reviewsText: {
         fontSize: 16,
-        color: 'black',
+        color: '#444444',
       },
       starsContainer: {
         flexDirection: 'row',

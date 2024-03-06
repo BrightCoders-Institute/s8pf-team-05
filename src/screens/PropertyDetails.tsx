@@ -1,4 +1,5 @@
-import React from 'react';
+
+/* eslint-disable */import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
@@ -19,7 +20,7 @@ const PropertyDetailsScreen: React.FC = () => {
     const totalReviews = 10;
     const hostName = 'Mar';
     const hostImage = require('../images/avatar-tpdne.jpg');
-    const propertyDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+    const propertyDescription = 'Lorem ipsum dolor sit amet, e et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
     const pricePerNight = '$1000';
 
     const handleReservePress = () => {
@@ -36,13 +37,13 @@ const PropertyDetailsScreen: React.FC = () => {
                     <Text style={styles.propertyName}>{propertyName}</Text>
                     <Text style={styles.propertyLocation}>{propertyLocation}</Text>
                     <Text style={styles.propertyDetails}>
-                        Huespedes: {guests} · Habitaciones: {bedrooms} · Camas: {beds} · Baños: {bathrooms}
+                    Guests: {guests} |   Bedrooms: {bedrooms} |   Beds: {beds} |   Bathrooms: {bathrooms}
                     </Text>
                     <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
                     <HostInfo hostName={hostName} hostImage={hostImage} />
                 </View>
                 <View style={styles.propertyDescription}>
-                    <Text style={styles.descriptionTitle}>Descripción:</Text>
+                    <Text style={styles.descriptionTitle}>Description:</Text>
                     <Text style={styles.descriptionText}>{propertyDescription}</Text>
                 </View>
             </ScrollView>
@@ -60,20 +61,22 @@ const styles = StyleSheet.create({
     propertyInfo: {
         paddingHorizontal: 20,
         marginTop: 20,
+
     },
     propertyName: {
-        fontSize: 24,
+        fontSize: 25,
         fontWeight: 'bold',
-        marginBottom: 5,
-        color: 'black',
+        color: '#444444',
     },
     propertyLocation: {
-        fontSize: 16,
+        fontSize: 15,
         color: 'gray',
     },
     propertyDetails: {
         fontSize: 14,
         marginTop: 5,
+        color: '#7C7C7C',
+        fontWeight: '600',
     }, 
     propertyDescription: {
         margin: 20,
@@ -81,12 +84,13 @@ const styles = StyleSheet.create({
     },
     descriptionTitle: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontWeight: '700',
         marginBottom: 5,
-        color: 'black',
+        color: '#444444',
     },
     descriptionText: {
-        fontSize: 14,
+        fontSize: 13,
+        color: '#7C7C7C',
     },
     bottomTab: {
         position: 'absolute',

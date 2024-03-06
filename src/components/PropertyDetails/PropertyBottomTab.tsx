@@ -11,12 +11,12 @@ const PropertyBottomTab: React.FC<PropertyBottomTabProps> = ({ pricePerNight, on
   return (
     <View style={styles.container}>
         <View style={styles.priceContainer}>
-            <Text style={styles.pricePerNight}>{pricePerNight}</Text>
-            <Text style={styles.perNightText}>por noche</Text>
+            <Text style={styles.pricePerNight}>{pricePerNight} USD</Text>
+            <Text style={styles.perNightText}>night</Text>
         </View>
             
         <TouchableOpacity style={styles.reserveButton} onPress={onReservePress}>
-            <Text style={styles.reserveButtonText}>Reservar</Text>
+            <Text style={styles.reserveButtonText}>Reserve</Text>
         </TouchableOpacity>
     </View>
   );
@@ -43,28 +43,28 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 3,
   },
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   pricePerNight: {
-    fontSize: 18,
-    color: 'black',
+    fontSize: 16,
+    color: '#444444',
     fontWeight: 'bold',
   },
   perNightText: {
-    fontWeight: 'bold',
+    fontWeight: '600',
     marginLeft: 5,
     fontSize: 14,
-    color: 'gray',
+    color: '#7C7C7C',
   },
   reserveButton: {
     backgroundColor: '#6F2DBD',
     paddingHorizontal: 50,
     paddingVertical: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
