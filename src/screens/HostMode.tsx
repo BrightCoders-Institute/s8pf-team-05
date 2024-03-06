@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#444444',
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginVertical: 20,
   },
   formContainer: {
     width: '100%',
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 10,
     marginBottom: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
   },
   line: {
     height: 1,
@@ -154,13 +154,15 @@ const styles = StyleSheet.create({
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: 'transparent',
     borderColor: '#DBDADA',
     borderWidth: 1.5,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginLeft: 190,
+    marginVertical: 15,
   },
   addButtonText: {
     marginRight: 10,
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginVertical: 20,
+    marginVertical: 25,
     marginHorizontal: 15,
   },
   addPropertyButtonText: {
