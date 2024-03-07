@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
-import { StyleSheet, Text, View } from 'react-native'
-=======
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
->>>>>>> main
 import React from 'react'
 
 import SelectLocation from '../components/SelectCity/SelectLocation';
