@@ -1,10 +1,16 @@
-
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const goToSelectCity = () => {
-    console.log('go to select city');
+const SearchBar = ({onPress}: {onPress: () => void}) => {
+  return (
+    <View style={styles.searchContainer}>
+      <TouchableOpacity onPress={onPress} style={styles.searchButton}>
+        <Icon name="search" size={20} />
+        <Text style={styles.buttonText}>Where you going?</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const SearchBar: React.FC = () => {

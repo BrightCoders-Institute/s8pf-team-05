@@ -1,12 +1,21 @@
-
-import { View, ScrollView, StyleSheet } from 'react-native';
-import React, {useState} from 'react'
+import {View, ScrollView, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
 import SearchBar from '../components/Explore/SearchBar';
 import CategoryButton from '../components/Explore/CategoryButton';
 import PropertyCard from '../components/Explore/PropertyCard';
 
-const Explore = () => {
+// type Property = {
+//   id: number;
+//   name: string;
+//   images: string[];
+//   location: string;
+//   rating: number;
+//   description: string;
+//   dateAvailable: string;
+//   price: string;
+// };
 
+const Explore = ({navigation}: any) => {
   const goToCategory = (category: string) => {
     console.log('go to category: ', category);
     setSelectedCategory(category);
@@ -21,48 +30,64 @@ const Explore = () => {
      { name: 'Mountain', icon: 'mountain', properties: [{ id: 6, name: 'Mountain 1', images: ['https://media.istockphoto.com/id/910224886/es/foto/chalet-casas-de-monta%C3%B1a.jpg?s=612x612&w=0&k=20&c=qAUBGIIdHtY4Vj9twHBz2WsC6P3LawGZK_zWqGFmdwc=', 'image2.jpg', 'image3.jpg'], location: 'Ciudad de México', description: 'Acogedor departamento cerca del centro.', dateAvailable: 'Disponible ahora', price: '$100 por noche', rating: 4.5 },] },
    ];
 
-
-  const [selectedCategory, setSelectedCategory] = useState<string>(categories[0].name);
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    categories[0].name,
+  );
 
   const renderProperties = () => {
-    if (!selectedCategory) return null;
-    
-    const properties = categories.find(cat => cat.name === selectedCategory)?.properties || [];
+    if (!selectedCategory) {
+      return null;
+    }
+
+    const properties =
+      categories.find(cat => cat.name === selectedCategory)?.properties || [];
 
     return properties.map(property => (
-      <PropertyCard key={property.id} property={property} />
+      <PropertyCard
+        key={property.id}
+        property={property}
+        onPress={() => {
+          navigation.navigate('PropertyDetails', property); //Mandar la información de la Propiedad a la ScreenDetails.
+        }}
+      />
     ));
   };
 
   return (
-    <ScrollView >
-    <View style={styles.container}>
-      <SearchBar />
-      <View>
+    <ScrollView>
+      <View style={styles.container}>
+        <SearchBar
+          onPress={() => {
+            navigation.navigate('SelectCity');
+          }}
+        />
         <View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer}>
-            {categories.map((category, index) => (
-              <CategoryButton
-                key={index}
-                name={category.name}
-                icon={category.icon}
-                onPress={() => goToCategory(category.name)}
-                isSelected={category.name === selectedCategory}
-              />
-            ))}
-          </ScrollView>
-          <View >
-            <View style={styles.propertiesContainer}>
-              {renderProperties()}
+          <View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.categoryContainer}>
+              {categories.map((category, index) => (
+                <CategoryButton
+                  key={index}
+                  name={category.name}
+                  icon={category.icon}
+                  onPress={() => goToCategory(category.name)}
+                  isSelected={category.name === selectedCategory}
+                />
+              ))}
+            </ScrollView>
+            <View>
+              <View style={styles.propertiesContainer}>
+                {renderProperties()}
+              </View>
             </View>
           </View>
         </View>
       </View>
-    </View>
     </ScrollView>
-
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -84,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Explore
+export default Explore;

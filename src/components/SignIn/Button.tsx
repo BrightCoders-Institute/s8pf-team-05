@@ -1,18 +1,27 @@
+import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  GestureResponderEvent,
+} from 'react-native';
 
-import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-
-const Button = () => {
+const Button = ({
+  onPress,
+}: {
+  onPress: (event: GestureResponderEvent) => void;
+}) => {
   return (
     <View style={styles.container}>
-        <TouchableOpacity>
-            <View style={styles.signinBtn}>
-                <Text style={styles.txt}>Continue</Text>
-            </View>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
+        <View style={styles.signinBtn}>
+          <Text style={styles.txt}>Continue</Text>
+        </View>
+      </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
     container:{
@@ -38,4 +47,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Button
+export default Button;

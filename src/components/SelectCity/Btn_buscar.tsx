@@ -2,14 +2,14 @@
 import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-
-const Btn_buscar = () => {
-    const nav = useNavigation();
+interface btProps{
+    whereNav: string
+}
+const Btn_buscar = ({whereNav}:btProps ) => {
+    const navigation = useNavigation();
   return (
     <TouchableOpacity
-    onPress={()=>(
-        nav.navigate('Home')
-    )}>
+    onPress={() => navigation.navigate(whereNav)}>
         <View style={styles.btn}>
             <Text style={styles.text}>Search</Text>
         </View>

@@ -1,6 +1,8 @@
 // En tu componente PropertyBottomTab.tsx
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Navigation from '../../navigation/Navigation';
+import { useNavigation } from '@react-navigation/native';
 
 interface PropertyBottomTabProps {
   pricePerNight: string;
@@ -8,6 +10,7 @@ interface PropertyBottomTabProps {
 }
 
 const PropertyBottomTab: React.FC<PropertyBottomTabProps> = ({ pricePerNight, onReservePress }) => {
+  const navigation = useNavigation()
   return (
     <View style={styles.container}>
         <View style={styles.priceContainer}>

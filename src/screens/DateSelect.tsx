@@ -6,6 +6,7 @@ import CloseButton from '../components/Date/CloseButton';
 import Options from '../components/Date/Options';
 import ClearButton from '../components/Date/ClearButton';
 import SaveButton from '../components/Date/SaveButton';
+import HeaderNavigation from '../navigation/HeaderNavigation';
 
 
 const DateSelect = () => {
@@ -19,6 +20,7 @@ const DateSelect = () => {
 
   return (
     <View style={styles.container}>
+        <HeaderNavigation whereNav='PropertyDetails'/>
         <View>
             <CloseButton/>
             <View style={styles.date_container}>

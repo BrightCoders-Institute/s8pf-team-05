@@ -1,21 +1,22 @@
-
 import React from 'react';
-import {useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import SigninInputs from '../components/SignIn/SigninInputs';
 import Button from '../components/SignIn/Button';
 import LoginAccounts from '../components/SignIn/LoginAccounts';
 
-
-const Signin = () => {
+const Signin = ({navigation}: any) => {
   return (
     <View style={styles.first_container}>
       <View style={styles.second_container}>
         <Text style={styles.title}>Welcome to Eirbianbi</Text>
         <Text style={styles.subtitle}>Please Sign in or create an account</Text>
-        <SigninInputs/>
-        <Button/>
-        <LoginAccounts/>
+        <SigninInputs />
+        <Button
+          onPress={() => {
+            navigation.replace('Main');
+          }}
+        />
+        <LoginAccounts />
       </View>
     </View>
   );

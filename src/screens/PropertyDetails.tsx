@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 
 /* eslint-disable */import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+=======
+import React from 'react';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+>>>>>>> main
 import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
 import HostInfo from '../components/PropertyDetails/HostInfo';
 import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
+import HeaderNavigation from '../navigation/HeaderNavigation';
 
 const PropertyDetailsScreen: React.FC = () => {
     const propertyImages = ['https://i.pinimg.com/564x/d6/18/18/d618188c4722ca5cc938ee3dde7b09cc.jpg',
@@ -23,9 +29,9 @@ const PropertyDetailsScreen: React.FC = () => {
     const propertyDescription = 'Lorem ipsum dolor sit amet, e et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
     const pricePerNight = '$1000';
 
-    const handleReservePress = () => {
-        console.log('Botón de reservar presionado');
-    };
+  const handleReservePress = () => {
+    console.log('Botón de reservar presionado');
+  };
 
     return (
         <View style={styles.container}>
@@ -50,8 +56,8 @@ const PropertyDetailsScreen: React.FC = () => {
             <View style={styles.bottomTab}>
                 <PropertyBottomTab pricePerNight={pricePerNight} onReservePress={handleReservePress} />
             </View>
-        </View>
-    );
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
