@@ -1,10 +1,15 @@
-
+/* eslint-disable */
 import React from 'react'
 import {useState} from 'react'
 import { StyleSheet, Text, View, TextInput} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const InputPassword = ({placeholder, secure, value,}) => {
+interface InputPasswordProps {
+    placeholder: string;
+    value: string;
+}
+
+const InputPassword = ({placeholder, value,}: InputPasswordProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState(true)
   return (

@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import SigninInputs from '../components/SignIn/SigninInputs';
-import Button from '../components/SignIn/Button';
+import ContinueButton from '../components/SignIn/ContinueButton';
+import CreateAccountButton from '../components/CreateAccount/CreateAccountButton';
 import LoginAccounts from '../components/SignIn/LoginAccounts';
 
 const Signin = ({navigation}: any) => {
@@ -9,11 +10,16 @@ const Signin = ({navigation}: any) => {
     <View style={styles.first_container}>
       <View style={styles.second_container}>
         <Text style={styles.title}>Welcome to Eirbianbi</Text>
-        <Text style={styles.subtitle}>Please Sign in or create an account</Text>
+        <Text style={styles.subtitle}>Please Sign in or Create an Account</Text>
         <SigninInputs />
-        <Button
+        <ContinueButton
           onPress={() => {
             navigation.replace('Main');
+          }}
+        />
+        <CreateAccountButton
+          onPress={() => {
+            navigation.replace('CreateAccount');
           }}
         />
         <LoginAccounts />

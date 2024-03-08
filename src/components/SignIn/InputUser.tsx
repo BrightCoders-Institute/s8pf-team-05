@@ -19,6 +19,7 @@ const InputUser = ({placeholder, secure, value,}: InputUserProps) => {
             //value={value}
             placeholder={placeholder}
             placeholderTextColor={'#B4B2B2'}
+            keyboardType='email-address'
             secureTextEntry={secure}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}/>
