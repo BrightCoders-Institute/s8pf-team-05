@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import NumericInput from '../components/HostMode/NumericInput';
 import HeaderNavigation from '../navigation/HeaderNavigation';
 
+import firestore from '@react-native-firebase/firestore';
+
 const HostModeScreen: React.FC = () => {
   const [guests, setGuests] = React.useState(0);
   const [bedrooms, setBedrooms] = React.useState(0);
@@ -13,6 +15,8 @@ const HostModeScreen: React.FC = () => {
   const [propertyLocation, setPropertyLocation] = React.useState('');
   const [propertyDescription, setPropertyDescription] = React.useState('');
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
+  const [avaliabilityDates, setAvaliabilityDates] = React.useState<string[]>([]);
+  const [price, setPrice] = React.useState(0);
 
   const handleIncrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
     setState(prevValue => prevValue + 1);
@@ -23,11 +27,27 @@ const HostModeScreen: React.FC = () => {
   };
 
   const handleAddImages = () => {
-    // Implementar la lógica para agregar imágenes
+    // Implementa la lógica para agregar imágenes
   };
 
   const handleAddProperty = () => {
-    // Implementar la lógica para agregar la propiedad
+    firestore()
+      .collection('properties')
+      .add({
+        propertyName: propertyName,
+        location: propertyLocation,
+        guests: guests,
+        bedrooms: bedrooms,
+        beds: beds,
+        bathrooms: bathrooms,
+        description: propertyDescription,
+        images: propertyImages,
+        avaliabilityDates: avaliabilityDates,
+        price: price,
+      })
+      .then(() => {
+        console.log('Property added!');
+      });
   };
 
   return (
@@ -56,7 +76,6 @@ const HostModeScreen: React.FC = () => {
             />
           </View>
 
-          {/* Resto de los campos de entrada numérica */}
           <NumericInput
             label="Number of guests"
             value={guests}
@@ -93,16 +112,37 @@ const HostModeScreen: React.FC = () => {
             <View style={styles.line} />
           </View>
 
-          {/* Botón para agregar imágenes */}
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              value={avaliabilityDates.join(', ')}
+              onChangeText={(text) => setAvaliabilityDates(text.split(', '))}
+              placeholder="Avaliability Dates (comma separated)"
+              placeholderTextColor={'#7C7C7C'}
+            />
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              value={price.toString()} // Convert the price value to a string
+              onChangeText={(text) => setPrice(text as unknown as number)} // Update the type of setPrice to accept a string
+              placeholder="Price"
+              placeholderTextColor={'#7C7C7C'}
+              keyboardType="numeric"
+            />
+          </View>
           <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
             <Text style={styles.addButtonText}>Add Images</Text>
             <Icon name="attach" size={30} color="gray" />
           </TouchableOpacity>
 
-          {/* Botón para agregar la propiedad */}
           <TouchableOpacity style={styles.addPropertyButton} onPress={handleAddProperty}>
             <Text style={styles.addPropertyButtonText}>Add property</Text>
           </TouchableOpacity>
+
+
+          
         </View>
       </View>
     </ScrollView>
@@ -183,7 +223,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     textAlign: 'center',
-    
   },
 });
 
