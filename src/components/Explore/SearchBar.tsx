@@ -13,16 +13,6 @@ const SearchBar = ({onPress}: {onPress: () => void}) => {
   );
 };
 
-const SearchBar: React.FC = () => {
-    return (
-        <View style={styles.searchContainer}>
-            <TouchableOpacity onPress={goToSelectCity} style={styles.searchButton}>
-            <Icon name="search" size={20} color={'#444444'}/>
-            <Text style={styles.buttonText}>Where you going?</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
 
 const styles = StyleSheet.create({
     searchContainer: {
