@@ -13,6 +13,7 @@ const SearchBar = ({onPress}: {onPress: () => void}) => {
   );
 };
 
+
 const styles = StyleSheet.create({
     searchContainer: {
         marginHorizontal: 35,
