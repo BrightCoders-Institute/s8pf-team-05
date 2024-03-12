@@ -1,8 +1,22 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
 import OptionsButtons from '../components/ProfileScreenComponents/OptionsButtons';
 
+
+
 const Profile = ({navigation}: any) => {
+
+  const handleLogOut = async () => {
+    try {
+      await auth().signOut()
+      .then(navigation.replace('Signin'))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -40,11 +54,7 @@ const Profile = ({navigation}: any) => {
       />
 
       <View style={styles.logoutContainer}>
-        <Text
-          style={styles.logout}
-          onPress={() => {
-            navigation.replace('Signin');
-          }}>
+        <Text style={styles.logout} onPress={handleLogOut}>
           Log out
         </Text>
       </View>

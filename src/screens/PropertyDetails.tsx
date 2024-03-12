@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-
-/* eslint-disable */import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-=======
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
->>>>>>> main
 import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
 import HostInfo from '../components/PropertyDetails/HostInfo';

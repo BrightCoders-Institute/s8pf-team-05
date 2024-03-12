@@ -1,11 +1,11 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Signin from '../screens/Signin';
-import NavigationTab from './NavigationTab';
+import NavigationTab from './navigationTab';
 import PropertyDetailsScreen from '../screens/PropertyDetails';
 import PersonalInformation from '../screens/PersonalInformation';
 import HostModeScreen from '../screens/HostMode';
-import Explore from '../screens/Explore';
+import CreateAccount from '../screens/CreateAccount';
 import DateSelect from '../screens/DateSelect';
 import SelectCity from '../screens/SelectCity';
 
@@ -37,6 +37,10 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       <Stack.Screen 
         name="Signin" 
         component={Signin} />
+
+      <Stack.Screen 
+      name="CreateAccount" 
+      component={CreateAccount} />
 
       <Stack.Screen 
         name="PropertyDetails" 
