@@ -8,6 +8,7 @@ import HostModeScreen from '../screens/HostMode';
 import ConfirmReservation from '../screens/ConfirmReservation';
 import DateSelect from '../screens/DateSelect';
 import SelectCity from '../screens/SelectCity';
+import ReservationCompleted from '../screens/ReservationCompleted';
 
 // type RootStackParams = {
 //   Signin: undefined;
@@ -44,6 +45,11 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       <Stack.Screen name="DateSelect" component={DateSelect} />
 
       <Stack.Screen name="ConfirmReservation" component={ConfirmReservation} />
+
+      <Stack.Screen
+        name="ReservationCompleted"
+        component={ReservationCompleted}
+      />
     </Stack.Navigator>
   );
 };

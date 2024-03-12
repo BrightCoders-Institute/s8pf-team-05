@@ -1,28 +1,28 @@
 import React from 'react';
-import {StyleSheet, TextInput, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 
 export default function CommentBox() {
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <View style={styles.commentBox}>
       <TextInput
         placeholder="Escribe aquí tu comentario..."
-        style={styles.text}
         placeholderTextColor={'#8D8D8D'}
+        multiline={true}
+        numberOfLines={5}
+        textAlignVertical="top"
       />
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  commentBox: {
     borderColor: '#B7B7B7',
     borderWidth: 1,
-    height: 120,
     borderRadius: 10,
     paddingHorizontal: 10,
-    marginTop: 10,
-  },
-  text: {
-    color: '#8D8D8D',
+    marginVertical: 10,
+    height: 120,
+    justifyContent: 'center',
   },
 });

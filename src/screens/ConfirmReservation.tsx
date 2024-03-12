@@ -1,70 +1,83 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import Header from '../components/ConfirmReservation/Header';
 import Ranking from '../components/ConfirmReservation/Ranking';
 import DetailsReservation from '../components/ConfirmReservation/DetailsReservation';
 import HostInfo from '../components/ConfirmReservation/HostInfo';
 import CommentBox from '../components/ConfirmReservation/CommentBox';
 import Button from '../components/ConfirmReservation/Button';
-import {KeyboardProvider} from 'react-native-keyboard-controller';
+import LoadingComponent from '../components/LoadingComponent';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ConfirmReservation() {
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+
   return (
-    <KeyboardProvider   >
-      <Text>Hola chavales</Text>
-    </KeyboardProvider>
-    // <View style={styles.container}>
-    //   <Header />
+    <>
+      {loading && <LoadingComponent />}
+      <View style={styles.container}>
+        <Header />
 
-    //   <View style={styles.informationPropertyContainer}>
-    //     <Image
-    //       style={styles.imgProperty}
-    //       source={{
-    //         uri: 'https://i.pinimg.com/564x/d6/18/18/d618188c4722ca5cc938ee3dde7b09cc.jpg',
-    //       }}
-    //     />
-    //     <View style={styles.textInformationPropertyContainer}>
-    //       <Text style={styles.nameProperty}>Casa rustica cerca del centro</Text>
-    //       <Text style={styles.locationProperty}>
-    //         Ixtlahuacan, Colima, México
-    //       </Text>
-    //       <Ranking />
-    //     </View>
-    //   </View>
+        <ScrollView>
+          <View style={styles.informationPropertyContainer}>
+            <Image
+              style={styles.imgProperty}
+              source={{
+                uri: 'https://i.pinimg.com/564x/d6/18/18/d618188c4722ca5cc938ee3dde7b09cc.jpg',
+              }}
+            />
+            <View style={styles.textInformationPropertyContainer}>
+              <Text style={styles.nameProperty}>
+                Casa rustica cerca del centro
+              </Text>
+              <Text style={styles.locationProperty}>
+                Ixtlahuacan, Colima, México
+              </Text>
+              <Ranking />
+            </View>
+          </View>
 
-    //   {/* Line */}
-    //   <View style={styles.line1} />
+          {/* Line */}
+          <View style={styles.line1} />
 
-    //   <Text style={styles.title}>Tu Viaje</Text>
-    //   <DetailsReservation
-    //     title="Fecha"
-    //     info="21-23 de mar"
-    //     btnEditar={() => console.log('Se presiono el boton')}
-    //   />
-    //   <DetailsReservation
-    //     title="Huéspedes"
-    //     info="1 huésped"
-    //     btnEditar={() => console.log('Se presiono el boton 2')}
-    //   />
+          <Text style={styles.title}>Tu Viaje</Text>
+          <DetailsReservation
+            title="Fecha"
+            info="21-23 de mar"
+            btnEditar={() => console.log('Se presiono el boton')}
+          />
+          <DetailsReservation
+            title="Huéspedes"
+            info="1 huésped"
+            btnEditar={() => console.log('Se presiono el boton 2')}
+          />
 
-    //   {/* Line */}
-    //   <View style={styles.line1} />
+          {/* Line */}
+          <View style={styles.line1} />
 
-    //   <Text style={styles.title}>Escríbele al anfitrión</Text>
-    //   <Text>
-    //     Cuenta porque viajas, quien te acompaña y que es lo que mas te gusta del
-    //     espacio.
-    //   </Text>
-    //   <HostInfo
-    //     hostName="Fransisco"
-    //     hostImage={
-    //       'https://www.infobae.com/new-resizer/6_ShVi7_Ps8JOa8jdGKI06ofW80=/1440x1440/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UERNNO3H7RGNPEJKE2STAUGWXM.jpg'
-    //     }
-    //   />
-    //   <CommentBox />
+          <Text style={styles.title}>Escríbele al anfitrión</Text>
+          <Text>
+            Cuenta porque viajas, quien te acompaña y que es lo que mas te gusta
+            del espacio.
+          </Text>
+          <HostInfo
+            hostName="Fransisco"
+            hostImage={
+              'https://www.infobae.com/new-resizer/6_ShVi7_Ps8JOa8jdGKI06ofW80=/1440x1440/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UERNNO3H7RGNPEJKE2STAUGWXM.jpg'
+            }
+          />
+          <CommentBox />
 
-    //   <Button style={styles.button} />
-    // </View>
+          <Button
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate('ReservationCompleted');
+            }}
+          />
+        </ScrollView>
+      </View>
+    </>
   );
 }
 
