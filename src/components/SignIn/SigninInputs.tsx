@@ -1,27 +1,34 @@
 /* eslint-disable */
 import React from 'react'
 import {useState} from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import InputUser  from './InputUser';
-import InputPassword  from './InputPassword';
+import { StyleSheet, Text, View, TextInput } from 'react-native'
 
-const SigninInputs = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+
+interface SigninProps {
+  email: string;
+  password: string;
+  onChangeText: (email: string, password: string) => void;
+}
+
+const SigninInputs : React.FC<SigninProps> = ({email, password, onChangeText}) => {
+    
+
+    const onChangeTextEmail = (email:string) => {
+      console.log(email)
+    };
+    const onChangeTextPassword = () => {
+      console.log(password)
+    }
+
   return (
-    <View style={styles.inputs_container}>
-            <InputUser placeholder={"Email"} secure={false} value={setEmail} />
-            <InputPassword placeholder={"Password"} secure={true} value={setPassword} />
-        </View>
+    
   )
 }
 
 
 const styles = StyleSheet.create({
-    inputs_container: {
-        marginTop: 30,
-        marginHorizontal: 15,
-    },
+  
+},
 })
 
 

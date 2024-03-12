@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native'
 import CreateAccountInputs from '../components/CreateAccount/CreateAccountInputs';
@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 const CreateAccount = ({navigation}: any) => {
+    const [isFormValid, setIsFormValid] = useState(false)
+
   return (
     <View style={styles.first_container}>
       <View style={styles.second_container}>
@@ -18,10 +20,15 @@ const CreateAccount = ({navigation}: any) => {
         <Text style={styles.title}>Welcome to Eirbianbi</Text>
         <Text style={styles.subtitle}>Please complete all fields</Text>
         <ScrollView style={styles.scrollContainer}>
-            <CreateAccountInputs />
+            <CreateAccountInputs onValidationChange={(isValid) => setIsFormValid(isValid)}/>
             <ContinueButton
                 onPress={() => {
-                 navigation.replace('Signin');
+                  if(isFormValid) {
+                    navigation.replace('Signin');
+                    //console.log('registrado')
+                  }else{
+                    console.log('error en el formulario')
+                  }
                 }}
             />
         </ScrollView>
