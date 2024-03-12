@@ -6,7 +6,7 @@ const SearchBar = ({onPress}: {onPress: () => void}) => {
   return (
     <View style={styles.searchContainer}>
       <TouchableOpacity onPress={onPress} style={styles.searchButton}>
-        <Icon name="search" size={20} />
+        <Icon name="search" size={20} color={'#444444'}/>
         <Text style={styles.buttonText}>Where you going?</Text>
       </TouchableOpacity>
     </View>

@@ -7,7 +7,7 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 
-const Button = ({
+const CreateAccountButton = ({
   onPress,
 }: {
   onPress: (event: GestureResponderEvent) => void;
@@ -15,8 +15,8 @@ const Button = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress}>
-        <View style={styles.signinBtn}>
-          <Text style={styles.txt}>Continue</Text>
+        <View style={styles.createBtn}>
+          <Text style={styles.txt}>Create an Account</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -30,21 +30,22 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         marginHorizontal: 30,
     },
-    signinBtn: {
+    createBtn: {
         alignItems: 'center',
         width: 320,
         height: 45,
-        backgroundColor: '#6F2DBD',
+        borderWidth: 1,
+        borderColor: '#6F2DBD',
         borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 15,
     },
     txt: {
-        color: 'white',
+        color: '#444444',
         fontSize: 15,
         fontWeight: '600',
         textAlign: 'center',
     },
 })
 
-export default Button;
+export default CreateAccountButton;
