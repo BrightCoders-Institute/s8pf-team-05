@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NumericInput from '../components/HostMode/NumericInput';
 import HeaderNavigation from '../navigation/HeaderNavigation';
@@ -18,7 +18,6 @@ const HostModeScreen: React.FC = () => {
   const [propertyLocation, setPropertyLocation] = React.useState('');
   const [propertyDescription, setPropertyDescription] = React.useState('');
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
-  const [avaliabilityDates, setAvaliabilityDates] = React.useState<string[]>([]);
   const [price, setPrice] = React.useState<number | undefined>();
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
@@ -69,6 +68,10 @@ const HostModeScreen: React.FC = () => {
   
 
   const handleAddProperty = async () => {
+    if (!propertyName || !propertyLocation || guests <= 0 || bedrooms <= 0 || beds <= 0 || bathrooms <= 0 || !price || price <= 0 || propertyImages.length === 0) {
+      Alert.alert('Please fill in all required fields and ensure numerical values are greater than 0.');
+      return;
+    }
     try {
       const propertyRef = await firestore().collection('properties').add({
         propertyName: propertyName,
@@ -78,7 +81,7 @@ const HostModeScreen: React.FC = () => {
         beds: beds,
         bathrooms: bathrooms,
         description: propertyDescription,
-        avaliabilityDates: avaliabilityDates,
+        avaliabilityDates: selectedDate,
         price: price,
       });
   
@@ -94,6 +97,20 @@ const HostModeScreen: React.FC = () => {
       // Wait for all images to upload and update the property document with image URLs
       const imageUrls = await Promise.all(imageUploadPromises);
       await propertyRef.update({ images: imageUrls });
+
+      setPropertyName('');
+      setPropertyLocation('');
+      setGuests(0);
+      setBedrooms(0);
+      setBeds(0);
+      setBathrooms(0);
+      setPropertyDescription('');
+      setSelectedDate(null);
+      setPrice(undefined);
+      setPropertyImages([]);
+
+      // Mostrar una alerta de éxito al usuario
+      Alert.alert('Success', 'Property added successfully!');
   
       console.log('Property added!');
     } catch (error) {
