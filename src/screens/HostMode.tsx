@@ -6,6 +6,8 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
 import storage from '@react-native-firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 
 const HostModeScreen: React.FC = () => {
   const [guests, setGuests] = React.useState(0);
@@ -17,8 +19,11 @@ const HostModeScreen: React.FC = () => {
   const [propertyDescription, setPropertyDescription] = React.useState('');
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
   const [avaliabilityDates, setAvaliabilityDates] = React.useState<string[]>([]);
-  const [price, setPrice] = React.useState(0);
-  const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
+  const [price, setPrice] = React.useState<number | undefined>();
+  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
+  
+
 
 
   const handleIncrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
@@ -48,8 +53,21 @@ const HostModeScreen: React.FC = () => {
     updatedImages.splice(index, 1);
     setPropertyImages(updatedImages);
   };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
   
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
   
+  const handleConfirm = (date: Date) => {
+    setSelectedDate(date);
+    hideDatePicker();
+  };
+  
+
   const handleAddProperty = async () => {
     try {
       const propertyRef = await firestore().collection('properties').add({
@@ -146,22 +164,28 @@ const HostModeScreen: React.FC = () => {
             <View style={styles.line} />
           </View>
 
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              value={avaliabilityDates.join(', ')}
-              onChangeText={(text) => setAvaliabilityDates(text.split(', '))}
-              placeholder="Avaliability Dates (comma separated)"
-              placeholderTextColor={'#7C7C7C'}
-            />
-          </View>
+          <TouchableOpacity style={styles.addButton} onPress={showDatePicker}>
+            <Text style={styles.addButtonText}>
+              {selectedDate ? selectedDate.toLocaleDateString() : "Select Availability Dates"}
+            </Text>
+            <Icon name="calendar" size={30} color="gray" />
+          </TouchableOpacity>
+
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+
+
 
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.input}
-              value={price.toString()} // Convert the price value to a string
-              onChangeText={(text) => setPrice(text as unknown as number)} // Update the type of setPrice to accept a string
-              placeholder="Price"
+              value={price !== undefined ? price.toString() : ''}
+              onChangeText={(text) => setPrice(text ? parseFloat(text) : undefined)}
+              placeholder="Price per night"
               placeholderTextColor={'#7C7C7C'}
               keyboardType="numeric"
             />
@@ -243,7 +267,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginLeft: 190,
     marginVertical: 15,
   },
   addButtonText: {
