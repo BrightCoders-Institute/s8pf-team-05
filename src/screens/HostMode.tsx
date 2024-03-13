@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NumericInput from '../components/HostMode/NumericInput';
 import HeaderNavigation from '../navigation/HeaderNavigation';
-
+import storage from '@react-native-firebase/storage';
+import {launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
 
 const HostModeScreen: React.FC = () => {
@@ -17,6 +18,8 @@ const HostModeScreen: React.FC = () => {
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
   const [avaliabilityDates, setAvaliabilityDates] = React.useState<string[]>([]);
   const [price, setPrice] = React.useState(0);
+  const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
+
 
   const handleIncrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
     setState(prevValue => prevValue + 1);
@@ -26,14 +29,30 @@ const HostModeScreen: React.FC = () => {
     setState(prevValue => Math.max(0, prevValue - 1));
   };
 
-  const handleAddImages = () => {
-    // Implementa la lógica para agregar imágenes
+  const handleAddImages = async () => {
+    try {
+      const result = await launchImageLibrary({ mediaType: 'photo', selectionLimit: 10 });
+      if (!result.didCancel) {
+        const { assets } = result;
+        const newImageUrls = assets.map(asset => asset.uri);
+        // Concatenate the new images with the existing ones
+        setPropertyImages(prevImages => [...prevImages, ...newImageUrls]);
+      }
+    } catch (error) {
+      console.error('Error selecting images: ', error);
+    }
   };
 
-  const handleAddProperty = () => {
-    firestore()
-      .collection('properties')
-      .add({
+  const handleDeleteImage = (index: number) => {
+    const updatedImages = [...propertyImages];
+    updatedImages.splice(index, 1);
+    setPropertyImages(updatedImages);
+  };
+  
+  
+  const handleAddProperty = async () => {
+    try {
+      const propertyRef = await firestore().collection('properties').add({
         propertyName: propertyName,
         location: propertyLocation,
         guests: guests,
@@ -41,14 +60,29 @@ const HostModeScreen: React.FC = () => {
         beds: beds,
         bathrooms: bathrooms,
         description: propertyDescription,
-        images: propertyImages,
         avaliabilityDates: avaliabilityDates,
         price: price,
-      })
-      .then(() => {
-        console.log('Property added!');
       });
+  
+      // Upload images to Firebase Cloud Storage
+      const imageUploadPromises = propertyImages.map(async (image, index) => {
+        const imageName = `image_${index}`;
+        const imageRef = storage().ref(`images/${propertyRef.id}/${imageName}`);
+        await imageRef.putFile(image);
+        const imageUrl = await imageRef.getDownloadURL();
+        return imageUrl;
+      });
+  
+      // Wait for all images to upload and update the property document with image URLs
+      const imageUrls = await Promise.all(imageUploadPromises);
+      await propertyRef.update({ images: imageUrls });
+  
+      console.log('Property added!');
+    } catch (error) {
+      console.error('Error adding property: ', error);
+    }
   };
+  
 
   return (
     <ScrollView>
@@ -137,12 +171,18 @@ const HostModeScreen: React.FC = () => {
             <Icon name="attach" size={30} color="gray" />
           </TouchableOpacity>
 
+          <View style={styles.imagesContainer}>
+            {propertyImages.map((imageUrl, index) => (
+              <TouchableOpacity key={index} onPress={() => handleDeleteImage(index)}>
+                <Image source={{ uri: imageUrl }} style={styles.image} />
+                <Icon name="close-circle" size={24} color="red" style={styles.deleteIcon} />
+              </TouchableOpacity>
+            ))}
+          </View>
           <TouchableOpacity style={styles.addPropertyButton} onPress={handleAddProperty}>
             <Text style={styles.addPropertyButtonText}>Add property</Text>
           </TouchableOpacity>
 
-
-          
         </View>
       </View>
     </ScrollView>
@@ -223,6 +263,22 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  imagesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    margin: 5,
+    borderRadius: 10,
+  },
+  deleteIcon: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
   },
 });
 
