@@ -2,29 +2,33 @@
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View, TextInput, Button} from 'react-native';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore';
 import ConfirmCreateAccountButton from '../components/CreateAccount/ConfirmCreateAccountButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+
 const CreateAccount = ({navigation}: any) => {
-  const [name, setName] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
 
   const [validEntries, setValidEntries] = useState(false);
-  const [validPhone, setValidPhone] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
   const [validRePassword, setValidRePassword] = useState(false);
   const [emailMessage, setEmailMessage] = useState('');
 
-  const [userInfo, setUserInfo] = useState<FirebaseAuthTypes.User>()
+  //const [userInfo, setUserInfo] = useState<FirebaseAuthTypes.User>()
+  const [newUser, setNewUser] = useState({
+    name: '',
+    lastname: '',
+    phoneNumber: '',
+    birthDay: '',
+    description: '',
+  })
 
   const [isFocusedName, setIsFocusedName] = useState(false);
   const [isFocusedLastName, setIsFocusedLastName] = useState(false);
-  const [isFocusedPhone, setIsFocusedPhone] = useState(false);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPass, setIsFocusedPass] = useState(false);
   const [isFocusedRePass, setIsFocusedRePass] = useState(false);
@@ -33,15 +37,14 @@ const CreateAccount = ({navigation}: any) => {
 
   const handleRegister: () => void = () => {
     const emailPattern = /\S+@\S+\.\S+/;
-      if(name && lastname && phone && email && password && rePassword){
+      if(newUser.name && newUser.lastname && email && password && rePassword){
         setValidEntries(false)
         setValidRePassword(false)
         {emailPattern.test(email) ? setValidEmail(false) : setValidEmail(true)}
-        {phone.length >= 10 ? setValidPhone(false) : setValidPhone(true)}
         {password.length >= 6 ? setValidPassword(false) : setValidPassword(true)}
-          if(password === rePassword){
-            //handleCreateUserWithFirebase()
-            console.log(name, lastname, phone, email, password)
+           if(password === rePassword){
+            handleCreateUserWithFirebase()
+            console.log(newUser)
           }else{
             setValidRePassword(true)
           }
@@ -50,27 +53,37 @@ const CreateAccount = ({navigation}: any) => {
         }
    }
 
-   const handleCreateUserWithFirebase: () => void = async () => {
-    await auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      const user = userCredential.user
-      if(user){
-        setUserInfo(user)
-        navigation.replace('Signin');
-      }
+    const handleCreateUserWithFirebase: () => void = async () => {
+      await auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        if(user){
+          //setUserInfo(user)
+          onSend()
+          navigation.replace('Signin');
+        }
+      })
+      .catch(err => {
+        if(err.code === 'auth/email-already-in-use'){
+          setValidEmail(true)
+          setEmailMessage('Email already in use')
+        }
+        if(err.code === 'auth/invalid-email'){
+          setEmailMessage('Please enter a valid email')
+        }
+        console.log(err)
     })
-    .catch(err => {
-      if(err.code === 'auth/email-already-in-use'){
-        setValidEmail(true)
-        setEmailMessage('Email already in use')
-      }
-      if(err.code === 'auth/invalid-email'){
-        setEmailMessage('Please enter a valid email')
-      }
-      console.log(err)
-   })
   }
+
+    const onSend : () => void = async () => {
+      await firestore().collection('users').add({
+        name: newUser.name,
+        lastname: newUser.lastname,
+        birthday: newUser.birthDay,
+        description: newUser.description,
+      })
+    }
   return (
     <View style={styles.first_container}>
       <View style={styles.second_container}>
@@ -84,8 +97,8 @@ const CreateAccount = ({navigation}: any) => {
               <View style={styles.inputs_container}>
                 <View style={styles.input_container}>
                   <TextInput style={[styles.input_text, isFocusedName && styles.isActive]}
-                  onChangeText={val => setName(val)}
-                  value={name}
+                  onChangeText={val => setNewUser({...newUser, name:val})}
+                  value={newUser.name}
                   placeholder={"Name"}
                   placeholderTextColor={'#B4B2B2'}
                   onFocus={() => setIsFocusedName(true)}
@@ -94,24 +107,13 @@ const CreateAccount = ({navigation}: any) => {
                 </View>
                 <View style={styles.input_container}>
                   <TextInput style={[styles.input_text, isFocusedLastName && styles.isActive]}
-                      onChangeText={val => setLastname(val)}
-                      value={lastname}
+                      onChangeText={(val) => setNewUser({...newUser, lastname:val})}
+                      value={newUser.lastname}
                       placeholder={"Lastname"}
                       placeholderTextColor={'#B4B2B2'}
                       onFocus={() => setIsFocusedLastName(true)}
                       onBlur={() => setIsFocusedLastName(false)}/>
                       <Text style={styles.errorTxt}/>
-                </View>
-                <View style={styles.input_container}>
-                  <TextInput style={[styles.input_text, isFocusedPhone && styles.isActive]}
-                      onChangeText={val => setPhone(val)}
-                      value={phone}
-                      placeholder={"Phone Number"}
-                      placeholderTextColor={'#B4B2B2'}
-                      keyboardType='numeric'
-                      onFocus={() => setIsFocusedPhone(true)}
-                      onBlur={() => setIsFocusedPhone(false)}/>
-                      {validPhone ? <Text style={styles.errorTxt}>Please enter a 10 digit phone number</Text> : <Text style={styles.errorTxt}/>}
                 </View>
                 <View style={styles.input_container}>
                   <TextInput style={[styles.input_text, isFocusedEmail && styles.isActive]}

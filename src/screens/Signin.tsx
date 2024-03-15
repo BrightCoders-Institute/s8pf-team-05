@@ -7,8 +7,7 @@ import CreateAccountButton from '../components/CreateAccount/CreateAccountButton
 import LoginAccounts from '../components/SignIn/LoginAccounts';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Signin = ({navigation}: any) => {
-
+const Signin = ({navigation}:any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
