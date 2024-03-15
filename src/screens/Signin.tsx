@@ -8,34 +8,58 @@ import LoginAccounts from '../components/SignIn/LoginAccounts';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Signin = ({navigation}: any) => {
-  //implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(false);
+
+  const [validEntries, setValidEntries] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
+  const [emailMessage, setEmailMessage] = useState('');
 
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(true);
-  const handleLogin = async () => {
-    try {
-      await auth().signInWithEmailAndPassword(email, password).then((userCredential) => {
-        const user = userCredential.user
-        if(user){
-          navigation.replace('Main');
+
+  const handleLogin: () => void = () => {
+    const emailPattern = /\S+@\S+\.\S+/;
+      if(email && password){
+        setValidEntries(false)
+        {emailPattern.test(email) ? setValidEmail(false) : setValidEmail(true)}
+        {password.length >= 6 ? setValidPassword(false) : setValidPassword(true)}
+        SigninWithFirebase()
+        }else {
+          setValidEntries(true)
         }
-      })
-    } catch (error) {
-      console.log(error)
-    }
+ }
+  
+  const SigninWithFirebase = async () => {
+      if(email && password){
+        await auth().signInWithEmailAndPassword(email, password).then((userCredential) => {
+          const user = userCredential.user
+          if(user){
+            navigation.replace('Main');
+          }
+        }).catch(err => {
+          if(err.code === 'auth/email-already-in-use'){
+            setEmailMessage('Email already in use')
+          }
+          if(err.code === 'auth/invalid-email'){
+            setEmailMessage('Invalid email')
+          }
+          console.log(err)
+        })
+      }
+    
   }
   return (
     <View style={styles.first_container}>
       <View style={styles.second_container}>
-        <Text style={styles.title}>Welcome to Eirbianbi</Text>
+        <Text style={styles.title}>Welcome to NestQuest</Text>
         <Text style={styles.subtitle}>Please Sign in or Create an Account</Text>
         <View style={styles.inputs_container}>
         <View style={styles.input_container}>
-          <TextInput style={[styles.input_textEmail, isFocusedEmail ? styles.isActiveEmail: styles.inActiveEmail,]}
+          <TextInput style={[styles.input_text, isFocusedEmail && styles.isActiveEmail]}
               onChangeText={val => setEmail(val)}
               value={email}
               autoCapitalize='none'
@@ -44,9 +68,10 @@ const Signin = ({navigation}: any) => {
               keyboardType='email-address'
               onFocus={() => setIsFocusedEmail(true)}
               onBlur={() => setIsFocusedEmail(false)}/>
+              {validEmail ? <Text style={styles.errorTxt}>{emailMessage}</Text> : <Text style={styles.errorTxt}/>}
         </View>
         <View style={styles.input_container}>
-          <TextInput style={[styles.input_textPassword, isFocusedPassword ? styles.isActivePassword: styles.inActivePassword,]}
+          <TextInput style={[styles.input_text, isFocusedPassword && styles.isActivePassword]}
               onChangeText={val => setPassword(val)}
               value={password}
               autoCapitalize='none'
@@ -56,8 +81,10 @@ const Signin = ({navigation}: any) => {
               onFocus={() => setIsFocusedPassword(true)}
               onBlur={() => setIsFocusedPassword(false)}
               />
+              {validPassword ? <Text style={styles.errorTxt}>Invalid password</Text> : <Text style={styles.errorTxt}/>}
               <Icon name={passwordVisible ? "eye-off" : "eye"} size={27} color="#A663CC" style={styles.icon} onPress={() => setPasswordVisible(!passwordVisible)}/>
         </View>
+        {validEntries ? <Text style={styles.errorEntriesTxt}>Please enter your email and password</Text> : <Text style={styles.errorTxt}/>}
     </View>
         <ContinueButton
           onPress={handleLogin}
@@ -99,11 +126,11 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginHorizontal: 15,
   },
-    input_container: {
-    justifyContent: 'center',
+  input_container: {
+    justifyContent: 'flex-start',
     alignItems: 'flex-end',
   },
-  input_textEmail: {
+  input_text: {
     height: 60,
     width: '100%',
     fontSize: 15,
@@ -111,41 +138,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderWidth: 1.5,
     borderColor: '#DBDADA',
-    borderTopRightRadius: 8,
-    borderTopLeftRadius: 8,
+    borderRadius: 8,
   },
-  input_textPassword: {
-    height: 60,
-    width: '100%',
-    fontSize: 15,
-    color: '#000000',
-    paddingHorizontal: 20,
-    borderWidth: 1.5,
-    borderColor: '#DBDADA',
-    borderBottomRightRadius: 8,
-    borderBottomLeftRadius: 8,
-},
+  errorTxt: {
+    fontSize: 10,
+    width: '100%',    
+    paddingLeft: 11,
+    color: '#CD3939',
+    marginBottom: 5,
+  },
+  errorEntriesTxt: {
+    fontSize: 12,
+    textAlign: 'center',
+    marginLeft: 10,
+    color: '#CD3939',
+    marginTop: 8,
+  },
   isActiveEmail: {
     borderWidth: 2,
     borderRadius: 8,
     borderColor: '#444444',
     margin: 0,
   },
-  inActiveEmail:{
-    borderBottomWidth: 0,
-  },
   isActivePassword: {
     borderWidth: 2,
     borderRadius: 8,
     borderColor: '#444444',
   },
-  inActivePassword:{
-    borderTopWidth: 0,
-  },
   icon: {
     textAlign: 'center',
     position: 'absolute',
     paddingRight: 12,
+    marginTop: 17,
 }
 });
 

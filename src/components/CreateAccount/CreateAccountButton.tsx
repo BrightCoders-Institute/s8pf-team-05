@@ -26,7 +26,7 @@ const CreateAccountButton = ({
 const styles = StyleSheet.create({
     container:{
         alignItems: 'center',
-        marginTop: 30,
+        marginTop: 17,
         marginBottom: 5,
         marginHorizontal: 30,
     },
