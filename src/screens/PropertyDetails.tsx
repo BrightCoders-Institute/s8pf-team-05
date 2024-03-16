@@ -4,9 +4,12 @@ import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
 import HostInfo from '../components/PropertyDetails/HostInfo';
 import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
-import HeaderNavigation from '../navigation/HeaderNavigation';
+import { useNavigation } from '@react-navigation/native';
 
 const PropertyDetailsScreen: React.FC = () => {
+
+    const navigation = useNavigation()
+
     const propertyImages = ['https://i.pinimg.com/564x/d6/18/18/d618188c4722ca5cc938ee3dde7b09cc.jpg',
                             'https://i.pinimg.com/564x/83/c5/d1/83c5d1d9539c0296a2f7b60789c0a716.jpg',
                             'https://i.pinimg.com/550x/2e/07/e4/2e07e483ecd7b8b25ef720de4df5e0c5.jpg']; 
@@ -24,7 +27,7 @@ const PropertyDetailsScreen: React.FC = () => {
     const pricePerNight = '$1000';
 
   const handleReservePress = () => {
-    console.log('Botón de reservar presionado');
+    navigation.navigate('ConfirmReservation');
   };
 
     return (
