@@ -8,12 +8,11 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 
-interface ContinueButtonProps {
-  title: string;
-}
-
-const ContinueButton = ( 
-  { onPress,}: { onPress: (event: GestureResponderEvent) => void}) => {
+const ContinueButton = ({
+  onPress,
+}: {
+  onPress: (event: GestureResponderEvent) => void;
+}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress}>
@@ -28,7 +27,7 @@ const ContinueButton = (
 const styles = StyleSheet.create({
     container:{
         alignItems: 'center',
-        marginTop: 30,
+        marginTop: 15,
         marginBottom: 5,
         marginHorizontal: 30,
     },

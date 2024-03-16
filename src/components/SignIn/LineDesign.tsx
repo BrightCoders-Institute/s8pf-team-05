@@ -16,7 +16,7 @@ export default LineDesign
 const styles = StyleSheet.create({
     line_container:{
         flexDirection: 'row',
-        marginTop: 40,
+        marginTop: 25,
         marginBottom: 35,
     },
     line_items: {

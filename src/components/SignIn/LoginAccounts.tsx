@@ -10,14 +10,14 @@ const LoginAccounts = () => {
         <LineDesign/>
         <TouchableOpacity>
             <View style={styles.login_btn}>
-                <Icon name="mail-outline" size={27} color="#A663CC" style={styles.icon}/>
-                <Text style={styles.text}>Continue with email</Text>
+                <Icon name="logo-google" size={27} color="#A663CC" style={styles.icon}/>
+                <Text style={styles.text}>Continue with Google</Text>
             </View>
         </TouchableOpacity>
         <TouchableOpacity>
             <View style={styles.login_btn}>
-                <Icon name="logo-google" size={27} color="#A663CC" style={styles.icon}/>
-                <Text style={styles.text}>Continue with Google</Text>
+                <Icon name="logo-facebook" size={27} color="#A663CC" style={styles.icon}/>
+                <Text style={styles.text}>Continue with Facebook</Text>
             </View>
         </TouchableOpacity>
     </View>
