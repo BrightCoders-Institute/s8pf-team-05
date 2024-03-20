@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, TextInput, Button} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, TextInput, Alert} from 'react-native';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import ConfirmCreateAccountButton from '../components/CreateAccount/ConfirmCreateAccountButton';
@@ -61,6 +61,7 @@ const CreateAccount = ({navigation}: any) => {
         if(user){
           //setUserInfo(user)
           onSend()
+          Alert.alert('Success', 'Account created successfully!');
           navigation.replace('Signin');
         }
       })
@@ -80,6 +81,7 @@ const CreateAccount = ({navigation}: any) => {
       await firestore().collection('users').add({
         name: newUser.name,
         lastname: newUser.lastname,
+        phone: newUser.phoneNumber,
         birthday: newUser.birthDay,
         description: newUser.description,
       })
