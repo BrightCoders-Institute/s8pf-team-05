@@ -10,6 +10,7 @@ import CreateAccount from '../screens/CreateAccount';
 import DateSelect from '../screens/DateSelect';
 import SelectCity from '../screens/SelectCity';
 import ReservationCompleted from '../screens/ReservationCompleted';
+import HostModeInactiveScreen from '../screens/HostModeInactive';
 
 // type RootStackParams = {
 //   Signin: undefined;
@@ -34,14 +35,9 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
 
       <Stack.Screen name="Signin" component={Signin} />
 
-      <Stack.Screen name="PropertyDetails" component={PropertyDetailsScreen} />
-      <Stack.Screen 
-      name="CreateAccount" 
-      component={CreateAccount} />
+      <Stack.Screen name="CreateAccount" component={CreateAccount} />
 
-      <Stack.Screen 
-        name="PropertyDetails" 
-        component={PropertyDetailsScreen} />
+      <Stack.Screen name="PropertyDetails" component={PropertyDetailsScreen} />
 
       <Stack.Screen
         name="PersonalInformation"
@@ -49,6 +45,11 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       />
 
       <Stack.Screen name="HostModeScreen" component={HostModeScreen} />
+
+      <Stack.Screen
+        name="HostModeInactive"
+        component={HostModeInactiveScreen}
+      />
 
       <Stack.Screen name="DateSelect" component={DateSelect} />
 
