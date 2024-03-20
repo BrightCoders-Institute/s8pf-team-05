@@ -9,7 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
-const HostModeScreen: React.FC = () => {
+const HostModeScreen: React.FC = ({navigation}:any) => {
   const [guests, setGuests] = React.useState(0);
   const [bedrooms, setBedrooms] = React.useState(0);
   const [beds, setBeds] = React.useState(0);
@@ -111,7 +111,7 @@ const HostModeScreen: React.FC = () => {
 
       // Mostrar una alerta de éxito al usuario
       Alert.alert('Success', 'Property added successfully!');
-  
+      navigation.replace('HostModePropertiesList');
       console.log('Property added!');
     } catch (error) {
       console.error('Error adding property: ', error);
@@ -120,10 +120,10 @@ const HostModeScreen: React.FC = () => {
   
 
   return (
-    <ScrollView>
+    <View style={styles.container}>
       <HeaderNavigation whereNav='Profile'/>
-      <View style={styles.container}>
-        <Text style={styles.title}>Add a new property</Text>
+      <Text style={styles.title}>Add a new property</Text>
+      <ScrollView>
         <View style={styles.formContainer}>
           <View style={styles.inputWrapper}>
             <TextInput
@@ -195,8 +195,6 @@ const HostModeScreen: React.FC = () => {
             onCancel={hideDatePicker}
           />
 
-
-
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.input}
@@ -223,10 +221,9 @@ const HostModeScreen: React.FC = () => {
           <TouchableOpacity style={styles.addPropertyButton} onPress={handleAddProperty}>
             <Text style={styles.addPropertyButtonText}>Add property</Text>
           </TouchableOpacity>
-
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -235,13 +232,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 25,
   },
   title: {
     fontSize: 30,
     color: '#444444',
     fontWeight: 'bold',
-    marginVertical: 20,
+    marginBottom: 15,
+    marginTop: 7,
   },
   formContainer: {
     width: '100%',
