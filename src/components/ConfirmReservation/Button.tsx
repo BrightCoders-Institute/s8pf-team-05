@@ -2,15 +2,17 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 export default function Button({
+  text,
   style,
   onPress,
 }: {
+  text: string;
   style?: {};
   onPress: () => void;
 }) {
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
-      <Text style={styles.text}>Solicitar Reservación</Text>
+      <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
 }

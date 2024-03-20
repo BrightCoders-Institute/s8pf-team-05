@@ -25,6 +25,7 @@ export default HostInfo;
 const styles = StyleSheet.create({
   container: {
     marginTop: 5,
+    marginBottom: -5,
     flexDirection: 'row',
   },
   infoContainer: {

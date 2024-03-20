@@ -49,7 +49,7 @@ const Profile = ({navigation}: any) => {
         icon="diamond-outline"
         text="Host mode"
         onPress={() => {
-          navigation.navigate('HostModeScreen'); //Cambiar a screen Host mode.
+          navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
         }}
       />
 
