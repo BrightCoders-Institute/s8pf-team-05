@@ -67,10 +67,11 @@ export default function ConfirmReservation() {
               'https://www.infobae.com/new-resizer/6_ShVi7_Ps8JOa8jdGKI06ofW80=/1440x1440/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UERNNO3H7RGNPEJKE2STAUGWXM.jpg'
             }
           />
-          <CommentBox />
+          <CommentBox placeholder="Escribe aqui tu comentario..." />
 
           <Button
             style={styles.button}
+            text="Solicitar Reservacion"
             onPress={() => {
               navigation.navigate('ReservationCompleted');
             }}
