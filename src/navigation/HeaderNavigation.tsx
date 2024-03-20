@@ -8,13 +8,20 @@ interface headerProps{
 const HeaderNavigation = ({whereNav}: headerProps) => {
      const navigate = useNavigation()
   return (
-    <TouchableOpacity
+    <View style={styles.button_container}>
+      <TouchableOpacity
     onPress={() => navigate.navigate(whereNav)}>
-              <Icon name ='arrowleft' size={20} color={'black'}/>
+              <Icon name ='arrowleft' size={27} color={'black'}/>
     </TouchableOpacity>
+    </View>
   )
 }
 
 export default HeaderNavigation
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  button_container: {
+    width: '100%',
+    marginTop: 20,
+  },
+})
