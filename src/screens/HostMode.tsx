@@ -7,7 +7,8 @@ import storage from '@react-native-firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import { Picker as SelectPicker } from '@react-native-picker/picker';
+import { firebase } from '@react-native-firebase/auth';
 
 const HostModeScreen: React.FC = () => {
   const [guests, setGuests] = React.useState(0);
@@ -21,9 +22,12 @@ const HostModeScreen: React.FC = () => {
   const [price, setPrice] = React.useState<number | undefined>();
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
-  
+  const [propertyType, setPropertyType] = React.useState<string>('');
+  const userId = firebase.auth().currentUser?.uid || '';
 
-
+  const handlePropertyTypeSelection = (type: string) => {
+    setPropertyType(type);
+  };
 
   const handleIncrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
     setState(prevValue => prevValue + 1);
@@ -68,7 +72,7 @@ const HostModeScreen: React.FC = () => {
   
 
   const handleAddProperty = async () => {
-    if (!propertyName || !propertyLocation || guests <= 0 || bedrooms <= 0 || beds <= 0 || bathrooms <= 0 || !price || price <= 0 || propertyImages.length === 0) {
+    if (!propertyName || !propertyLocation || guests <= 0 || bedrooms <= 0 || beds <= 0 || bathrooms <= 0 || !price || price <= 0 || propertyImages.length === 0 || !propertyType) {
       Alert.alert('Please fill in all required fields and ensure numerical values are greater than 0.');
       return;
     }
@@ -83,6 +87,8 @@ const HostModeScreen: React.FC = () => {
         description: propertyDescription,
         avaliabilityDates: selectedDate,
         price: price,
+        propertyType: propertyType,
+        hostId: userId,
       });
   
       // Upload images to Firebase Cloud Storage
@@ -118,6 +124,10 @@ const HostModeScreen: React.FC = () => {
     }
   };
   
+
+  function onChange(itemValue: any, itemIndex: number): void {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <ScrollView>
@@ -169,6 +179,38 @@ const HostModeScreen: React.FC = () => {
             onIncrease={() => handleIncrease(setBathrooms)}
             onDecrease={() => handleDecrease(setBathrooms)}
           />
+          
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              value={price !== undefined ? price.toString() : ''}
+              onChangeText={(text) => setPrice(text ? parseFloat(text) : undefined)}
+              placeholder="Price per night"
+              placeholderTextColor={'#7C7C7C'}
+              keyboardType="numeric"
+            />
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <SelectPicker
+              selectedValue={propertyType}
+              style={styles.picker}
+              onValueChange={(itemValue, itemIndex) =>
+                handlePropertyTypeSelection(itemValue)
+              }>
+              <SelectPicker.Item label="Select property type" value="" />
+              <SelectPicker.Item label="House" value="house" />
+              <SelectPicker.Item label="Apartment" value="apartment" />
+              <SelectPicker.Item label="Condo" value="condo" />
+              <SelectPicker.Item label="Cabin" value="cabin" />
+              <SelectPicker.Item label="Villa" value="villa" />
+              <SelectPicker.Item label="Mansion" value="mansion" />
+              <SelectPicker.Item label="Other" value="other" />
+            </SelectPicker>
+          </View>
+
+
+
           <View style={styles.inputWrapper}>
             <TextInput
               style={[styles.textArea]}
@@ -195,18 +237,6 @@ const HostModeScreen: React.FC = () => {
             onCancel={hideDatePicker}
           />
 
-
-
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              value={price !== undefined ? price.toString() : ''}
-              onChangeText={(text) => setPrice(text ? parseFloat(text) : undefined)}
-              placeholder="Price per night"
-              placeholderTextColor={'#7C7C7C'}
-              keyboardType="numeric"
-            />
-          </View>
           <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
             <Text style={styles.addButtonText}>Add Images</Text>
             <Icon name="attach" size={30} color="gray" />
@@ -319,6 +349,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 5,
     right: 5,
+  },
+  picker: {
+    marginTop: 20,
+    height: 40,
+    color: '#000000',
+    borderColor: '#DBDADA',
+    borderBottomWidth: 1.5,
+    paddingHorizontal: 5,
+    flex: 1,
   },
 });
 

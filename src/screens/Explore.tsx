@@ -4,16 +4,6 @@ import SearchBar from '../components/Explore/SearchBar';
 import CategoryButton from '../components/Explore/CategoryButton';
 import PropertyCard from '../components/Explore/PropertyCard';
 
-// type Property = {
-//   id: number;
-//   name: string;
-//   images: string[];
-//   location: string;
-//   rating: number;
-//   description: string;
-//   dateAvailable: string;
-//   price: string;
-// };
 
 const Explore = ({navigation}: any) => {
   const goToCategory = (category: string) => {
