@@ -199,17 +199,15 @@ const HostModeScreen: React.FC = () => {
                 handlePropertyTypeSelection(itemValue)
               }>
               <SelectPicker.Item label="Select property type" value="" />
-              <SelectPicker.Item label="House" value="house" />
               <SelectPicker.Item label="Apartment" value="apartment" />
-              <SelectPicker.Item label="Condo" value="condo" />
-              <SelectPicker.Item label="Cabin" value="cabin" />
-              <SelectPicker.Item label="Villa" value="villa" />
-              <SelectPicker.Item label="Mansion" value="mansion" />
+              <SelectPicker.Item label="House" value="house" />
+              <SelectPicker.Item label="Pool House" value="pool" />
+              <SelectPicker.Item label="House in the forest" value="forest" />
+              <SelectPicker.Item label="Beach house" value="beach" />
+              <SelectPicker.Item label="House in the countryside" value="countryside" />
               <SelectPicker.Item label="Other" value="other" />
             </SelectPicker>
           </View>
-
-
 
           <View style={styles.inputWrapper}>
             <TextInput
