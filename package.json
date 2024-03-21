@@ -22,6 +22,7 @@
     "@react-navigation/native-stack": "^6.9.18",
     "@types/react-native-calendar-picker": "^8.0.0",
     "@types/react-native-snap-carousel": "^3.8.10",
+    "moment": "^2.30.1",
     "patch-package": "^8.0.0",
     "react": "18.2.0",
     "react-native": "0.73.4",

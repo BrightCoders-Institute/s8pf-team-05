@@ -202,9 +202,9 @@ const HostModeScreen: React.FC = () => {
               <SelectPicker.Item label="Apartment" value="apartment" />
               <SelectPicker.Item label="House" value="house" />
               <SelectPicker.Item label="Pool House" value="pool" />
-              <SelectPicker.Item label="House in the forest" value="forest" />
-              <SelectPicker.Item label="Beach house" value="beach" />
               <SelectPicker.Item label="House in the countryside" value="countryside" />
+              <SelectPicker.Item label="Beach house" value="beach" />
+              <SelectPicker.Item label="House in the mountain" value="mountain" />
               <SelectPicker.Item label="Other" value="other" />
             </SelectPicker>
           </View>
