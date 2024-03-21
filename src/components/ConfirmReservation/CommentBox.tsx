@@ -1,15 +1,24 @@
 import React from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 
-export default function CommentBox() {
+type Props = {
+  title?: string;
+  placeholder: string;
+  onChangeText?: (value: string) => void;
+};
+
+export default function CommentBox({title, placeholder, onChangeText}: Props) {
   return (
-    <View style={styles.commentBox}>
+    <View>
+      <Text style={styles.title}>{title}</Text>
       <TextInput
-        placeholder="Escribe aquí tu comentario..."
+        style={styles.commentBox}
+        placeholder={placeholder}
         placeholderTextColor={'#8D8D8D'}
         multiline={true}
         numberOfLines={5}
         textAlignVertical="top"
+        onChangeText={onChangeText}
       />
     </View>
   );
@@ -20,9 +29,14 @@ const styles = StyleSheet.create({
     borderColor: '#B7B7B7',
     borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    marginVertical: 10,
+    padding: 15,
+    marginVertical: 5,
     height: 120,
     justifyContent: 'center',
+  },
+  title: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

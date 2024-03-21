@@ -1,13 +1,17 @@
 /* eslint-disable */
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 //{/*onPress={() => navigation.goBack()}*/}
-const CloseButton = () => {
+
+const CloseButton = ({onPress}: {onPress: () => void}) => {
   return (
-    <View style={styles.x_container}> 
-        <Icon name="close" size={25} color="#444444" style={styles.x_icon}/> 
-    </View>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.x_container}> 
+          <Icon name="close" size={25} color="#444444" style={styles.x_icon}/> 
+      </View>
+    </TouchableWithoutFeedback>
+    
   )
 }
 
