@@ -17,29 +17,64 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import InputDate from '../components/HostModeInactive/InputDate';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import Profilepicture from '../components/personalInfo/Profilepicture';
+import {launchImageLibrary} from 'react-native-image-picker';
+import LoadingComponent from '../components/LoadingComponent';
 
 const HostModeInactiveScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [msgAlert, setMsgAlert] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
+  const [imgUser, setImgUser] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [birthDay, setBirthDay] = useState<string>('');
   const [aboutYou, setAboutYou] = useState<string>('');
 
+  const handleAddImages = async () => {
+    try {
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        selectionLimit: 1,
+      });
+      if (!result.didCancel) {
+        const {assets} = result;
+        const newImage = assets.map(asset => asset.uri);
+        setImgUser(newImage[0]);
+      }
+    } catch (error) {
+      console.error('Error selecting images: ', error);
+    }
+  };
+
   const handleSendRequest = async () => {
     // Lógica para enviar la solicitud
-    console.log(birthDay);
-    if (phone.length >= 10 && birthDay.length >= 9 && aboutYou.length >= 10) {
+    if (
+      phone.length >= 10 &&
+      birthDay.length >= 9 &&
+      aboutYou.length >= 10 &&
+      imgUser.length !== 0
+    ) {
       hideModal();
-      await firestore()
+      setLoading(true);
+      const imageName = 'userImageProfile';
+      const imageRef = storage().ref(
+        `users/${auth().currentUser?.uid}/${imageName}`,
+      );
+      await imageRef.putFile(imgUser);
+      const imageUrl = await imageRef.getDownloadURL();
+      console.log(imageUrl);
+      firestore()
         .collection('users')
         .doc(auth().currentUser?.uid)
         .update({
           birthday: birthDay,
           description: aboutYou,
           phone: phone,
+          profileImage: imageUrl,
         })
         .then(() => Alert.alert('Success', 'Information Correctly Updated'));
     } else {
@@ -63,6 +98,7 @@ const HostModeInactiveScreen: React.FC = () => {
 
   return (
     <>
+      {loading && <LoadingComponent />}
       <HeaderNavigation whereNav="Main" />
       <View style={styles.container}>
         <Modal
@@ -76,6 +112,13 @@ const HostModeInactiveScreen: React.FC = () => {
             <View style={styles.modalView}>
               <ScrollView>
                 <CloseButton onPress={hideModal} />
+
+                <Text style={styles.titleInput}>Foto</Text>
+                <View style={styles.photoConatainer}>
+                  <Profilepicture onPress={handleAddImages} imgUser={imgUser} />
+                  <Text> Agrega una fotografía</Text>
+                </View>
+
                 <Input
                   title="Teléfono"
                   placeholder="Ingresa tu numero de teléfono"
@@ -83,6 +126,7 @@ const HostModeInactiveScreen: React.FC = () => {
                     setPhone(value);
                   }}
                 />
+
                 <InputDate
                   style={styles.inputFecha}
                   content={selectedDate?.toLocaleDateString()}
@@ -94,6 +138,7 @@ const HostModeInactiveScreen: React.FC = () => {
                   onConfirm={handleConfirm}
                   onCancel={hideDatePicker}
                 />
+
                 <CommentBox
                   title="Sobre ti"
                   placeholder="Escribe un poco sobre ti..."
@@ -106,7 +151,6 @@ const HostModeInactiveScreen: React.FC = () => {
 
                 <Button
                   text="Enviar Formulario"
-                  style={styles.btnModal}
                   onPress={() => {
                     handleSendRequest();
                   }}
@@ -134,6 +178,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+  },
+  photoConatainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontSize: 25,
@@ -164,7 +212,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     flex: 1,
-    marginTop: '50%',
+    marginTop: '5%',
     backgroundColor: 'white',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -181,13 +229,16 @@ const styles = StyleSheet.create({
   inputFecha: {
     marginBottom: 30,
   },
-  btnModal: {
-    marginTop: 30,
-  },
   textAlert: {
-    marginTop: 20,
+    marginVertical: 10,
     textAlign: 'center',
     color: 'red',
+  },
+  titleInput: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 15,
   },
 });
 
