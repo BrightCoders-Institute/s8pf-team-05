@@ -37,7 +37,10 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
 
       <Stack.Screen name="Signin" component={Signin} />
 
-      <Stack.Screen name="CreateAccount" component={CreateAccount} />
+
+      <Stack.Screen 
+      name="CreateAccount" 
+      component={CreateAccount} />
 
       <Stack.Screen name="PropertyDetails" component={PropertyDetailsScreen} />
 

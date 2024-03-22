@@ -10,14 +10,15 @@ import {
 import FavoriteButton from './FavoriteButton';
 import Rating from './Rating';
 import Carousel from 'react-native-snap-carousel';
+import Moment from 'moment'
 
 interface PropertyCardProps {
   property: {
     images: string[];
     location: string;
     rating: number;
-    description: string;
-    dateAvailable: string;
+    propertyName: string;
+    avaliabilityDates: Date;
     price: string;
   };
   onPress: () => void;
@@ -30,6 +31,11 @@ const renderItem = ({item}: {item: string}) => (
 );
 
 const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
+  const timestamp = property.avaliabilityDates;
+  const date = new Date(timestamp.seconds * 1000);
+  const formattedDate = Moment(date).format('MMM D, YYYY');
+  console.log(property.images)
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.propertyCard}>
@@ -49,11 +55,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
             <Text style={styles.propertyLocation}>{property.location}</Text>
             <Rating rating={property.rating} />
           </View>
-          <Text style={styles.propertyDescription}>{property.description}</Text>
-          <Text style={styles.propertyDateAvailable}>
-            {property.dateAvailable}
-          </Text>
-          <Text style={styles.propertyPrice}>{property.price}</Text>
+          <Text style={styles.propertyDescription}>{property.propertyName}</Text>
+          <Text style={styles.propertyDateAvailable}>{formattedDate}</Text>
+
+          <Text style={styles.propertyPrice}>${property.price} por noche</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
