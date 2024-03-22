@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth:1,
     borderColor:'gray',
-    marginBottom: 40
+    marginBottom: 20,
+    marginTop: 20,
 
   },
   text_accion:{
