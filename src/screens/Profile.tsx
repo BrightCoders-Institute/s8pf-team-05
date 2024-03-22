@@ -1,6 +1,8 @@
+/* eslint-disable */
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth'
 import OptionsButtons from '../components/ProfileScreenComponents/OptionsButtons';
 
 
@@ -9,12 +11,15 @@ const Profile = ({navigation}: any) => {
 
   const handleLogOut = async () => {
     try {
-      await auth().signOut()
-      .then(navigation.replace('Signin'))
-    } catch (error) {
+      await auth().signOut().then(navigation.replace('Signin'))
+      const isSignedIn = await GoogleSignin.isSignedIn();
+      if(isSignedIn){
+        await GoogleSignin.revokeAccess().then(navigation.replace('Signin'))
+      } 
+    }catch (error) {
       console.log(error)
-    }
   }
+}
 
 
   return (

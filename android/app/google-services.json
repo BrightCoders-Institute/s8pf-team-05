@@ -12,7 +12,20 @@
           "package_name": "com.nestquest"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "950063643166-r7eug3o2f9qp9r8008gpfs4l2ojpnlgp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nestquest",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "950063643166-imhvslitr5ti6q900i4sqqmgg8oe4gat.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCgOCV8HJ_xLBcMlWh8jCGxgr6Mxthxukc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950063643166-imhvslitr5ti6q900i4sqqmgg8oe4gat.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
