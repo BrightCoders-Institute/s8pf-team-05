@@ -75,7 +75,7 @@ const Explore = ({ navigation }: any) => {
                     key={property.id}
                     property={property}
                     onPress={() => {
-                      navigation.navigate('PropertyDetails', property);
+                      navigation.navigate('PropertyDetails', { property: property });
                     }}
                   />
                 ))}
