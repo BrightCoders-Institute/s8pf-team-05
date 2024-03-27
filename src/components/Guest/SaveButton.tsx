@@ -2,10 +2,14 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const SaveButton = () => {
+interface SaveButtonProps {
+    saveNumbers: () => void;
+}
+
+const SaveButton: React.FC<SaveButtonProps> = ({saveNumbers}) => {
   return (
     <View>
-        <TouchableOpacity style={styles.save_btn}>
+        <TouchableOpacity style={styles.save_btn} onPress={saveNumbers}>
             <Text style={styles.save_txt}>Save</Text>
         </TouchableOpacity>
     </View>

@@ -17,7 +17,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ label, value, onIncrease, o
             <View style={styles.inputWrapper}>
             
                 <TouchableOpacity style={styles.button} onPress={onDecrease}>
-                    <Icon name="remove-circle-outline" size={30} color="#A7A7A7" />
+                    <Icon name="remove-circle-outline" size={32} color="#A7A7A7" />
                 </TouchableOpacity>
                 <TextInput
                 style={styles.input}
@@ -26,7 +26,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ label, value, onIncrease, o
                 onChangeText={value => {}}
                 />
                 <TouchableOpacity style={styles.button} onPress={onIncrease}>
-                    <Icon name="add-circle-outline" size={30} color="#A7A7A7" />
+                    <Icon name="add-circle-outline" size={32} color="#A7A7A7" />
                 </TouchableOpacity>
             </View>    
         </View>
