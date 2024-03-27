@@ -10,6 +10,7 @@ import HostModePropertiesList from '../screens/HostModePropertiesList';
 import ConfirmReservation from '../screens/ConfirmReservation';
 import CreateAccount from '../screens/CreateAccount';
 import DateSelect from '../screens/DateSelect';
+import GuestSelect from '../screens/GuestSelect';
 import SelectCity from '../screens/SelectCity';
 import ReservationCompleted from '../screens/ReservationCompleted';
 import HostModeInactiveScreen from '../screens/HostModeInactive';
@@ -58,6 +59,8 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       />
 
       <Stack.Screen name="DateSelect" component={DateSelect} />
+
+      <Stack.Screen name="GuestSelect" component={GuestSelect} />
 
       <Stack.Screen name="ConfirmReservation" component={ConfirmReservation} />
 
