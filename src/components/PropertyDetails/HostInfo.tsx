@@ -3,14 +3,14 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 
 interface HostInfoProps {
   hostName: string;
-  hostImage: any; 
+  hostImage: string; 
 }
 
 const HostInfo: React.FC<HostInfoProps> = ({ hostName, hostImage }) => {
   return (
     <View style={styles.hostInfoContainer}>
       <View style={styles.container}>
-        <Image source={hostImage} style={styles.hostImage} />
+        <Image source={{uri: hostImage}} style={styles.hostImage} />
         <View>
           <Text style={styles.hostTitle}>Host:</Text>
           <Text style={styles.hostName}>{hostName}</Text>
