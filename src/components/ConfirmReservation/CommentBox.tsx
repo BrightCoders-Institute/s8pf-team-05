@@ -27,6 +27,7 @@ export default function CommentBox({title, placeholder, onChangeText}: Props) {
 const styles = StyleSheet.create({
   commentBox: {
     borderColor: '#B7B7B7',
+    color: 'black',
     borderWidth: 1,
     borderRadius: 10,
     padding: 15,

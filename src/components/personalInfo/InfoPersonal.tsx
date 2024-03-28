@@ -12,7 +12,7 @@ const InfoPersonal = ({name,value,action}:InfoPersonalProps) => {
     <View style={styles.container}>
       <View style={styles.text_container}>
         <Text style={styles.text_name}>{name}</Text>
-        <Text>{value}</Text>
+        <Text style={styles.text_value}>{value}</Text>
       </View>
       <Text style ={styles.text_accion}> {action}</Text>
     </View>
@@ -34,14 +34,18 @@ const styles = StyleSheet.create({
   },
   text_accion:{
     fontWeight: 'bold',
+    color: '#444444',
     textDecorationLine: 'underline',
     textAlignVertical: 'center',
   },
   text_name:{
     fontWeight: 'bold',
-    
+    color: '#444444',
   },
   text_container:{
     marginBottom: 25
+  },
+  text_value: {
+    color: '#7C7C7C',
   }
 })
