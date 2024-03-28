@@ -1,57 +1,76 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 import SelectLocation from '../components/SelectCity/SelectLocation';
 import CarouselComponent from '../components/SelectCity/Carousel';
 import Btn_buscar from '../components/SelectCity/Btn_buscar';
-import HeaderNavigation from '../navigation/HeaderNavigation';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation, StackActions} from '@react-navigation/native';
+
 export default function SelectCity() {
-  
-  const navigation = useNavigation()
+  const [selectedCity, setSelectedCity] = useState<string>();
+  const [disabledBtn, setDisabledBtn] = useState(true);
+  const navigation = useNavigation();
+
+  if (selectedCity !== undefined && disabledBtn) {
+    setDisabledBtn(false);
+  }
+
+  function handleSelectedCity() {
+    firestore()
+      .collection('users')
+      .doc(auth().currentUser?.uid)
+      .update({
+        defaultCity: selectedCity,
+      })
+      .then(() => navigation.dispatch(StackActions.replace('Main')));
+  }
+
   return (
     <View style={styles.container}>
-      <CarouselComponent/>
+      <CarouselComponent />
       <View style={styles.containerInfo}>
         <Text style={styles.title_Text}>Find places to stay</Text>
-        <Text style={styles.description_Text}>A cabin, an apartment or a castle, everything you are looking for will be found here.</Text>
-        <SelectLocation/>
-        <Btn_buscar whereNav='Profile'/>
-        <TouchableOpacity
-    onPress={() => navigation.navigate('Profile')}>
-        <View >
-            <Text >Buscar</Text>
-        </View>
-    </TouchableOpacity>
+        <Text style={styles.description_Text}>
+          A cabin, an apartment or a castle, everything you are looking for will
+          be found here.
+        </Text>
+        <SelectLocation
+          selectedCity={val => {
+            setSelectedCity(val);
+          }}
+        />
+        <Btn_buscar onPress={handleSelectedCity} disabled={disabledBtn} />
       </View>
-
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:40,
+    paddingTop: 40,
     paddingBottom: 30,
     backgroundColor: '#F3F3F3',
   },
-  containerInfo:{
-    margin:20,
+  containerInfo: {
+    margin: 20,
     marginTop: 20,
     padding: 5,
   },
-  title_Text:{
-    fontSize:40,
-    fontWeight:'bold',
+  title_Text: {
+    fontSize: 40,
+    fontWeight: 'bold',
     color: '#444444',
     lineHeight: 40,
   },
-  description_Text:{
-    fontSize:15,
-    marginTop: 15,
+  description_Text: {
+    textAlign: 'center',
+    fontSize: 15,
+    marginTop: 10,
     marginBottom: 30,
-    paddingRight:15,
+    paddingRight: 15,
     color: '#7C7C7C',
-  }
-})
+  },
+});

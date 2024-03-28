@@ -21,6 +21,7 @@ import storage from '@react-native-firebase/storage';
 import Profilepicture from '../components/personalInfo/Profilepicture';
 import {launchImageLibrary} from 'react-native-image-picker';
 import LoadingComponent from '../components/LoadingComponent';
+import { useNavigation } from '@react-navigation/native';
 
 const HostModeInactiveScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,6 +34,8 @@ const HostModeInactiveScreen: React.FC = () => {
   const [phone, setPhone] = useState<string>('');
   const [birthDay, setBirthDay] = useState<string>('');
   const [aboutYou, setAboutYou] = useState<string>('');
+
+  const navigation = useNavigation();
 
   const handleAddImages = async () => {
     try {
@@ -53,8 +56,8 @@ const HostModeInactiveScreen: React.FC = () => {
   const handleSendRequest = async () => {
     // Lógica para enviar la solicitud
     if (
-      phone.length >= 10 &&
-      birthDay.length >= 9 &&
+      phone.length === 10 &&
+      birthDay.length > 0 &&
       aboutYou.length >= 10 &&
       imgUser.length !== 0
     ) {
@@ -75,8 +78,12 @@ const HostModeInactiveScreen: React.FC = () => {
           description: aboutYou,
           phone: phone,
           profileImage: imageUrl,
+          HostMode: true,
         })
-        .then(() => Alert.alert('Success', 'Information Correctly Updated'));
+        .then(() => {
+          Alert.alert('Success', 'Information Correctly Updated');
+          navigation.goBack();
+        });
     } else {
       setMsgAlert('Rellene todos los campos');
     }
@@ -150,7 +157,7 @@ const HostModeInactiveScreen: React.FC = () => {
                 <Text style={styles.textAlert}>{msgAlert}</Text>
 
                 <Button
-                  text="Enviar Formulario"
+                  text="Send form"
                   onPress={() => {
                     handleSendRequest();
                   }}
