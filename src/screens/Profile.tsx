@@ -1,13 +1,30 @@
 /* eslint-disable */
 import {StyleSheet, Text, View, Image} from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore';
 import OptionsButtons from '../components/ProfileScreenComponents/OptionsButtons';
 
 
 
 const Profile = ({navigation}: any) => {
+  const [nameUser, setNameUser] = useState('');
+  const [lastnameUser, setLastnameUser] = useState('');
+  const [photoUser, setPhotoUser] = useState('');
+  const [isHost, setIsHost] = useState<boolean>();
+
+  useEffect(() => {
+    async function getDataUser() {
+      const infoUser = (await firestore().collection('users').doc(auth().currentUser?.uid).get()).data()
+      setNameUser(infoUser?.name);
+      setLastnameUser(infoUser?.lastname);
+      setPhotoUser(infoUser?.profileImage);
+      setIsHost(infoUser?.HostMode);
+    }
+    getDataUser()
+  }, []);
+
 
   const handleLogOut = async () => {
     try {
@@ -18,8 +35,10 @@ const Profile = ({navigation}: any) => {
       } 
     }catch (error) {
       console.log(error)
+    }
   }
-}
+
+  console.log(isHost);
 
 
   return (
@@ -29,12 +48,10 @@ const Profile = ({navigation}: any) => {
       <View style={styles.card}>
         <Image
           style={styles.img}
-          source={{
-            uri: 'https://i.pinimg.com/236x/35/f6/71/35f6716adc65383508eca7cfda5b5594.jpg',
-          }}
+          source={photoUser === '' ? require('../source/defaultUserImage.jpg') : {uri: photoUser}}
         />
         <View style={styles.userInformationContainer}>
-          <Text style={styles.nameUser}>Jhon</Text>
+          <Text style={styles.nameUser}>{nameUser} {lastnameUser}</Text>
           <Text style={styles.rolUser}>Huesped</Text>
         </View>
       </View>
@@ -54,7 +71,7 @@ const Profile = ({navigation}: any) => {
         icon="diamond-outline"
         text="Host mode"
         onPress={() => {
-          navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
+          isHost ? navigation.navigate('HostModeScreen') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
         }}
       />
 

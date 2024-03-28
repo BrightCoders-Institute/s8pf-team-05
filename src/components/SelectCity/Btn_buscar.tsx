@@ -1,34 +1,39 @@
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
 
-import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
-interface btProps{
-    whereNav: string
+interface btProps {
+  onPress: () => void;
+  disabled: boolean;
 }
-const Btn_buscar = ({whereNav}:btProps ) => {
-    const navigation = useNavigation();
+
+const Btn_buscar = ({onPress, disabled}: btProps) => {
   return (
-    <TouchableOpacity
-    onPress={() => navigation.navigate(whereNav)}>
-        <View style={styles.btn}>
-            <Text style={styles.text}>Search</Text>
-        </View>
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
+      <View style={disabled ? styles.btnDisabled : styles.btn}>
+        <Text style={styles.text}>Search</Text>
+      </View>
     </TouchableOpacity>
-  )
-}
-export default Btn_buscar
+  );
+};
+export default Btn_buscar;
 
 const styles = StyleSheet.create({
-    btn:{
-        backgroundColor:'#6F2DBD',
-        padding: 12,
-        borderRadius: 10,
-
-    },
-    text:{
-        color:'white',
-        textAlign:'center',
-        fontWeight: '600',
-        fontSize: 15,
-    }
-})
+  btn: {
+    backgroundColor: '#6F2DBD',
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 50,
+  },
+  btnDisabled: {
+    backgroundColor: '#8B8B8B',
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 50,
+  },
+  text: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: 15,
+  },
+});

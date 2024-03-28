@@ -22,7 +22,7 @@ export default function Input({
         placeholder={placeholder}
         placeholderTextColor={'#7C7C7C'}
         keyboardType="phone-pad"
-        maxLength={15}
+        maxLength={10}
         onChangeText={onChangeText}
       />
     </View>
