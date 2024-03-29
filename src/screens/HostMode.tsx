@@ -125,10 +125,6 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
   };
   
 
-  function onChange(itemValue: any, itemIndex: number): void {
-    throw new Error('Function not implemented.');
-  }
-
   return (
     <View style={styles.container}>
       <HeaderNavigation whereNav='Profile'/>

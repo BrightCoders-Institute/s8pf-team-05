@@ -54,7 +54,7 @@ const HostModeInactiveScreen: React.FC = () => {
     // Lógica para enviar la solicitud
     if (
       phone.length >= 10 &&
-      birthDay.length >= 9 &&
+
       aboutYou.length >= 10 &&
       imgUser.length !== 0
     ) {
