@@ -10,6 +10,7 @@ import HostModePropertiesList from '../screens/HostModePropertiesList';
 import ConfirmReservation from '../screens/ConfirmReservation';
 import CreateAccount from '../screens/CreateAccount';
 import DateSelect from '../screens/DateSelect';
+import GuestSelect from '../screens/GuestSelect';
 import SelectCity from '../screens/SelectCity';
 import ReservationCompleted from '../screens/ReservationCompleted';
 import HostModeInactiveScreen from '../screens/HostModeInactive';
@@ -39,20 +40,23 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
 
       <Stack.Screen name="Signin" component={Signin} />
 
-
-      <Stack.Screen 
-      name="CreateAccount" 
-      component={CreateAccount} />
+      <Stack.Screen name="CreateAccount" component={CreateAccount} />
 
       <Stack.Screen name="PropertyDetails" component={PropertyDetailsScreen} />
 
-      <Stack.Screen name="PersonalInformation" component={PersonalInformation}/>
+      <Stack.Screen
+        name="PersonalInformation"
+        component={PersonalInformation}
+      />
 
-      <Stack.Screen name="Profile" component={Profile}/>
+      <Stack.Screen name="Profile" component={Profile} />
 
-      <Stack.Screen name="HostModeScreen" component={HostModeScreen}/>
+      <Stack.Screen name="HostModeScreen" component={HostModeScreen} />
 
-      <Stack.Screen name="HostModePropertiesList" component={HostModePropertiesList}/>
+      <Stack.Screen
+        name="HostModePropertiesList"
+        component={HostModePropertiesList}
+      />
 
       <Stack.Screen
         name="HostModeInactive"
@@ -61,7 +65,10 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
 
       <Stack.Screen name="DateSelect" component={DateSelect} />
 
+      <Stack.Screen name="GuestSelect" component={GuestSelect} />
+
       <Stack.Screen name="ConfirmReservation" component={ConfirmReservation} />
+
 
       <Stack.Screen name="ReservationCompleted" component={ReservationCompleted}/>
 

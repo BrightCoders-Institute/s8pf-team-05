@@ -2,10 +2,22 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, TextInput} from 'react-native';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore';
 import ContinueButton from '../components/SignIn/ContinueButton';
 import CreateAccountButton from '../components/CreateAccount/CreateAccountButton';
 import LoginAccounts from '../components/SignIn/LoginAccounts';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+type DataUser = {
+  HostMode: boolean;
+  birthDay: string;
+  defaultCity: string;
+  description: string;
+  lastname: string;
+  name: string;
+  phoneNumber: string;
+  photo: string;
+}
 
 const Signin = ({navigation}:any) => {
   const [email, setEmail] = useState('');
@@ -34,10 +46,17 @@ const Signin = ({navigation}:any) => {
   
   const SigninWithFirebase = async () => {
       if(email && password){
-        await auth().signInWithEmailAndPassword(email, password).then((userCredential) => {
+        await auth().signInWithEmailAndPassword(email, password).then(async (userCredential) => {
           const user = userCredential.user
           if(user){
-            navigation.replace('Main');
+            const infoUser = (await firestore().collection('users').doc(user.uid).get()).data()
+            console.log(infoUser);
+            if(infoUser.defaultCity !== ''){
+              navigation.replace('Main');
+            } else {
+              navigation.replace('SelectCity');
+            }
+            
           }
         }).catch(err => {
           if(err.code === 'auth/email-already-in-use'){

@@ -22,7 +22,6 @@ const DateSelect = () => {
     <View style={styles.container}>
         <HeaderNavigation whereNav='PropertyDetails'/>
         <View>
-            <CloseButton/>
             <View style={styles.date_container}>
                 <Text style={styles.date_txt}>When's your trip?</Text>
                 {/*<Options/>*/}
@@ -55,7 +54,8 @@ const styles = StyleSheet.create({
     },
     date_container:{
         height: 460,
-        marginVertical: 10,
+        marginTop: 40,
+        marginBottom: 10,
         padding: 10,
         borderRadius: 15,
         borderWidth: 1.5,

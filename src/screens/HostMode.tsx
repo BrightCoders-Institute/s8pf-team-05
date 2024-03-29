@@ -1,16 +1,25 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NumericInput from '../components/HostMode/NumericInput';
 import HeaderNavigation from '../navigation/HeaderNavigation';
 import storage from '@react-native-firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Picker as SelectPicker } from '@react-native-picker/picker';
-import { firebase } from '@react-native-firebase/auth';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Picker as SelectPicker} from '@react-native-picker/picker';
+import {firebase} from '@react-native-firebase/auth';
 
-const HostModeScreen: React.FC = ({navigation}:any) => {
+const HostModeScreen: React.FC = ({navigation}: any) => {
   const [guests, setGuests] = React.useState(0);
   const [bedrooms, setBedrooms] = React.useState(0);
   const [beds, setBeds] = React.useState(0);
@@ -29,19 +38,26 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
     setPropertyType(type);
   };
 
-  const handleIncrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
+  const handleIncrease = (
+    setState: React.Dispatch<React.SetStateAction<number>>,
+  ) => {
     setState(prevValue => prevValue + 1);
   };
 
-  const handleDecrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
+  const handleDecrease = (
+    setState: React.Dispatch<React.SetStateAction<number>>,
+  ) => {
     setState(prevValue => Math.max(0, prevValue - 1));
   };
 
   const handleAddImages = async () => {
     try {
-      const result = await launchImageLibrary({ mediaType: 'photo', selectionLimit: 10 });
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        selectionLimit: 10,
+      });
       if (!result.didCancel) {
-        const { assets } = result;
+        const {assets} = result;
         const newImageUrls = assets.map(asset => asset.uri);
         // Concatenate the new images with the existing ones
         setPropertyImages(prevImages => [...prevImages, ...newImageUrls]);
@@ -60,20 +76,32 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
-  
+
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-  
+
   const handleConfirm = (date: Date) => {
     setSelectedDate(date);
     hideDatePicker();
   };
-  
 
   const handleAddProperty = async () => {
-    if (!propertyName || !propertyLocation || guests <= 0 || bedrooms <= 0 || beds <= 0 || bathrooms <= 0 || !price || price <= 0 || propertyImages.length === 0 || !propertyType) {
-      Alert.alert('Please fill in all required fields and ensure numerical values are greater than 0.');
+    if (
+      !propertyName ||
+      !propertyLocation ||
+      guests <= 0 ||
+      bedrooms <= 0 ||
+      beds <= 0 ||
+      bathrooms <= 0 ||
+      !price ||
+      price <= 0 ||
+      propertyImages.length === 0 ||
+      !propertyType
+    ) {
+      Alert.alert(
+        'Please fill in all required fields and ensure numerical values are greater than 0.',
+      );
       return;
     }
     try {
@@ -90,7 +118,7 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
         propertyType: propertyType,
         hostId: userId,
       });
-  
+
       // Upload images to Firebase Cloud Storage
       const imageUploadPromises = propertyImages.map(async (image, index) => {
         const imageName = `image_${index}`;
@@ -99,10 +127,10 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
         const imageUrl = await imageRef.getDownloadURL();
         return imageUrl;
       });
-  
+
       // Wait for all images to upload and update the property document with image URLs
       const imageUrls = await Promise.all(imageUploadPromises);
-      await propertyRef.update({ images: imageUrls });
+      await propertyRef.update({images: imageUrls});
 
       setPropertyName('');
       setPropertyLocation('');
@@ -123,11 +151,10 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
       console.error('Error adding property: ', error);
     }
   };
-  
 
   return (
     <View style={styles.container}>
-      <HeaderNavigation whereNav='Profile'/>
+      <HeaderNavigation whereNav="Profile" />
       <Text style={styles.title}>Add a new property</Text>
       <ScrollView>
         <View style={styles.formContainer}>
@@ -175,12 +202,14 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
             onIncrease={() => handleIncrease(setBathrooms)}
             onDecrease={() => handleDecrease(setBathrooms)}
           />
-          
+
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.input}
               value={price !== undefined ? price.toString() : ''}
-              onChangeText={(text) => setPrice(text ? parseFloat(text) : undefined)}
+              onChangeText={text =>
+                setPrice(text ? parseFloat(text) : undefined)
+              }
               placeholder="Price per night"
               placeholderTextColor={'#7C7C7C'}
               keyboardType="numeric"
@@ -198,9 +227,15 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
               <SelectPicker.Item label="Apartment" value="apartment" />
               <SelectPicker.Item label="House" value="house" />
               <SelectPicker.Item label="Pool House" value="pool" />
-              <SelectPicker.Item label="House in the countryside" value="countryside" />
+              <SelectPicker.Item
+                label="House in the countryside"
+                value="countryside"
+              />
               <SelectPicker.Item label="Beach house" value="beach" />
-              <SelectPicker.Item label="House in the mountain" value="mountain" />
+              <SelectPicker.Item
+                label="House in the mountain"
+                value="mountain"
+              />
               <SelectPicker.Item label="Other" value="other" />
             </SelectPicker>
           </View>
@@ -219,7 +254,9 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
 
           <TouchableOpacity style={styles.addButton} onPress={showDatePicker}>
             <Text style={styles.addButtonText}>
-              {selectedDate ? selectedDate.toLocaleDateString() : "Select Availability Dates"}
+              {selectedDate
+                ? selectedDate.toLocaleDateString()
+                : 'Select Availability Dates'}
             </Text>
             <Icon name="calendar" size={30} color="gray" />
           </TouchableOpacity>
@@ -238,13 +275,22 @@ const HostModeScreen: React.FC = ({navigation}:any) => {
 
           <View style={styles.imagesContainer}>
             {propertyImages.map((imageUrl, index) => (
-              <TouchableOpacity key={index} onPress={() => handleDeleteImage(index)}>
-                <Image source={{ uri: imageUrl }} style={styles.image} />
-                <Icon name="close-circle" size={24} color="red" style={styles.deleteIcon} />
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleDeleteImage(index)}>
+                <Image source={{uri: imageUrl}} style={styles.image} />
+                <Icon
+                  name="close-circle"
+                  size={24}
+                  color="red"
+                  style={styles.deleteIcon}
+                />
               </TouchableOpacity>
             ))}
           </View>
-          <TouchableOpacity style={styles.addPropertyButton} onPress={handleAddProperty}>
+          <TouchableOpacity
+            style={styles.addPropertyButton}
+            onPress={handleAddProperty}>
             <Text style={styles.addPropertyButtonText}>Add property</Text>
           </TouchableOpacity>
         </View>

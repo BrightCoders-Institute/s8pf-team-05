@@ -25,6 +25,9 @@ const CreateAccount = ({navigation}: any) => {
     phoneNumber: '',
     birthDay: '',
     description: '',
+    profileImage: '',
+    HostMode: false,
+    defaultCity: '',
   })
 
   const [isFocusedName, setIsFocusedName] = useState(false);
@@ -60,7 +63,7 @@ const CreateAccount = ({navigation}: any) => {
         const user = userCredential.user
         if(user){
           //setUserInfo(user)
-          onSend()
+          onSend(user.uid)
           Alert.alert('Success', 'Account created successfully!');
           navigation.replace('Signin');
         }
@@ -77,14 +80,8 @@ const CreateAccount = ({navigation}: any) => {
     })
   }
 
-    const onSend : () => void = async () => {
-      await firestore().collection('users').add({
-        name: newUser.name,
-        lastname: newUser.lastname,
-        phone: newUser.phoneNumber,
-        birthday: newUser.birthDay,
-        description: newUser.description,
-      })
+    const onSend = async (uid: string) => {
+      await firestore().collection('users').doc(uid).set(newUser)
     }
   return (
     <View style={styles.first_container}>
