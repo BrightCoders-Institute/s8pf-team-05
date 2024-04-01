@@ -60,9 +60,11 @@ const Signin = ({navigation}:any) => {
           }
         }).catch(err => {
           if(err.code === 'auth/email-already-in-use'){
+            setValidEmail(true)
             setEmailMessage('Email already in use')
           }
-          if(err.code === 'auth/invalid-email'){
+          if(err.code === 'auth/invalid-email' || err.code === 'auth/invalid-credential'){
+            setValidEmail(true)
             setEmailMessage('Invalid email')
           }
           console.log(err)

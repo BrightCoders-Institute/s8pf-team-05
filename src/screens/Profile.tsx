@@ -38,8 +38,6 @@ const Profile = ({navigation}: any) => {
     }
   }
 
-  console.log(isHost);
-
 
   return (
     <View style={styles.container}>
@@ -52,7 +50,7 @@ const Profile = ({navigation}: any) => {
         />
         <View style={styles.userInformationContainer}>
           <Text style={styles.nameUser}>{nameUser} {lastnameUser}</Text>
-          <Text style={styles.rolUser}>Huesped</Text>
+          {isHost ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Huesped</Text>}
         </View>
       </View>
 
@@ -72,6 +70,13 @@ const Profile = ({navigation}: any) => {
         text="Host mode"
         onPress={() => {
           isHost ? navigation.navigate('HostModeScreen') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
+        }}
+      />
+      <OptionsButtons
+        icon="reorder-three-outline"
+        text="Registered properties"
+        onPress={() => {
+          isHost ? navigation.navigate('HostModePropertiesList') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
         }}
       />
 
