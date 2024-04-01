@@ -4,13 +4,15 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 type Props = {
   title?: string;
   placeholder: string;
+  msgError?: string;
+  style?: {};
   onChangeText?: (value: string) => void;
 };
 
-export default function CommentBox({title, placeholder, onChangeText}: Props) {
+export default function CommentBox({title, placeholder, msgError, style, onChangeText}: Props) {
   return (
     <View>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, style]}>{title}</Text>
       <TextInput
         style={styles.commentBox}
         placeholder={placeholder}
@@ -20,6 +22,7 @@ export default function CommentBox({title, placeholder, onChangeText}: Props) {
         textAlignVertical="top"
         onChangeText={onChangeText}
       />
+      <Text style={styles.msgError}>{msgError}</Text>
     </View>
   );
 }
@@ -38,5 +41,10 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  msgError: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });

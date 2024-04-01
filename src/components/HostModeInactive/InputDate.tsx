@@ -4,27 +4,29 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 type Props = {
   content?: string;
+  msgError?: string;
   style?: {};
   onPress: () => void;
 };
 
-export default function InputDate({content, style, onPress}: Props) {
+export default function InputDate({content, style, msgError, onPress}: Props) {
   return (
     <View style={[styles.container, style]}>
-      <Text style={styles.title}>Fecha de nacimiento</Text>
+      <Text style={styles.title}>Date of birth</Text>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.subContainer}>
           <Text style={styles.input}>{content}</Text>
           <Icon name="calendar-outline" size={30} style={styles.icon} />
         </View>
       </TouchableOpacity>
+      <Text style={styles.msgError}>{msgError}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 15,
+    marginTop: 5,
   },
   subContainer: {
     flexDirection: 'row',
@@ -35,6 +37,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
+  },
+  msgError: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 5,
   },
   input: {
     color: '#000000',
