@@ -44,8 +44,8 @@ const App = () => {
       </NavigationContainer>
     );
   } else if (defaultCity) {
-    // El usuario está autenticado y tiene una ciudad por defecto
     return (
+      // El usuario está autenticado y tiene una ciudad por defecto
       <NavigationContainer>
         <Navigation initialRoute="Home" />
       </NavigationContainer>

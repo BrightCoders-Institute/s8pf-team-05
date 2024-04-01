@@ -23,7 +23,7 @@ const CreateAccount = ({navigation}: any) => {
     name: '',
     lastname: '',
     phoneNumber: '',
-    birthDay: '',
+    birthday: '',
     description: '',
     profileImage: '',
     HostMode: false,
@@ -65,6 +65,7 @@ const CreateAccount = ({navigation}: any) => {
           //setUserInfo(user)
           onSend(user.uid)
           Alert.alert('Success', 'Account created successfully!');
+          auth().signOut();
           navigation.replace('Signin');
         }
       })

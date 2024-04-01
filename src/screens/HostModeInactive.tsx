@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -21,13 +21,16 @@ import storage from '@react-native-firebase/storage';
 import Profilepicture from '../components/personalInfo/Profilepicture';
 import {launchImageLibrary} from 'react-native-image-picker';
 import LoadingComponent from '../components/LoadingComponent';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const HostModeInactiveScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [msgAlert, setMsgAlert] = useState<string>('');
+  const [msgAlertPhoneNumber, setMsgAlertPhoneNumber] = useState('');
+  const [msgAlertBirthday, setMsgAlertBirthday] = useState('');
+  const [msgAlertDescription, setMsgAlertDescription] = useState('');
+  const [msgAlertPhoto, setMsgAlertPhoto] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [imgUser, setImgUser] = useState<string>('');
@@ -36,6 +39,19 @@ const HostModeInactiveScreen: React.FC = () => {
   const [aboutYou, setAboutYou] = useState<string>('');
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function getInfoUser() {
+      const data = await firestore()
+        .collection('users')
+        .doc(auth().currentUser?.uid)
+        .get();
+      const user = data.data();
+      setImgUser(user?.profileImage);
+      setPhone(user?.phoneNumber);
+    }
+    getInfoUser();
+  }, []);
 
   const handleAddImages = async () => {
     try {
@@ -55,37 +71,75 @@ const HostModeInactiveScreen: React.FC = () => {
 
   const handleSendRequest = async () => {
     // Lógica para enviar la solicitud
+    handlePhoneChange();
+    handleDateChange();
+    handleDescriptionChange();
+    handlePhotoChange();
+
     if (
       phone.length === 10 &&
-      birthDay.length > 0 &&
-      aboutYou.length >= 10 &&
-      imgUser.length !== 0
+      birthDay !== '' &&
+      aboutYou.length > 10 &&
+      imgUser !== ''
     ) {
       hideModal();
       setLoading(true);
+
       const imageName = 'userImageProfile';
       const imageRef = storage().ref(
         `users/${auth().currentUser?.uid}/${imageName}`,
       );
       await imageRef.putFile(imgUser);
       const imageUrl = await imageRef.getDownloadURL();
-      console.log(imageUrl);
+
       firestore()
         .collection('users')
         .doc(auth().currentUser?.uid)
         .update({
           birthday: birthDay,
           description: aboutYou,
-          phone: phone,
+          phoneNumber: phone,
           profileImage: imageUrl,
           HostMode: true,
         })
         .then(() => {
           Alert.alert('Success', 'Information Correctly Updated');
-          navigation.goBack();
+          navigation.navigate('Main');
         });
+    }
+  };
+
+  const handlePhoneChange = () => {
+    if (phone.length === 10) {
+      setMsgAlertPhoneNumber(''); // Limpiar el mensaje de error
     } else {
-      setMsgAlert('Rellene todos los campos');
+      setMsgAlertPhoneNumber('The phone must have 10 numbers');
+    }
+  };
+
+  const handleDateChange = () => {
+    if (birthDay !== '') {
+      setMsgAlertBirthday(''); // Limpiar el mensaje de error
+    } else {
+      setMsgAlertBirthday('Select a Date');
+    }
+  };
+
+  const handleDescriptionChange = () => {
+    if (aboutYou.length > 10) {
+      setMsgAlertDescription(''); // Limpiar el mensaje de error
+    } else {
+      setMsgAlertDescription(
+        'Your description must be longer than 10 characters',
+      );
+    }
+  };
+
+  const handlePhotoChange = () => {
+    if (imgUser !== '') {
+      setMsgAlertPhoto(''); // Limpiar el mensaje de error
+    } else {
+      setMsgAlertPhoto('Add photo');
     }
   };
 
@@ -120,15 +174,19 @@ const HostModeInactiveScreen: React.FC = () => {
               <ScrollView>
                 <CloseButton onPress={hideModal} />
 
-                <Text style={styles.titleInput}>Foto</Text>
+                <Text style={styles.titleInput}>Photo</Text>
                 <View style={styles.photoConatainer}>
                   <Profilepicture onPress={handleAddImages} imgUser={imgUser} />
-                  <Text> Agrega una fotografía</Text>
+                  <Text style={styles.textAlert}>{msgAlertPhoto}</Text>
                 </View>
 
                 <Input
-                  title="Teléfono"
-                  placeholder="Ingresa tu numero de teléfono"
+                  title="Phone Number"
+                  placeholder="Enter your phone number"
+                  value={phone}
+                  msgError={msgAlertPhoneNumber}
+                  maxLength={10}
+                  keyBoardType="phone-pad"
                   onChangeText={value => {
                     setPhone(value);
                   }}
@@ -136,6 +194,7 @@ const HostModeInactiveScreen: React.FC = () => {
 
                 <InputDate
                   style={styles.inputFecha}
+                  msgError={msgAlertBirthday}
                   content={selectedDate?.toLocaleDateString()}
                   onPress={() => setDatePickerVisibility(true)}
                 />
@@ -147,17 +206,17 @@ const HostModeInactiveScreen: React.FC = () => {
                 />
 
                 <CommentBox
-                  title="Sobre ti"
-                  placeholder="Escribe un poco sobre ti..."
+                  title="About You"
+                  placeholder="Write something about you..."
+                  msgError={msgAlertDescription}
                   onChangeText={value => {
                     setAboutYou(value);
                   }}
                 />
 
-                <Text style={styles.textAlert}>{msgAlert}</Text>
-
                 <Button
                   text="Send form"
+                  style={styles.btnForm}
                   onPress={() => {
                     handleSendRequest();
                   }}
@@ -236,16 +295,17 @@ const styles = StyleSheet.create({
   inputFecha: {
     marginBottom: 30,
   },
-  textAlert: {
-    marginVertical: 10,
-    textAlign: 'center',
-    color: 'red',
-  },
   titleInput: {
     color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 15,
+  },
+  textAlert: {
+    color: 'red',
+  },
+  btnForm: {
+    marginTop: 25,
   },
 });
 
