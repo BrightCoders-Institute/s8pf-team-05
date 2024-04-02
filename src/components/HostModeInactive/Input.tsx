@@ -1,16 +1,30 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  KeyboardTypeOptions,
+} from 'react-native';
 
 type Props = {
   title: string;
-  placeholder: string;
+  value?: string;
+  placeholder?: string;
+  msgError?: string;
+  maxLength: number;
+  keyBoardType: KeyboardTypeOptions;
   style?: {};
   onChangeText?: (value: string) => void;
 };
 
 export default function Input({
   title,
+  value,
   placeholder,
+  msgError,
+  maxLength,
+  keyBoardType,
   style,
   onChangeText,
 }: Props) {
@@ -21,10 +35,12 @@ export default function Input({
         style={styles.input}
         placeholder={placeholder}
         placeholderTextColor={'#7C7C7C'}
-        keyboardType="phone-pad"
-        maxLength={10}
+        keyboardType={keyBoardType}
+        maxLength={maxLength}
         onChangeText={onChangeText}
+        value={value}
       />
+      <Text style={styles.msgError}>{msgError}</Text>
     </View>
   );
 }
@@ -39,12 +55,16 @@ const styles = StyleSheet.create({
     borderColor: '#DBDADA',
     borderWidth: 1.5,
     padding: 10,
-    flex: 1,
   },
   title: {
     color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
+  },
+  msgError: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });

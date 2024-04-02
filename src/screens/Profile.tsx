@@ -9,21 +9,34 @@ import OptionsButtons from '../components/ProfileScreenComponents/OptionsButtons
 
 
 const Profile = ({navigation}: any) => {
+  const [infoUser, setInfoUser] = useState({
+    name: '',
+    lastname: '',
+    profileImage: '',
+    HostMode: null,
+  });
   const [nameUser, setNameUser] = useState('');
   const [lastnameUser, setLastnameUser] = useState('');
   const [photoUser, setPhotoUser] = useState('');
   const [isHost, setIsHost] = useState<boolean>();
 
   useEffect(() => {
-    async function getDataUser() {
-      const infoUser = (await firestore().collection('users').doc(auth().currentUser?.uid).get()).data()
-      setNameUser(infoUser?.name);
-      setLastnameUser(infoUser?.lastname);
-      setPhotoUser(infoUser?.profileImage);
-      setIsHost(infoUser?.HostMode);
-    }
-    getDataUser()
-  }, []);
+    const subscriber = firestore()
+      .collection('users')
+      .doc(auth().currentUser?.uid)
+      .onSnapshot(documentSnapshot => {
+        const dataUser = documentSnapshot.data();
+        setInfoUser({
+          name: dataUser?.name,
+          lastname: dataUser?.lastname,
+          profileImage: dataUser?.profileImage,
+          HostMode: dataUser?.HostMode,
+        });
+      });
+
+    // Stop listening for updates when no longer required
+    return () => subscriber();
+  }, [auth().currentUser?.uid]);
 
 
   const handleLogOut = async () => {
@@ -38,7 +51,6 @@ const Profile = ({navigation}: any) => {
     }
   }
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -46,7 +58,7 @@ const Profile = ({navigation}: any) => {
       <View style={styles.card}>
         <Image
           style={styles.img}
-          source={photoUser === '' ? require('../source/defaultUserImage.jpg') : {uri: photoUser}}
+          source={infoUser.profileImage === '' ? require('../source/defaultUserImage.jpg') : {uri: infoUser.profileImage}}
         />
         <View style={styles.userInformationContainer}>
           <Text style={styles.nameUser}>{nameUser} {lastnameUser}</Text>
@@ -69,7 +81,7 @@ const Profile = ({navigation}: any) => {
         icon="diamond-outline"
         text="Host mode"
         onPress={() => {
-          isHost ? navigation.navigate('HostModeScreen') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
+          infoUser.HostMode ? navigation.navigate('HostModeScreen') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
         }}
       />
       <OptionsButtons
@@ -79,7 +91,6 @@ const Profile = ({navigation}: any) => {
           isHost ? navigation.navigate('HostModePropertiesList') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
         }}
       />
-
       <View style={styles.logoutContainer}>
         <Text style={styles.logout} onPress={handleLogOut}>
           Log out
@@ -137,7 +148,7 @@ const styles = StyleSheet.create({
   },
   nameUser: {
     color: 'black',
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
   },

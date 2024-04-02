@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
 import HostInfo from '../components/PropertyDetails/HostInfo';
@@ -16,6 +16,9 @@ const PropertyDetailsScreen: React.FC = ({ route }: any) => {
     lastname: '',
     profileImage: null,
   });
+
+  const [averageRating, setAverageRating] = useState<number>(0);
+  const [totalReviews, setTotalReviews] = useState<number>(0);
 
   useEffect(() => {
     const fetchHostInfo = async () => {
@@ -37,11 +40,36 @@ const PropertyDetailsScreen: React.FC = ({ route }: any) => {
       }
     };
 
+    const fetchReviews = async () => {
+      try {
+        const reviewsSnapshot = await firestore().collection('reviews').where('propertyId', '==', property.id).get();
+        let totalRating = 0;
+        let totalReviewsCount = 0;
+
+        reviewsSnapshot.forEach(doc => {
+          const reviewData = doc.data();
+          totalRating += reviewData.rating;
+          totalReviewsCount++;
+        });
+
+        const avgRating = totalReviewsCount > 0 ? totalRating / totalReviewsCount : 0;
+        setAverageRating(avgRating);
+        setTotalReviews(totalReviewsCount);
+      } catch (error) {
+        console.error('Error fetching reviews: ', error);
+      }
+    };
+
     fetchHostInfo();
-  }, [property.hostId]);
+    fetchReviews();
+  }, [property.hostId, property.id]);
 
   const handleReservePress = () => {
     navigation.navigate('ConfirmReservation');
+  };
+
+  const handleRatingPress = () => {
+    navigation.navigate('ReviewScreen', { property });
   };
 
   return (
@@ -56,7 +84,9 @@ const PropertyDetailsScreen: React.FC = ({ route }: any) => {
           <Text style={styles.propertyDetails}>
             Guests: {property.guests} | Bedrooms: {property.bedrooms} | Beds: {property.beds} | Bathrooms: {property.bathrooms}
           </Text>
-          {/*<RatingBox averageRating={property.averageRating} totalReviews={property.totalReviews} />*/}
+          <TouchableOpacity onPress={handleRatingPress}>
+            <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
+          </TouchableOpacity>
           <HostInfo hostName={`${hostInfo.name} ${hostInfo.lastname}`} hostImage={hostInfo.profileImage} />
         </View>
         <View style={styles.propertyDescription}>
