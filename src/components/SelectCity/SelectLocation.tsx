@@ -26,6 +26,7 @@ export default SelectLocation;
 const styles = StyleSheet.create({
   title: {
     fontSize: 17,
+    color: '#444444',
     fontWeight: 'bold',
     marginTop: 15,
     marginBottom: 6,

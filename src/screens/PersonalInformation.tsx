@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 30,
     marginBottom: 20,
+    color: '#444444',
   },
   profile: {
     justifyContent: 'center',

@@ -9,7 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 
 const PropertyDetailsScreen: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
-  const { property } = route.params;
+  const {property} = route.params;
 
   const [hostInfo, setHostInfo] = useState<{ name: string, lastname: string, profileImage: string | null }>({
     name: '',
