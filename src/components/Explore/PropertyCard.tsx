@@ -18,7 +18,6 @@ interface PropertyCardProps {
     location: string;
     rating: number;
     propertyName: string;
-    avaliabilityDates: Date;
     price: string;
   };
   onPress: () => void;
@@ -31,10 +30,6 @@ const renderItem = ({item}: {item: string}) => (
 );
 
 const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
-  const timestamp = property.avaliabilityDates;
-  const date = new Date(timestamp.seconds * 1000);
-  const formattedDate = Moment(date).format('MMM D, YYYY');
-  console.log(property.images)
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
@@ -56,7 +51,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
             <Rating rating={property.rating} />
           </View>
           <Text style={styles.propertyDescription}>{property.propertyName}</Text>
-          <Text style={styles.propertyDateAvailable}>{formattedDate}</Text>
 
           <Text style={styles.propertyPrice}>${property.price} por noche</Text>
         </View>

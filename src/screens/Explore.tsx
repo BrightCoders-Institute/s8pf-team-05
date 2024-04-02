@@ -13,7 +13,7 @@ const Explore = ({ navigation }: any) => {
     { name: 'Countryside', icon: 'tree', value: 'countryside' },
     { name: 'Beach', icon: 'umbrella-beach', value: 'beach' },
     { name: 'Mountain', icon: 'mountain', value: 'mountain' },
-    { name: 'Other', icon: 'home-city', value: 'other' },
+    { name: 'Other', icon: 'plus', value: 'other' },
   ];
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
