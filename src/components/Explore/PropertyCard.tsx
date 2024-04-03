@@ -34,7 +34,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
   const timestamp = property.avaliabilityDates;
   const date = new Date(timestamp.seconds * 1000);
   const formattedDate = Moment(date).format('MMM D, YYYY');
-  console.log(property.images)
+  //console.log(property.images)
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
