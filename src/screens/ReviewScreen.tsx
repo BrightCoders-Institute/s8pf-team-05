@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import ReviewForm from '../components/Review/ReviewForm'; 
 import ReviewItem from '../components/Review/ReviewItem'; 
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -10,6 +10,8 @@ const ReviewScreen: React.FC = ({ route }: any) => {
   const { property } = route.params;
 
   const [reviews, setReviews] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
   React.useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -20,13 +22,24 @@ const ReviewScreen: React.FC = ({ route }: any) => {
         
         const fetchedReviews = reviewsSnapshot.docs.map(doc => doc.data());
         setReviews(fetchedReviews);
+        setLoading(false); // Mark loading as false once reviews are fetched
       } catch (error) {
         console.error('Error fetching reviews: ', error);
+        setLoading(false); // Mark loading as false in case of error
       }
     };
 
     fetchReviews();
   }, [property.id]);
+
+  // Renderizar la imagen y el mensaje si no hay reviews
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -35,12 +48,22 @@ const ReviewScreen: React.FC = ({ route }: any) => {
         <View style={styles.formContainer}>
           <ReviewForm propertyId={property.id} />
         </View>
-        <Text style={styles.reviewsTitle}>Reseñas de usuarios</Text>
-        <View style={styles.reviewsContainer}>
-          {reviews.map(review => (
-            <ReviewItem key={review.id} review={review} />
-          ))}
-        </View>
+        {reviews.length === 0 ? ( // Verificar si no hay reviews
+          <View style={styles.emptyContainer}>
+            
+            <Image source={require('../images/empty-state-reviews.png')} style={styles.emptyImage} />
+            <Text style={styles.emptyText}>Aun no hay ninguna review</Text>
+          </View>
+        ) : (
+          <>
+            <Text style={styles.reviewsTitle}>Reseñas de usuarios</Text>
+            <View style={styles.reviewsContainer}>
+              {reviews.map(review => (
+                <ReviewItem key={review.id} review={review} />
+              ))}
+            </View>
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -70,6 +93,26 @@ const styles = StyleSheet.create({
   reviewsContainer: {
     marginTop: 1,
     marginHorizontal: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  emptyImage: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: '#888',
   },
 });
 
