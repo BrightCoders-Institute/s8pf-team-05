@@ -106,7 +106,7 @@ const Explore = ({ navigation }: any) => {
                 </View>
               ) : (
                 <View style={styles.emptyStateContainer}>
-                  <Image source={require('../images/no-properties-found.png')} style={styles.emptyStateImage} />
+                  <Image source={require('../images/empty-state-explore.png')} style={styles.emptyStateImage} />
                   <Text style={styles.emptyStateText}>
                     No properties found matching the search criteria.
                   </Text>

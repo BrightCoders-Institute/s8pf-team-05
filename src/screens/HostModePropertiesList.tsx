@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native'
 import React, {useEffect, useState} from 'react'
-//import PropertyList from '../components/HostMode/PropertyList';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -31,7 +30,16 @@ import IconDots from 'react-native-vector-icons/Entypo';
         name="arrow-back" size={27} color="#444444"/>
       <Text style={styles.title}>My Properties</Text>
       <ScrollView>
-        {properties.map((property, index) => {
+        {properties.length === 0 ? (
+          <View style={styles.emptyStateContainer}>
+            <Image
+              style={styles.emptyStateImage}
+              source={require('../images/empty-state-properties-list.png')}
+            />
+            <Text style={styles.emptyStateText}>You do not have any property for rent yet</Text>
+          </View>
+        ) : (
+        properties.map((property, index) => {
               const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;
               const showOptions = (index : number) => {setActiveOptions(activeOptions === index ? null : index)};
               const editProperty: () => void = () => {navigation.navigate('HostModeUpdateProperties', { property: property });}
@@ -86,7 +94,7 @@ import IconDots from 'react-native-vector-icons/Entypo';
               )}
             </View>
           );
-        })}
+        }))}
       </ScrollView>
     </View>
   )
@@ -173,5 +181,22 @@ const styles = StyleSheet.create({
       color: '#444444',
       alignItems: 'center',
       // borderWidth: 1,
-    }
+    },
+    emptyStateContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    emptyStateImage: {
+      width: 200,
+      height: 200,
+      marginBottom: 20,
+      marginTop: '25%',
+    },
+    emptyStateText: {
+      fontSize: 18,
+      color: '#888',
+      paddingHorizontal: 60,
+      textAlign: 'center',
+    },
 })
