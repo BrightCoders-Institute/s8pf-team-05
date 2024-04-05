@@ -32,7 +32,7 @@ import IconDots from 'react-native-vector-icons/Entypo';
       <Text style={styles.title}>My Properties</Text>
       <ScrollView>
         {properties.map((property, index) => {
-              const details = `Guest: ${property.guests} | Bedrooms: ${property.bedrooms} | Beds: ${property.beds} | Bathrooms: ${property.bathrooms}`;
+              const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;
               const showOptions = (index : number) => {setActiveOptions(activeOptions === index ? null : index)};
               const editProperty: () => void = () => {navigation.navigate('HostModeUpdateProperties', { property: property });}
               //const editProperty: () => void = () => {console.log(property.avaliabilityDates)}
@@ -66,7 +66,7 @@ import IconDots from 'react-native-vector-icons/Entypo';
               />
               <View style={styles.propertyContainer}>
                 <Text style={styles.name}>{property.propertyName}</Text>
-                <Text style={styles.location}>{property.location}</Text>
+                <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
                 <Text numberOfLines={1} style={styles.details}>{details}</Text>
               </View>
               <View>

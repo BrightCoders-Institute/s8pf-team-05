@@ -18,6 +18,8 @@ import firestore from '@react-native-firebase/firestore';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
+import SelectLocation from '../components/SelectCity/SelectLocation';
+
 
 const HostModeScreen: React.FC = ({navigation}: any) => {
   const [guests, setGuests] = React.useState(0);
@@ -25,7 +27,8 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   const [beds, setBeds] = React.useState(0);
   const [bathrooms, setBathrooms] = React.useState(0);
   const [propertyName, setPropertyName] = React.useState('');
-  const [propertyLocation, setPropertyLocation] = React.useState('');
+  const [selectedCity, setSelectedCity] = React.useState('');
+  const [propertyAdress, setPropertyAdress] = React.useState('');
   const [propertyDescription, setPropertyDescription] = React.useState('');
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
   const [price, setPrice] = React.useState<number | undefined>();
@@ -89,7 +92,8 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   const handleAddProperty = async () => {
     if (
       !propertyName ||
-      !propertyLocation ||
+      !propertyAdress ||
+      !selectedCity ||
       guests <= 0 ||
       bedrooms <= 0 ||
       beds <= 0 ||
@@ -107,7 +111,8 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
     try {
       const propertyRef = await firestore().collection('properties').add({
         propertyName: propertyName,
-        location: propertyLocation,
+        propertyAdress: propertyAdress,
+        city: selectedCity,
         guests: guests,
         bedrooms: bedrooms,
         beds: beds,
@@ -133,7 +138,8 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
       await propertyRef.update({images: imageUrls});
 
       setPropertyName('');
-      setPropertyLocation('');
+      setPropertyAdress('');
+      setSelectedCity('');
       setGuests(0);
       setBedrooms(0);
       setBeds(0);
@@ -166,15 +172,25 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
               placeholder="Property name"
               placeholderTextColor={'#7C7C7C'}
             />
+
           </View>
 
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.input}
-              value={propertyLocation}
-              onChangeText={setPropertyLocation}
-              placeholder="Property location"
+              value={propertyAdress}
+              onChangeText={setPropertyAdress}
+              placeholder="Property Adress"
               placeholderTextColor={'#7C7C7C'}
+            />
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <SelectLocation
+              title="Select the property city"
+              selectedCity={val => {
+                setSelectedCity(val);
+              }}
             />
           </View>
 

@@ -4,6 +4,7 @@ import SearchBar from '../components/Explore/SearchBar';
 import CategoryButton from '../components/Explore/CategoryButton';
 import PropertyCard from '../components/Explore/PropertyCard';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const Explore = ({ navigation }: any) => {
   const categories = [
@@ -25,11 +26,29 @@ const Explore = ({ navigation }: any) => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
+        const user = auth().currentUser;
+        if (!user) {
+          return;
+        }
+
+        const userDoc = await firestore()
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+        const userData = userDoc.data();
+        const defaultCity = userData?.defaultCity;
+
+        if (!defaultCity) {
+          return;
+        }
+
         const snapshot = await firestore()
           .collection('properties')
           .where('propertyType', '==', selectedCategory)
+          .where('city', '==', defaultCity)
           .get();
-        
+
         const fetchedProperties = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setProperties(fetchedProperties);
       } catch (error) {

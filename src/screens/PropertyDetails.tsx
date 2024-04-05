@@ -80,9 +80,9 @@ const PropertyDetailsScreen: React.FC = ({ route }: any) => {
         </View>
         <View style={styles.propertyInfo}>
           <Text style={styles.propertyName}>{property.propertyName}</Text>
-          <Text style={styles.propertyLocation}>{property.location}</Text>
+          <Text style={styles.propertyLocation}>{property.propertyAdress}, {property.city}</Text>
           <Text style={styles.propertyDetails}>
-            Guests: {property.guests} | Bedrooms: {property.bedrooms} | Beds: {property.beds} | Bathrooms: {property.bathrooms}
+            Guests: {property.guests} · Bedrooms: {property.bedrooms} · Beds: {property.beds} · Bathrooms: {property.bathrooms}
           </Text>
           <TouchableOpacity onPress={handleRatingPress}>
             <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
