@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconDots from 'react-native-vector-icons/Entypo';
+import EmptyState from '../components/EmptyState';
 
 
   const HostModePropertiesList = ({navigation}: any) => {
@@ -31,13 +32,10 @@ import IconDots from 'react-native-vector-icons/Entypo';
       <Text style={styles.title}>My Properties</Text>
       <ScrollView>
         {properties.length === 0 ? (
-          <View style={styles.emptyStateContainer}>
-            <Image
-              style={styles.emptyStateImage}
-              source={require('../images/empty-state-properties-list.png')}
-            />
-            <Text style={styles.emptyStateText}>You do not have any property for rent yet</Text>
-          </View>
+          <EmptyState
+            imageSource={require('../images/empty-state-properties-list.png')}
+            message="You haven't added any properties yet."
+          />
         ) : (
         properties.map((property, index) => {
               const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;

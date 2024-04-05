@@ -5,6 +5,7 @@ import CategoryButton from '../components/Explore/CategoryButton';
 import PropertyCard from '../components/Explore/PropertyCard';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import EmptyState from '../components/EmptyState';
 
 const Explore = ({ navigation }: any) => {
   const categories = [
@@ -105,12 +106,11 @@ const Explore = ({ navigation }: any) => {
                   ))}
                 </View>
               ) : (
-                <View style={styles.emptyStateContainer}>
-                  <Image source={require('../images/empty-state-explore.png')} style={styles.emptyStateImage} />
-                  <Text style={styles.emptyStateText}>
-                    No properties found matching the search criteria.
-                  </Text>
-                </View>
+                <EmptyState
+                  imageSource={require('../images/empty-state-explore.png')}
+                  message="No properties found matching the search criteria."
+                />
+                
               )}
               <View style={styles.propertiesContainer}>
                 
