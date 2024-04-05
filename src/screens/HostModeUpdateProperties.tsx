@@ -19,13 +19,15 @@ import firestore from '@react-native-firebase/firestore';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
+import SelectLocation from '../components/SelectCity/SelectLocation';
 
 const HostModeUpdateProperties: React.FC = ({route}: any) => {
   const navigation = useNavigation();
   const {property} = route.params;
 
   const [propertyName1, setPropertyName] = React.useState(property.propertyName);
-  const [propertyLocation1, setPropertyLocation] = React.useState(property.location);
+  const [propertyAdress1, setPropertyAdress] = React.useState(property.propertyAdress);
+  const [selectedCity, setSelectedCity] = React.useState(property.city);
   const [guests1, setGuests] = React.useState(property.guests);
   const [bedrooms1, setBedrooms] = React.useState(property.bedrooms);
   const [beds1, setBeds] = React.useState(property.beds);
@@ -95,7 +97,8 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
   const handleUpdateProperty = async () => {
     if (
       !propertyName1 ||
-      !propertyLocation1 ||
+      !propertyAdress1 ||
+      !selectedCity ||
       guests1 <= 0 ||
       bedrooms1 <= 0 ||
       beds1 <= 0 ||
@@ -114,7 +117,8 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
       const propertyRef = firestore().collection('properties').doc(property.id);
       await propertyRef.update({
         propertyName: propertyName1,
-        location: propertyLocation1,
+        propertyAdress: propertyAdress1,
+        city: selectedCity,
         guests: guests1,
         bedrooms: bedrooms1,
         beds: beds1,
@@ -137,7 +141,7 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
        });
 
       setPropertyName('');
-      setPropertyLocation('');
+      setPropertyAdress('');
       setGuests(0);
       setBedrooms(0);
       setBeds(0);
@@ -146,6 +150,7 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
       setSelectedDate(null);
       setPrice(undefined);
       setPropertyImages([]);
+      setSelectedCity('');
 
       // Mostrar una alerta de éxito al usuario
       Alert.alert('Success', 'Property updated successfully!');
@@ -175,10 +180,19 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.input}
-              value={propertyLocation1}
-              onChangeText={setPropertyLocation}
+              value={propertyAdress1}
+              onChangeText={setPropertyAdress}
               placeholder="Property location"
               placeholderTextColor={'#7C7C7C'}
+            />
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <SelectLocation
+              title="Select the property city"
+              selectedCity={val => {
+                setSelectedCity(val);
+              }}
             />
           </View>
 
