@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import ReviewForm from '../components/Review/ReviewForm'; // Importa el componente de formulario de reseña
-import ReviewItem from '../components/Review/ReviewItem'; // Importa el componente de ítem de reseña
+import ReviewForm from '../components/Review/ReviewForm'; 
+import ReviewItem from '../components/Review/ReviewItem'; 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 
@@ -9,7 +9,6 @@ const ReviewScreen: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
   const { property } = route.params;
 
-  // Fetch reviews for the property from Firestore
   const [reviews, setReviews] = React.useState<any[]>([]);
   React.useEffect(() => {
     const fetchReviews = async () => {

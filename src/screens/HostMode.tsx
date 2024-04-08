@@ -18,6 +18,7 @@ import firestore from '@react-native-firebase/firestore';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
+import SelectLocation from '../components/SelectCity/SelectLocation';
 
 const HostModeScreen: React.FC = ({navigation}: any) => {
   const [guests, setGuests] = React.useState(0);
@@ -25,12 +26,12 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   const [beds, setBeds] = React.useState(0);
   const [bathrooms, setBathrooms] = React.useState(0);
   const [propertyName, setPropertyName] = React.useState('');
-  const [propertyLocation, setPropertyLocation] = React.useState('');
+  const [selectedCity, setSelectedCity] = React.useState('');
+  const [propertyAdress, setPropertyAdress] = React.useState('');
   const [propertyDescription, setPropertyDescription] = React.useState('');
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
   const [price, setPrice] = React.useState<number | undefined>();
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
   const [propertyType, setPropertyType] = React.useState<string>('');
   const userId = firebase.auth().currentUser?.uid || '';
 
@@ -81,15 +82,11 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date: Date) => {
-    setSelectedDate(date);
-    hideDatePicker();
-  };
-
   const handleAddProperty = async () => {
     if (
       !propertyName ||
-      !propertyLocation ||
+      !propertyAdress ||
+      !selectedCity ||
       guests <= 0 ||
       bedrooms <= 0 ||
       beds <= 0 ||
@@ -107,13 +104,13 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
     try {
       const propertyRef = await firestore().collection('properties').add({
         propertyName: propertyName,
-        location: propertyLocation,
+        propertyAdress: propertyAdress,
+        city: selectedCity,
         guests: guests,
         bedrooms: bedrooms,
         beds: beds,
         bathrooms: bathrooms,
         description: propertyDescription,
-        avaliabilityDates: selectedDate,
         price: price,
         propertyType: propertyType,
         hostId: userId,
@@ -133,13 +130,13 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
       await propertyRef.update({images: imageUrls});
 
       setPropertyName('');
-      setPropertyLocation('');
+      setPropertyAdress('');
+      setSelectedCity('');
       setGuests(0);
       setBedrooms(0);
       setBeds(0);
       setBathrooms(0);
       setPropertyDescription('');
-      setSelectedDate(null);
       setPrice(undefined);
       setPropertyImages([]);
 
@@ -166,15 +163,25 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
               placeholder="Property name"
               placeholderTextColor={'#7C7C7C'}
             />
+
           </View>
 
           <View style={styles.inputWrapper}>
             <TextInput
               style={styles.input}
-              value={propertyLocation}
-              onChangeText={setPropertyLocation}
-              placeholder="Property location"
+              value={propertyAdress}
+              onChangeText={setPropertyAdress}
+              placeholder="Property Adress"
               placeholderTextColor={'#7C7C7C'}
+            />
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <SelectLocation
+              title="Select the property city"
+              selectedCity={val => {
+                setSelectedCity(val);
+              }}
             />
           </View>
 
@@ -251,22 +258,6 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
             />
             <View style={styles.line} />
           </View>
-
-          <TouchableOpacity style={styles.addButton} onPress={showDatePicker}>
-            <Text style={styles.addButtonText}>
-              {selectedDate
-                ? selectedDate.toLocaleDateString()
-                : 'Select Availability Dates'}
-            </Text>
-            <Icon name="calendar" size={30} color="gray" />
-          </TouchableOpacity>
-
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
 
           <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
             <Text style={styles.addButtonText}>Add Images</Text>

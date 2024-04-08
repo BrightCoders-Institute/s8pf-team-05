@@ -37,6 +37,7 @@ export default function SelectCity() {
           be found here.
         </Text>
         <SelectLocation
+          title='In which city do you want to search?'
           selectedCity={val => {
             setSelectedCity(val);
           }}
