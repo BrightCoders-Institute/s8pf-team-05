@@ -31,11 +31,11 @@ const ReviewScreen: React.FC = ({ route }: any) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>Deja tu reseña</Text>
+        <Text style={styles.title}>Leave your review</Text>
         <View style={styles.formContainer}>
           <ReviewForm propertyId={property.id} />
         </View>
-        <Text style={styles.reviewsTitle}>Reseñas de usuarios</Text>
+        <Text style={styles.reviewsTitle}>User Reviews</Text>
         <View style={styles.reviewsContainer}>
           {reviews.map(review => (
             <ReviewItem key={review.id} review={review} />
@@ -49,15 +49,18 @@ const ReviewScreen: React.FC = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 20,
   },
   title: {
     fontSize: 24,
+    color: '#444444',
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
   },
   reviewsTitle: {
     fontSize: 20,
+    color: '#444444',
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 20,
