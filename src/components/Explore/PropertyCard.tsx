@@ -53,7 +53,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
           </View>
           <Text style={styles.propertyDescription}>{property.propertyName}</Text>
 
-          <Text style={styles.propertyPrice}>${property.price} por noche</Text>
+          <Text style={styles.propertyPrice}>${property.price} night</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
