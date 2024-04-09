@@ -41,14 +41,14 @@ export default function ConfirmReservation() {
           {/* Line */}
           <View style={styles.line1} />
 
-          <Text style={styles.title}>Tu Viaje</Text>
+          <Text style={styles.title}>Your Trip</Text>
           <DetailsReservation
-            title="Fecha"
+            title="Date"
             info="21-23 de mar"
             btnEditar={() => console.log('Se presiono el boton')}
           />
           <DetailsReservation
-            title="Huéspedes"
+            title="Guests"
             info="1 huésped"
             btnEditar={() => console.log('Se presiono el boton 2')}
           />
@@ -56,22 +56,19 @@ export default function ConfirmReservation() {
           {/* Line */}
           <View style={styles.line1} />
 
-          <Text style={styles.title}>Escríbele al anfitrión</Text>
-          <Text>
-            Cuenta porque viajas, quien te acompaña y que es lo que mas te gusta
-            del espacio.
-          </Text>
+          <Text style={styles.title}>Write to the host</Text>
+          <Text style={styles.writeDescrption}>Tell him why you are traveling, who is accompanying you and what you like most about the place</Text>
           <HostInfo
             hostName="Fransisco"
             hostImage={
               'https://www.infobae.com/new-resizer/6_ShVi7_Ps8JOa8jdGKI06ofW80=/1440x1440/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UERNNO3H7RGNPEJKE2STAUGWXM.jpg'
             }
           />
-          <CommentBox placeholder="Escribe aqui tu comentario..." />
+          <CommentBox placeholder="Write a comment here..." />
 
           <Button
             style={styles.button}
-            text="Solicitar Reservacion"
+            text="Request Reservation"
             onPress={() => {
               navigation.navigate('ReservationCompleted');
             }}
@@ -108,10 +105,11 @@ const styles = StyleSheet.create({
   },
   locationProperty: {
     fontSize: 14,
+    color: '#7C7C7C',
   },
   line1: {
     marginTop: 25,
-    height: 5,
+    height: 2,
     paddingHorizontal: -100,
     backgroundColor: '#CDCDCD',
   },
@@ -122,6 +120,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   button: {
-    marginTop: 60,
+    marginTop: 45,
+    marginBottom: 20,
+  },
+  writeDescrption: {
+    color: '#999898',
   },
 });
