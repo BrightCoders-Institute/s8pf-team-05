@@ -17,6 +17,7 @@ import ReservationCompleted from '../screens/ReservationCompleted';
 import HostModeInactiveScreen from '../screens/HostModeInactive';
 import ReviewScreen from '../screens/ReviewScreen';
 import ReviewForm from '../components/Review/ReviewForm';
+import LikedPropertys from '../screens/LikedPropertys';
 
 // type RootStackParams = {
 //   Signin: undefined;
@@ -62,7 +63,9 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       <Stack.Screen name="GuestSelect" component={GuestSelect} />
 
       <Stack.Screen name="ConfirmReservation" component={ConfirmReservation} />
-
+      
+      <Stack.Screen name="LikedPropertys" component={LikedPropertys} />
+  
       <Stack.Screen name="ReservationCompleted" component={ReservationCompleted}/>
 
       <Stack.Screen name="ReviewScreen" component={ReviewScreen} />

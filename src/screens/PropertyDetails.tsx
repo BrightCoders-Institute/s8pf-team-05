@@ -6,6 +6,9 @@ import HostInfo from '../components/PropertyDetails/HostInfo';
 import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import LikesDetails from '../components/likes/LikesDetails';
+import auth from '@react-native-firebase/auth'
+
 
 const PropertyDetailsScreen: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
@@ -79,7 +82,10 @@ const PropertyDetailsScreen: React.FC = ({ route }: any) => {
           <CarouselComponent images={property.images} />
         </View>
         <View style={styles.propertyInfo}>
+          <View style={styles.heart}>
           <Text style={styles.propertyName}>{property.propertyName}</Text>
+            <LikesDetails  idProperty={property.id}/>
+          </View>
           <Text style={styles.propertyLocation}>{property.propertyAdress}, {property.city}</Text>
           <Text style={styles.propertyDetails}>
             Guests: {property.guests} · Bedrooms: {property.bedrooms} · Beds: {property.beds} · Bathrooms: {property.bathrooms}
@@ -97,6 +103,7 @@ const PropertyDetailsScreen: React.FC = ({ route }: any) => {
       <View style={styles.bottomTab}>
         <PropertyBottomTab pricePerNight={property.price} onReservePress={handleReservePress} />
       </View>
+      
     </View>
   );
 };
@@ -144,6 +151,10 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  heart:{
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
 });
 
 export default PropertyDetailsScreen;
