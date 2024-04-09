@@ -109,7 +109,7 @@ const PersonalInformation = () => {
         <InfoPersonal
           name="Legal Name"
           value={infoUser.name + ' ' + infoUser.lastname}
-          action="Editar"
+          action="Edit"
           onPress={() => {
             setShowModal(true);
             setContentModal([
@@ -137,7 +137,7 @@ const PersonalInformation = () => {
               ? '*** *** ' + infoUser.phoneNumber.substring(6)
               : 'Not provided'
           }
-          action={infoUser.phoneNumber !== '' ? 'Editar' : 'Provide'}
+          action={infoUser.phoneNumber !== '' ? 'Edit' : 'Provide'}
           onPress={() => {
             setShowModal(true);
             setContentModal([
@@ -158,7 +158,7 @@ const PersonalInformation = () => {
             <InfoPersonal
               name="Date of birth"
               value={infoUser.birthday}
-              action="Editar"
+              action="Edit"
               onPress={() => {
                 setShowModal(true);
                 setContentModal([
@@ -175,7 +175,7 @@ const PersonalInformation = () => {
             <InfoPersonal
               name="About You"
               value={infoUser.description}
-              action="Editar"
+              action="Edit"
               onPress={() => {
                 setShowModal(true);
                 setContentModal([
