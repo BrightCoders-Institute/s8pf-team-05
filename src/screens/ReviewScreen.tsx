@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import ReviewForm from '../components/Review/ReviewForm'; 
 import ReviewItem from '../components/Review/ReviewItem'; 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import  Icon  from 'react-native-vector-icons/AntDesign'
 
 const ReviewScreen: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
@@ -41,35 +42,51 @@ const ReviewScreen: React.FC = ({ route }: any) => {
     );
   }
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Deja tu reseña</Text>
-        <View style={styles.formContainer}>
-          <ReviewForm propertyId={property.id} />
-        </View>
-        {reviews.length === 0 ? ( // Verificar si no hay reviews
-          <View style={styles.emptyContainer}>
-            
-            <Image source={require('../images/empty-state-reviews.png')} style={styles.emptyImage} />
-            <Text style={styles.emptyText}>Aun no hay ninguna review</Text>
+    <>
+      <View style={styles.button_container}>
+        <TouchableOpacity onPress={handleGoBack}>
+          <Icon name ='arrowleft' size={27} color={'black'}/>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.container}>
+        <ScrollView>
+          <Text style={styles.title}>Deja tu reseña</Text>
+          <View style={styles.formContainer}>
+            <ReviewForm propertyId={property.id} />
           </View>
-        ) : (
-          <>
-            <Text style={styles.reviewsTitle}>Reseñas de usuarios</Text>
-            <View style={styles.reviewsContainer}>
-              {reviews.map(review => (
-                <ReviewItem key={review.id} review={review} />
-              ))}
+          {reviews.length === 0 ? ( // Verificar si no hay reviews
+            <View style={styles.emptyContainer}>
+              
+              <Image source={require('../images/empty-state-reviews.png')} style={styles.emptyImage} />
+              <Text style={styles.emptyText}>Aun no hay ninguna review</Text>
             </View>
-          </>
-        )}
-      </ScrollView>
-    </View>
+          ) : (
+            <>
+              <Text style={styles.reviewsTitle}>Reseñas de usuarios</Text>
+              <View style={styles.reviewsContainer}>
+                {reviews.map(review => (
+                  <ReviewItem key={review.id} review={review} />
+                ))}
+              </View>
+            </>
+          )}
+        </ScrollView>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  button_container: {
+    width: '100%',
+    marginTop: 20,
+    marginLeft: 20,
+  },
   container: {
     flex: 1,
   },

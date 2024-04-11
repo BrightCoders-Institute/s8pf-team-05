@@ -9,10 +9,9 @@ const HeaderNavigation = ({whereNav}: headerProps) => {
      const navigate = useNavigation()
   return (
     <View style={styles.button_container}>
-      <TouchableOpacity
-    onPress={() => navigate.navigate(whereNav)}>
-              <Icon name ='arrowleft' size={27} color={'black'}/>
-    </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigate.navigate(whereNav)}>
+        <Icon name ='arrowleft' size={27} color={'black'}/>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -23,5 +22,6 @@ const styles = StyleSheet.create({
   button_container: {
     width: '100%',
     marginTop: 20,
+    marginLeft: 20,
   },
 })
