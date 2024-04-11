@@ -64,20 +64,29 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
               return (
                 <View style={styles.containerItem} key={index}>
 
-                <Image
-                  style={styles.img}
-                  source={{
-                    uri: property.images && property.images.length > 0 ? property.images[0] : 'fallback_image_url',
-                  }}
-                  />
-                <View style={styles.propertyContainer}>
-                  <Text style={styles.name}>{property.propertyName}</Text>
-                  <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
-                  <Text numberOfLines={1} style={styles.details}>{details}</Text>
-                </View>
-                <View>
-                  <TouchableOpacity onPress={() => showOptions(index)}>
-                    <IconDots name="dots-three-vertical" size={27} color="#444444" style={styles.icon}/>
+              <Image
+                style={styles.img}
+                source={{
+                  uri: property.images && property.images.length > 0 ? property.images[0] : 'fallback_image_url',
+                }}
+              />
+              <View style={styles.propertyContainer}>
+                <Text style={styles.name}>{property.propertyName}</Text>
+                <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
+                <Text numberOfLines={1} style={styles.details}>{details}</Text>
+              </View>
+              <View>
+                <TouchableOpacity onPress={() => showOptions(index)}>
+                  <IconDots name="dots-three-vertical" size={27} color="#444444" style={styles.icon}/>
+                </TouchableOpacity>
+              </View>
+              {activeOptions === index && (
+                <View style={styles.optionsContainer}>
+                  <TouchableOpacity style={styles.optionEdit} onPress={editProperty}>
+                    <Text style={styles.optionsTitle}>Edit</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.optionDelete} onPress={() => deleteProperty(index)}>
+                    <Text style={styles.optionsTitle}>Delete</Text>
                   </TouchableOpacity>
                 </View>
                 {activeOptions === index && (
