@@ -1,15 +1,27 @@
 /* eslint-disable */
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import ClearButton from '../components/Guest/ClearButton';
 import SaveButton from '../components/Guest/SaveButton';
 import NumericInput from '../components/HostMode/NumericInput';
 import HeaderNavigation from '../navigation/HeaderNavigation';
+import { useNavigation } from '@react-navigation/native';
 
 
-const DateSelect = () => {
+const DateSelect = ({route}: any) => {
+    const navigation = useNavigation();
+    const {property} = route.params;
+
     const [numberAdults, setNumberAdults] = useState(0);
     const [numberKids, setNumberKids] = useState(0);
+    const [alert, setAlert] = useState('');
+
+    useEffect(() => {
+        if (property.guestAdults !== null && property.guestKids !== null) {
+            setNumberAdults(property.guestAdults);
+            setNumberKids(property.guestKids);
+        }
+    }, []);
     
     const handleIncrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
         setState(prevValue => prevValue + 1);
@@ -22,13 +34,18 @@ const DateSelect = () => {
         setNumberKids(0);
     }
     const saveNumbers = () => {
-        const totalGuest = numberAdults + numberKids;
-        console.log(`${numberAdults} + ${numberKids} = ${totalGuest}`)
+        if(numberAdults < 1) {
+            setAlert('Select at least one adult');
+        } else {
+            property.guestAdults = numberAdults;
+            property.guestKids = numberKids;
+            navigation.navigate('ConfirmReservation',{property});
+        }
     }
 
   return (
     <View style={styles.container}>
-        <HeaderNavigation whereNav='PropertyDetails'/>
+        <HeaderNavigation />
         <View>
             <View style={styles.guest_container}>
                 <Text style={styles.title}>How many guests?</Text>
@@ -44,6 +61,7 @@ const DateSelect = () => {
                     onIncrease={() => handleIncrease(setNumberKids)}
                     onDecrease={() => handleDecrease(setNumberKids)}
                 />
+                <Text style={styles.txtAlert}>{alert}</Text>
             </View>
             <View style={styles.confirm_container}>
                 <ClearButton clearNumbers={clearNumbers}/>
@@ -86,4 +104,9 @@ const styles = StyleSheet.create({
         height: 100,
         backgroundColor: '#FFFFFF',
     },
+    txtAlert: {
+        color: 'red',
+        marginTop: 25,
+        textAlign: 'center',
+    }
 })

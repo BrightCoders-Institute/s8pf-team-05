@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, ScrollView, StyleSheet} from 'react-native';
 import SearchBar from '../components/Explore/SearchBar';
 import CategoryButton from '../components/Explore/CategoryButton';
 import PropertyCard from '../components/Explore/PropertyCard';
 import firestore from '@react-native-firebase/firestore';
 
-const Explore = ({ navigation }: any) => {
+const Explore = ({navigation}: any) => {
   const categories = [
-    { name: 'Apartments', icon: 'building', value: 'apartment' },
-    { name: 'Houses', icon: 'house-chimney', value: 'house' },
-    { name: 'Pool', icon: 'house-flood-water', value: 'pool' },
-    { name: 'Countryside', icon: 'tree', value: 'countryside' },
-    { name: 'Beach', icon: 'umbrella-beach', value: 'beach' },
-    { name: 'Mountain', icon: 'mountain', value: 'mountain' },
-    { name: 'Other', icon: 'plus', value: 'other' },
+    {name: 'Apartments', icon: 'building', value: 'apartment'},
+    {name: 'Houses', icon: 'house-chimney', value: 'house'},
+    {name: 'Pool', icon: 'house-flood-water', value: 'pool'},
+    {name: 'Countryside', icon: 'tree', value: 'countryside'},
+    {name: 'Beach', icon: 'umbrella-beach', value: 'beach'},
+    {name: 'Mountain', icon: 'mountain', value: 'mountain'},
+    {name: 'Other', icon: 'plus', value: 'other'},
   ];
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    categories[0].value
+    categories[0].value,
   );
 
   const [properties, setProperties] = useState<any[]>([]);
@@ -29,8 +29,11 @@ const Explore = ({ navigation }: any) => {
           .collection('properties')
           .where('propertyType', '==', selectedCategory)
           .get();
-        
-        const fetchedProperties = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        const fetchedProperties = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setProperties(fetchedProperties);
       } catch (error) {
         console.error('Error fetching properties: ', error);
@@ -75,7 +78,9 @@ const Explore = ({ navigation }: any) => {
                     key={property.id}
                     property={property}
                     onPress={() => {
-                      navigation.navigate('PropertyDetails', { property: property });
+                      navigation.navigate('PropertyDetails', {
+                        property: property,
+                      });
                     }}
                   />
                 ))}
