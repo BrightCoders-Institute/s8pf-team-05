@@ -60,7 +60,7 @@ const Profile = ({navigation}: any) => {
         />
         <View style={styles.userInformationContainer}>
           <Text style={styles.nameUser}>{nameUser} {lastnameUser}</Text>
-          {isHost ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Huesped</Text>}
+          {isHost ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Guest</Text>}
         </View>
       </View>
 

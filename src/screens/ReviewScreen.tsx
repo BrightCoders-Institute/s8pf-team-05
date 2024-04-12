@@ -55,7 +55,7 @@ const ReviewScreen: React.FC = ({ route }: any) => {
       </View>
       <View style={styles.container}>
         <ScrollView>
-          <Text style={styles.title}>Deja tu reseña</Text>
+          <Text style={styles.title}>Leave your review</Text>
           <View style={styles.formContainer}>
             <ReviewForm propertyId={property.id} />
           </View>
@@ -63,11 +63,11 @@ const ReviewScreen: React.FC = ({ route }: any) => {
             <View style={styles.emptyContainer}>
               
               <Image source={require('../images/empty-state-reviews.png')} style={styles.emptyImage} />
-              <Text style={styles.emptyText}>Aun no hay ninguna review</Text>
+              <Text style={styles.emptyText}>There is no reviews yet</Text>
             </View>
           ) : (
             <>
-              <Text style={styles.reviewsTitle}>Reseñas de usuarios</Text>
+              <Text style={styles.reviewsTitle}>Users Reviews</Text>
               <View style={styles.reviewsContainer}>
                 {reviews.map(review => (
                   <ReviewItem key={review.id} review={review} />
@@ -89,15 +89,18 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    paddingTop: 20,
   },
   title: {
     fontSize: 24,
+    color: '#444444',
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
   },
   reviewsTitle: {
     fontSize: 20,
+    color: '#444444',
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 20,

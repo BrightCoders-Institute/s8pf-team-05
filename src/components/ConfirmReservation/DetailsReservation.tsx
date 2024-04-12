@@ -17,7 +17,7 @@ export default function DetailsReservation({title, info, btnEditar}: Props) {
       </View>
       <TouchableWithoutFeedback onPress={btnEditar}>
         <View style={styles.btnContainer}>
-          <Text style={styles.btnText}>Editar</Text>
+          <Text style={styles.btnText}>Edit</Text>
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   info: {
-    color: 'black',
+    color: '#7C7C7C',
     fontSize: 15,
   },
   btnContainer: {
@@ -51,5 +51,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderBottomColor: 'black',
     borderBottomWidth: 2,
+    letterSpacing: 1,
   },
 });
