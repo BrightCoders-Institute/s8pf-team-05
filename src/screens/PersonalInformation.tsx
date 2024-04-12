@@ -97,8 +97,9 @@ const PersonalInformation = () => {
           onPressModal={() => setShowModal(false)}
         />
       )}
+      <HeaderNavigation whereNav="Main" />
       <View style={styles.container}>
-        <HeaderNavigation whereNav="Profile" />
+        
         <Text style={styles.text}>Personal information</Text>
         <View style={styles.profile}>
           <Profilepicture

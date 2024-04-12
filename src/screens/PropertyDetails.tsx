@@ -6,8 +6,9 @@ import HostInfo from '../components/PropertyDetails/HostInfo';
 import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import HeaderNavigation from '../navigation/HeaderNavigation';
 
-const PropertyDetailsScreen: React.FC = ({ route }: any) => {
+const PropertyDetails: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
   const {property} = route.params;
 
@@ -74,6 +75,7 @@ const PropertyDetailsScreen: React.FC = ({ route }: any) => {
 
   return (
     <View style={styles.container}>
+      <HeaderNavigation whereNav="Main" />
       <ScrollView>
         <View>
           <CarouselComponent images={property.images} />
@@ -146,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PropertyDetailsScreen;
+export default PropertyDetails;
