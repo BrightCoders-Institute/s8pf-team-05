@@ -45,9 +45,12 @@ const CardFavorites = () => {
           <View key={index} style={styles.container}>
             <Image style={styles.img} source={{ uri: favorite.images[0] }} />
             <View style={styles.container_description}>
-              <Text style={styles.text_name}>{favorite.propertyName}</Text>
-              <Text style={styles.textinf}>{favorite.propertyAdress}</Text>
-              <Text style={styles.textinf}>Price: ${favorite.price}</Text>
+              <Text style={styles.text_name} numberOfLines={1}>{favorite.propertyName}</Text>
+              <Text style={styles.textinf} numberOfLines={1}>Adress: { favorite.propertyAdress}</Text>
+              <Text style={styles.textinf} numberOfLines={1}>Price: ${favorite.price}</Text>
+              <Text style={{color:"black"}}>Description</Text>
+              <Text style={styles.textinf} numberOfLines={2}> {favorite.description}</Text>
+
             </View>
           </View>
         ))}
@@ -59,82 +62,48 @@ const CardFavorites = () => {
 export default CardFavorites
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: '#444444',
-  },
-  container: {
-    flexDirection: 'row',
-    marginBottom: 15,
-  },
-  containerPrincipal: {
-    margin: 20
-  },
-  img: {
-    width: 150,
-    height: 150,
-    borderBottomLeftRadius: 10,
-    borderTopLeftRadius: 10
-  },
-  container_description: {
-    backgroundColor: '#263238',
-    flex: 1,
-    borderBottomRightRadius: 10,
-    borderTopRightRadius: 10,
-    alignItems: 'center'
-  },
-  description_text: {
-    fontSize: 15,
-  },
-  text_name: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 20
-  },
-  textinf: {
-    color: 'white'
-  },
-  container_btn: {
-    position: 'absolute',
-  }
-})
+    header:{
+      fontSize: 35,
+      marginBottom: 20
+    },
+    containerPrincipal:{
+      margin:20
+    },
+    container:{
+      flexDirection:'row',
+      marginBottom:15,
+      
+    },
+    img:{
+      width: 150,
+      height:150,
+      borderBottomLeftRadius: 10,
+      borderTopLeftRadius: 10,
+    },
+    container_description:{
+      flex:1,
+      borderBottomRightRadius: 10,
+      borderTopRightRadius: 10,
+      alignItems: 'center',
+      elevation: 10,
+      backgroundColor: 'white'
+    },
+    description_text:{
+      fontSize:15,
+  
+    },
+    text_name:{
+      color:'black',
+      fontWeight: 'bold',
+      fontSize: 20
+    },
+    textinf:{
+      color:'black',
+      textAlign:'justify',
+      paddingHorizontal:20
+    },
+    container_btn:{
+      position:'absolute',
+    }
+  })
 
-// import { StyleSheet, Text, View } from 'react-native'
-// import React from 'react'
-// import CardWish from '../components/whislistComponents/CardWish'
-
-// const Wishlist = () => {
-//   return (
-//     <View style ={ styles.container}>
-//       <Text style={styles.header}>Whislist</Text>
-//       <View style ={ styles.containerCards}>
-//         <CardWish/>
-//         <CardWish/>
-//         <CardWish/>
-//         <CardWish/>
-//       </View>
-//     </View>
-//   )
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingHorizontal: 30,
-//     paddingVertical: 20,
-//   },
-//     containerCards: {
-//         flexDirection: 'row',
-//         flexWrap: 'wrap',
-//         justifyContent: 'space-between',
-//         marginTop:20
-//     },
-//     header:{
-//         fontSize:40,
-//         fontWeight:'bold',
-//         color: '#444444',
-//     }
-// })
-
-// export default Wishlist
