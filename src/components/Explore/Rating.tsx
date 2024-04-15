@@ -10,7 +10,7 @@ interface RatingProps {
 const Rating: React.FC<RatingProps> = ({ rating }) => {
     return (
         <View style={styles.ratingContainer}>
-            <Icon name="star" size={14} color="#444444" />
+            <Icon name="star" size={15} color="#e7b13d" />
             <Text style={styles.ratingText}>{rating}</Text>
             
         </View>

@@ -2,11 +2,17 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const SaveButton = () => {
+type Props = {
+    text: string;
+    disabled: boolean;
+    onPress: () => void;
+};
+
+const SaveButton = ({onPress, disabled}: {onPress: () => void, disabled: boolean}) => {
   return (
     <View>
-        <TouchableOpacity style={styles.save_btn}>
-            <Text style={styles.save_txt}>Save</Text>
+        <TouchableOpacity style={disabled ? styles.save_btn_disabled : styles.save_btn} onPress={onPress} disabled={disabled}>
+            <Text style={styles.save_txt}>Next</Text>
         </TouchableOpacity>
     </View>
   )
@@ -18,10 +24,18 @@ const styles = StyleSheet.create({
     save_btn: {
         width: 120,
         height: 60,
-        margin: 20,
+        margin: 20, 
         padding: 20,
         borderRadius: 8,
         backgroundColor: '#6F2DBD',
+    },
+    save_btn_disabled: {
+        width: 120,
+        height: 60,
+        margin: 20,
+        padding: 20,
+        borderRadius: 8,
+        backgroundColor: '#8B8B8B',
     },
     save_txt: {
         color: '#FFFFFF',

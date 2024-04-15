@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import StarRating from 'react-native-star-rating-widget';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
+  const navigation = useNavigation();
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>('');
   const [userReview, setUserReview] = useState<any>(null);
@@ -33,7 +35,7 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
   const handleSubmit = async () => {
     try {
     if (userReview) {
-        Alert.alert('Ya has realizado una reseña para esta propiedad.');
+        Alert.alert('You have already made a review for this property.');
         return;
     }
 
@@ -49,6 +51,7 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
       
       setRating(0);
       setReview('');
+      navigation.navigate('PropertyDetails');
     } catch (error) {
       console.error('Error submitting review: ', error);
     }
@@ -56,16 +59,16 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Calificación:</Text>
+      <Text style={styles.label}>Rate:</Text>
       <StarRating
         rating={rating}
         onChange={setRating}
         starSize={30}
         starStyle={{ marginRight: 10 }}
         enableHalfStar={false}
-        color="#444444"
+        color="#e7b13d"
       />
-      <Text style={styles.label}>Reseña:</Text>
+      <Text style={styles.label}>Review:</Text>
       <TextInput
         style={[styles.input, { height: 100 }]}
         value={review}
@@ -73,7 +76,7 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
         multiline
       />
         <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-            <Text style={styles.submitText}>Enviar</Text>
+            <Text style={styles.submitText}>Send</Text>
         </TouchableOpacity>
     </View>
   );
@@ -88,11 +91,13 @@ const styles = StyleSheet.create({
     width: 350,
   },
   label: {
+    color: '#444444',
     fontSize: 16,
     marginBottom: 5,
   },
   input: {
     borderWidth: 1,
+    color: 'black',
     borderColor: '#CCCCCC',
     borderRadius: 5,
     padding: 10,
@@ -117,7 +122,7 @@ const styles = StyleSheet.create({
   },
     submitText: {
         color: '#FFFFFF',
-        fontWeight: 'bold',
+        fontWeight: '500',
         
     },
 });

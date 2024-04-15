@@ -56,7 +56,7 @@ export default function EditModal({onPressOut, onPressModal, content}: Props) {
   };
 
   const handleConfirm = (date: Date) => {
-    console.log('Seleccionaste la fecha: ' + date.toLocaleDateString());
+    console.log('You selected the date: ' + date.toLocaleDateString());
     handleInputChange('birthday', date.toLocaleDateString());
     // setSelectedDate(date);
     // setBirthDay(date.toLocaleDateString());

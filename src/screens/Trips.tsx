@@ -1,6 +1,10 @@
 import {StyleSheet, Text, ScrollView} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import CardTrip from '../components/TripsScreenComponents/CardTrip';
+import firebase, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const DATA = [
   {
@@ -33,22 +37,60 @@ const DATA2 = [
 ];
 
 const Trips = () => {
+  const [reservations, setReservations] = useState<any[]>();
+
+  useEffect(() => {
+    async function fetchReservations() {
+      const querySnapshot = await firebase()
+        .collection('users')
+        .doc(auth().currentUser?.uid)
+        .collection('reservations')
+        .get();
+
+      const tmpReservations: any[] = [];
+
+      await Promise.all(
+        querySnapshot.docs.map(async doc => {
+          const idProperty =
+            doc.data().propertyReference._documentPath._parts[1];
+          const propertyDoc = await firebase()
+            .collection('properties')
+            .doc(idProperty)
+            .get();
+
+          tmpReservations.push({
+            id: propertyDoc.id,
+            ...propertyDoc.data(),
+          });
+        }),
+      );
+
+      setReservations(tmpReservations);
+    }
+
+    fetchReservations();
+  }, []);
+
+  console.log(reservations);
+
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Trips</Text>
+      <Text style={styles.title}>Next trips</Text>
 
-      {DATA.map((trip, index) => {
-        return (
-          <CardTrip
-            key={index}
-            place={trip.place}
-            host={trip.host}
-            date={trip.date}
-          />
-        );
-      })}
+      {reservations !== undefined &&
+        reservations.map((reservation, index) => {
+          return (
+            <CardTrip
+              key={index}
+              place={reservation.propertyName}
+              host={reservation.hostId}
+              date={reservation.id}
+              img={reservation.images[0]}
+            />
+          );
+        })}
 
-      <Text style={styles.subTitle}>Viajes Pasados</Text>
+      <Text style={styles.subTitle}>Trips you made</Text>
 
       {DATA2.map((trip, index) => {
         return (
@@ -73,13 +115,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#444444',
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 20,
   },
   subTitle: {
     color: '#444444',
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 15,
