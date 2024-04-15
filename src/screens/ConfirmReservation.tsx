@@ -64,7 +64,7 @@ export default function ConfirmReservation({route}: any) {
             })
             .then(() => {
               setLoading(false);
-              navigation.dispatch(StackActions.replace('Main'));
+              navigation.dispatch(StackActions.replace('ReservationCompleted'));
             });
         }
         getPath();
