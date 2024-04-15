@@ -38,7 +38,7 @@ const ReviewItem: React.FC<{ review: { rating: number; review: string; userId: s
       starSize={20} 
       color="#444444"
       starStyle={{ marginHorizontal: 0 }} />
-      <Text>{review.review}</Text>
+      <Text style={styles.userReview}>{review.review}</Text>
     </View>
   );
 };
@@ -61,8 +61,12 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   userName: {
+    color: '#444444',
     fontWeight: 'bold',
   },
+  userReview: {
+    color: '#7C7C7C',
+  }
 });
 
 export default ReviewItem;

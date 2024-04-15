@@ -8,6 +8,7 @@ interface headerProps {
 const HeaderNavigation = ({style}: headerProps) => {
   const navigate = useNavigation();
   return (
+
     <View style={style}>
       <TouchableOpacity onPress={() => navigate.goBack()}>
         <Icon name="arrowleft" size={27} color={'black'} />
@@ -17,3 +18,4 @@ const HeaderNavigation = ({style}: headerProps) => {
 };
 
 export default HeaderNavigation;
+

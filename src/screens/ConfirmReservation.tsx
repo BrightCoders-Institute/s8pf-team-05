@@ -102,7 +102,7 @@ export default function ConfirmReservation({route}: any) {
           {/* Line */}
           <View style={styles.line1} />
 
-          <Text style={styles.title}>Tu Viaje</Text>
+          <Text style={styles.title}>Your Trip</Text>
           <DetailsReservation
             title="Fecha"
             info={`${property.startDate.substring(
@@ -134,13 +134,13 @@ export default function ConfirmReservation({route}: any) {
           {/* Line */}
           <View style={styles.line1} />
 
-          <Text style={styles.title}>Escríbele al anfitrión</Text>
+
+          <Text style={styles.title}>Write to the host</Text>
           <Text>
-            Cuenta porque viajas, quien te acompaña y que es lo que mas te gusta
-            del espacio.
+            Tell him why you are traveling, who is accompanying you and what you like most about the place
           </Text>
           <HostInfo hostId={property.hostId} />
-          <CommentBox placeholder="Escribe aqui tu comentario..." />
+          <CommentBox placeholder="Write a comment here..." />
 
           <Button text="Request reservation" onPress={requestReservation} />
         </ScrollView>
@@ -175,10 +175,11 @@ const styles = StyleSheet.create({
   },
   locationProperty: {
     fontSize: 14,
+    color: '#7C7C7C',
   },
   line1: {
     marginTop: 25,
-    height: 5,
+    height: 2,
     paddingHorizontal: -100,
     backgroundColor: '#CDCDCD',
   },
@@ -187,5 +188,8 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 15,
     fontWeight: '600',
+  },
+  writeDescrption: {
+    color: '#999898',
   },
 });

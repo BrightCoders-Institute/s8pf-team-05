@@ -97,8 +97,9 @@ const PersonalInformation = () => {
           onPressModal={() => setShowModal(false)}
         />
       )}
+      <HeaderNavigation whereNav="Main" />
       <View style={styles.container}>
-        <HeaderNavigation whereNav="Profile" />
+        
         <Text style={styles.text}>Personal information</Text>
         <View style={styles.profile}>
           <Profilepicture
@@ -109,7 +110,7 @@ const PersonalInformation = () => {
         <InfoPersonal
           name="Legal Name"
           value={infoUser.name + ' ' + infoUser.lastname}
-          action="Editar"
+          action="Edit"
           onPress={() => {
             setShowModal(true);
             setContentModal([
@@ -137,7 +138,7 @@ const PersonalInformation = () => {
               ? '*** *** ' + infoUser.phoneNumber.substring(6)
               : 'Not provided'
           }
-          action={infoUser.phoneNumber !== '' ? 'Editar' : 'Provide'}
+          action={infoUser.phoneNumber !== '' ? 'Edit' : 'Provide'}
           onPress={() => {
             setShowModal(true);
             setContentModal([
@@ -158,7 +159,7 @@ const PersonalInformation = () => {
             <InfoPersonal
               name="Date of birth"
               value={infoUser.birthday}
-              action="Editar"
+              action="Edit"
               onPress={() => {
                 setShowModal(true);
                 setContentModal([
@@ -175,7 +176,7 @@ const PersonalInformation = () => {
             <InfoPersonal
               name="About You"
               value={infoUser.description}
-              action="Editar"
+              action="Edit"
               onPress={() => {
                 setShowModal(true);
                 setContentModal([

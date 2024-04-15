@@ -39,6 +39,7 @@ const HostInfo: React.FC<HostInfoProps> = ({hostId}) => {
         />
         <View style={styles.infoContainer}>
           <Text style={styles.hostTitle}>Host:</Text>
+
           <Text>{hostInfo.hostName}</Text>
         </View>
       </View>
@@ -66,5 +67,9 @@ const styles = StyleSheet.create({
   hostTitle: {
     color: 'black',
     fontWeight: 'bold',
+  },
+  hostName: {
+    fontSize: 15,
+    color: '#7C7C7C',
   },
 });

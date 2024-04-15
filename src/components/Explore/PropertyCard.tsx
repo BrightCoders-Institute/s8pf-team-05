@@ -15,7 +15,7 @@ import Moment from 'moment'
 interface PropertyCardProps {
   property: {
     images: string[];
-    location: string;
+    city: string;
     rating: number;
     propertyName: string;
     price: string;
@@ -47,12 +47,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
 
         <View style={styles.propertyInfo}>
           <View style={styles.propertyHeader}>
-            <Text style={styles.propertyLocation}>{property.location}</Text>
+            <Text style={styles.propertyLocation}>{property.city}</Text>
             <Rating rating={property.rating} />
           </View>
           <Text style={styles.propertyDescription}>{property.propertyName}</Text>
 
-          <Text style={styles.propertyPrice}>${property.price} por noche</Text>
+          <Text style={styles.propertyPrice}>${property.price} night</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>

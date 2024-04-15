@@ -13,7 +13,7 @@ export default function ReservationCompleted() {
   return (
     <View style={styles.container}>
       <Icon name="checkmark-circle" size={100} color={'#6F2DBD'} />
-      <Text style={styles.text}>Reservación realizada exitosamente</Text>
+      <Text style={styles.text}>Reservation made successfully!!</Text>
     </View>
   );
 }

@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {View, ScrollView, StyleSheet} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, StyleSheet, Text, Image } from 'react-native';
 import SearchBar from '../components/Explore/SearchBar';
 import CategoryButton from '../components/Explore/CategoryButton';
 import PropertyCard from '../components/Explore/PropertyCard';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import EmptyState from '../components/EmptyState';
 
 const Explore = ({navigation}: any) => {
   const categories = [
@@ -21,13 +23,32 @@ const Explore = ({navigation}: any) => {
   );
 
   const [properties, setProperties] = useState<any[]>([]);
+  const [propertiesFound, setPropertiesFound] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
+        const user = auth().currentUser;
+        if (!user) {
+          return;
+        }
+
+        const userDoc = await firestore()
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+        const userData = userDoc.data();
+        const defaultCity = userData?.defaultCity;
+
+        if (!defaultCity) {
+          return;
+        }
+
         const snapshot = await firestore()
           .collection('properties')
           .where('propertyType', '==', selectedCategory)
+          .where('city', '==', defaultCity)
           .get();
 
         const fetchedProperties = snapshot.docs.map(doc => ({
@@ -35,6 +56,8 @@ const Explore = ({navigation}: any) => {
           ...doc.data(),
         }));
         setProperties(fetchedProperties);
+        setPropertiesFound(fetchedProperties.length > 0);
+
       } catch (error) {
         console.error('Error fetching properties: ', error);
       }
@@ -71,7 +94,27 @@ const Explore = ({navigation}: any) => {
                 />
               ))}
             </ScrollView>
+            
             <View>
+              {propertiesFound ? (
+                <View style={styles.propertiesContainer}>
+                  {properties.map(property => (
+                    <PropertyCard
+                      key={property.id}
+                      property={property}
+                      onPress={() => {
+                        navigation.navigate('PropertyDetails', { property: property });
+                      }}
+                    />
+                  ))}
+                </View>
+              ) : (
+                <EmptyState
+                  imageSource={require('../images/empty-state-explore.png')}
+                  message="No properties found matching the search criteria."
+                />
+                
+              )}
               <View style={styles.propertiesContainer}>
                 {properties.map(property => (
                   <PropertyCard
@@ -110,6 +153,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 35,
     backgroundColor: '#F3F3F3',
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateImage: {
+    width: 200,
+    height: 200,
+    marginTop: '25%',
+  },
+  emptyStateText: {
+    marginTop: 10,
+    paddingHorizontal: 60,
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#888',
   },
 });
 

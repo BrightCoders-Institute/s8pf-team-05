@@ -12,23 +12,9 @@ import HostInfo from '../components/PropertyDetails/HostInfo';
 import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import HeaderNavigation from '../navigation/HeaderNavigation';
 
-type Property = {
-  hostId: string;
-  propertyName: string;
-  propertyType: string;
-  description: string;
-  avaliabilityDates: Date;
-  location: string;
-  images: string[];
-  guests: number;
-  bedrooms: number;
-  bathrooms: number;
-  beds: number;
-  price: number;
-};
-
-const PropertyDetailsScreen: React.FC = ({route}: any) => {
+const PropertyDetails: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
   const {property} = route.params;
 
@@ -118,16 +104,16 @@ const PropertyDetailsScreen: React.FC = ({route}: any) => {
 
   return (
     <View style={styles.container}>
+      <HeaderNavigation whereNav="Main" />
       <ScrollView>
         <View>
           <CarouselComponent images={property.images} />
         </View>
         <View style={styles.propertyInfo}>
           <Text style={styles.propertyName}>{property.propertyName}</Text>
-          <Text style={styles.propertyLocation}>{property.location}</Text>
+          <Text style={styles.propertyLocation}>{property.propertyAdress}, {property.city}</Text>
           <Text style={styles.propertyDetails}>
-            Guests: {property.guests} | Bedrooms: {property.bedrooms} | Beds:{' '}
-            {property.beds} | Bathrooms: {property.bathrooms}
+            Guests: {property.guests} · Bedrooms: {property.bedrooms} · Beds: {property.beds} · Bathrooms: {property.bathrooms}
           </Text>
           <TouchableOpacity onPress={handleRatingPress}>
             <RatingBox
@@ -200,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PropertyDetailsScreen;
+export default PropertyDetails;

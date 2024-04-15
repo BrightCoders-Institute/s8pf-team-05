@@ -50,7 +50,7 @@ const Signin = ({navigation}:any) => {
           const user = userCredential.user
           if(user){
             const infoUser = (await firestore().collection('users').doc(user.uid).get()).data()
-            console.log(infoUser);
+            //console.log(infoUser);
             if(infoUser.defaultCity !== ''){
               navigation.replace('Main');
             } else {

@@ -18,6 +18,7 @@ import firestore from '@react-native-firebase/firestore';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
+import SelectLocation from '../components/SelectCity/SelectLocation';
 
 const HostModeScreen: React.FC = ({navigation}: any) => {
   const [guests, setGuests] = React.useState(0);
@@ -25,12 +26,12 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   const [beds, setBeds] = React.useState(0);
   const [bathrooms, setBathrooms] = React.useState(0);
   const [propertyName, setPropertyName] = React.useState('');
-  const [propertyLocation, setPropertyLocation] = React.useState('');
+  const [selectedCity, setSelectedCity] = React.useState('');
+  const [propertyAdress, setPropertyAdress] = React.useState('');
   const [propertyDescription, setPropertyDescription] = React.useState('');
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
   const [price, setPrice] = React.useState<number | undefined>();
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
   const [propertyType, setPropertyType] = React.useState<string>('');
   const userId = firebase.auth().currentUser?.uid || '';
 
@@ -81,15 +82,11 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date: Date) => {
-    setSelectedDate(date);
-    hideDatePicker();
-  };
-
   const handleAddProperty = async () => {
     if (
       !propertyName ||
-      !propertyLocation ||
+      !propertyAdress ||
+      !selectedCity ||
       guests <= 0 ||
       bedrooms <= 0 ||
       beds <= 0 ||
@@ -107,13 +104,13 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
     try {
       const propertyRef = await firestore().collection('properties').add({
         propertyName: propertyName,
-        location: propertyLocation,
+        propertyAdress: propertyAdress,
+        city: selectedCity,
         guests: guests,
         bedrooms: bedrooms,
         beds: beds,
         bathrooms: bathrooms,
         description: propertyDescription,
-        avaliabilityDates: selectedDate,
         price: price,
         propertyType: propertyType,
         hostId: userId,
@@ -133,13 +130,13 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
       await propertyRef.update({images: imageUrls});
 
       setPropertyName('');
-      setPropertyLocation('');
+      setPropertyAdress('');
+      setSelectedCity('');
       setGuests(0);
       setBedrooms(0);
       setBeds(0);
       setBathrooms(0);
       setPropertyDescription('');
-      setSelectedDate(null);
       setPrice(undefined);
       setPropertyImages([]);
 
@@ -153,149 +150,147 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   };
 
   return (
-    <View style={styles.container}>
-      <HeaderNavigation whereNav="Profile" />
-      <Text style={styles.title}>Add a new property</Text>
-      <ScrollView>
-        <View style={styles.formContainer}>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              value={propertyName}
-              onChangeText={setPropertyName}
-              placeholder="Property name"
-              placeholderTextColor={'#7C7C7C'}
-            />
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              value={propertyLocation}
-              onChangeText={setPropertyLocation}
-              placeholder="Property location"
-              placeholderTextColor={'#7C7C7C'}
-            />
-          </View>
-
-          <NumericInput
-            label="Number of guests"
-            value={guests}
-            onIncrease={() => handleIncrease(setGuests)}
-            onDecrease={() => handleDecrease(setGuests)}
-          />
-          <NumericInput
-            label="Number of rooms"
-            value={bedrooms}
-            onIncrease={() => handleIncrease(setBedrooms)}
-            onDecrease={() => handleDecrease(setBedrooms)}
-          />
-          <NumericInput
-            label="Number of beds"
-            value={beds}
-            onIncrease={() => handleIncrease(setBeds)}
-            onDecrease={() => handleDecrease(setBeds)}
-          />
-          <NumericInput
-            label="Number of bathrooms"
-            value={bathrooms}
-            onIncrease={() => handleIncrease(setBathrooms)}
-            onDecrease={() => handleDecrease(setBathrooms)}
-          />
-
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              value={price !== undefined ? price.toString() : ''}
-              onChangeText={text =>
-                setPrice(text ? parseFloat(text) : undefined)
-              }
-              placeholder="Price per night"
-              placeholderTextColor={'#7C7C7C'}
-              keyboardType="numeric"
-            />
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <SelectPicker
-              selectedValue={propertyType}
-              style={styles.picker}
-              onValueChange={(itemValue, itemIndex) =>
-                handlePropertyTypeSelection(itemValue)
-              }>
-              <SelectPicker.Item label="Select property type" value="" />
-              <SelectPicker.Item label="Apartment" value="apartment" />
-              <SelectPicker.Item label="House" value="house" />
-              <SelectPicker.Item label="Pool House" value="pool" />
-              <SelectPicker.Item
-                label="House in the countryside"
-                value="countryside"
+    <>
+      <HeaderNavigation whereNav="Main" />
+      <View style={styles.container}>
+        
+        <Text style={styles.title}>Add a new property</Text>
+        <ScrollView>
+          <View style={styles.formContainer}>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                value={propertyName}
+                onChangeText={setPropertyName}
+                placeholder="Property name"
+                placeholderTextColor={'#7C7C7C'}
               />
-              <SelectPicker.Item label="Beach house" value="beach" />
-              <SelectPicker.Item
-                label="House in the mountain"
-                value="mountain"
+
+            </View>
+
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                value={propertyAdress}
+                onChangeText={setPropertyAdress}
+                placeholder="Property Adress"
+                placeholderTextColor={'#7C7C7C'}
               />
-              <SelectPicker.Item label="Other" value="other" />
-            </SelectPicker>
-          </View>
+            </View>
 
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={[styles.textArea]}
-              value={propertyDescription}
-              onChangeText={setPropertyDescription}
-              placeholder="Property description"
-              placeholderTextColor={'#7C7C7C'}
-              multiline
+            <View style={styles.inputWrapper}>
+              <SelectLocation
+                title="Select the property city"
+                selectedCity={val => {
+                  setSelectedCity(val);
+                }}
+              />
+            </View>
+
+            <NumericInput
+              label="Number of guests"
+              value={guests}
+              onIncrease={() => handleIncrease(setGuests)}
+              onDecrease={() => handleDecrease(setGuests)}
             />
-            <View style={styles.line} />
-          </View>
+            <NumericInput
+              label="Number of rooms"
+              value={bedrooms}
+              onIncrease={() => handleIncrease(setBedrooms)}
+              onDecrease={() => handleDecrease(setBedrooms)}
+            />
+            <NumericInput
+              label="Number of beds"
+              value={beds}
+              onIncrease={() => handleIncrease(setBeds)}
+              onDecrease={() => handleDecrease(setBeds)}
+            />
+            <NumericInput
+              label="Number of bathrooms"
+              value={bathrooms}
+              onIncrease={() => handleIncrease(setBathrooms)}
+              onDecrease={() => handleDecrease(setBathrooms)}
+            />
 
-          <TouchableOpacity style={styles.addButton} onPress={showDatePicker}>
-            <Text style={styles.addButtonText}>
-              {selectedDate
-                ? selectedDate.toLocaleDateString()
-                : 'Select Availability Dates'}
-            </Text>
-            <Icon name="calendar" size={30} color="gray" />
-          </TouchableOpacity>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                value={price !== undefined ? price.toString() : ''}
+                onChangeText={text =>
+                  setPrice(text ? parseFloat(text) : undefined)
+                }
+                placeholder="Price per night"
+                placeholderTextColor={'#7C7C7C'}
+                keyboardType="numeric"
+              />
+            </View>
 
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
-
-          <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
-            <Text style={styles.addButtonText}>Add Images</Text>
-            <Icon name="attach" size={30} color="gray" />
-          </TouchableOpacity>
-
-          <View style={styles.imagesContainer}>
-            {propertyImages.map((imageUrl, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleDeleteImage(index)}>
-                <Image source={{uri: imageUrl}} style={styles.image} />
-                <Icon
-                  name="close-circle"
-                  size={24}
-                  color="red"
-                  style={styles.deleteIcon}
+            <View style={styles.inputWrapper}>
+              <SelectPicker
+                selectedValue={propertyType}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) =>
+                  handlePropertyTypeSelection(itemValue)
+                }>
+                <SelectPicker.Item label="Select property type" value="" />
+                <SelectPicker.Item label="Apartment" value="apartment" />
+                <SelectPicker.Item label="House" value="house" />
+                <SelectPicker.Item label="Pool House" value="pool" />
+                <SelectPicker.Item
+                  label="House in the countryside"
+                  value="countryside"
                 />
-              </TouchableOpacity>
-            ))}
+                <SelectPicker.Item label="Beach house" value="beach" />
+                <SelectPicker.Item
+                  label="House in the mountain"
+                  value="mountain"
+                />
+                <SelectPicker.Item label="Other" value="other" />
+              </SelectPicker>
+            </View>
+
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={[styles.textArea]}
+                value={propertyDescription}
+                onChangeText={setPropertyDescription}
+                placeholder="Property description"
+                placeholderTextColor={'#7C7C7C'}
+                multiline
+              />
+              <View style={styles.line} />
+            </View>
+
+            <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
+              <Text style={styles.addButtonText}>Add Images</Text>
+              <Icon name="attach" size={30} color="gray" />
+            </TouchableOpacity>
+
+            <View style={styles.imagesContainer}>
+              {propertyImages.map((imageUrl, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handleDeleteImage(index)}>
+                  <Image source={{uri: imageUrl}} style={styles.image} />
+                  <Icon
+                    name="close-circle"
+                    size={24}
+                    color="red"
+                    style={styles.deleteIcon}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            <TouchableOpacity
+              style={styles.addPropertyButton}
+              onPress={handleAddProperty}>
+              <Text style={styles.addPropertyButtonText}>Add property</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.addPropertyButton}
-            onPress={handleAddProperty}>
-            <Text style={styles.addPropertyButtonText}>Add property</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </>
+    
   );
 };
 

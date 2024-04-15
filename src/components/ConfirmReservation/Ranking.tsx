@@ -33,6 +33,7 @@ export default function Ranking({idProperty}: {idProperty: string}) {
 
   return (
     <View style={styles.container}>
+
       <Icon name="star" color={'black'} />
       <Text style={styles.text}>{averageRating.toFixed(1)}</Text>
       <Text style={styles.textCount}>({totalReviews})</Text>
@@ -47,11 +48,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: 'black',
+    color: '#444444',
     fontWeight: 'bold',
+    paddingLeft: 4,
   },
   textCount: {
     marginLeft: 5,
-    color: '#ADADAD',
+    color: '#7C7C7C',
   },
 });

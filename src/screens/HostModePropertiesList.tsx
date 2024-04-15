@@ -1,11 +1,12 @@
 /* eslint-disable */
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native'
 import React, {useEffect, useState} from 'react'
-//import PropertyList from '../components/HostMode/PropertyList';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconDots from 'react-native-vector-icons/Entypo';
+import EmptyState from '../components/EmptyState';
+import HeaderNavigation from '../navigation/HeaderNavigation';
 
 
   const HostModePropertiesList = ({navigation}: any) => {
@@ -24,15 +25,20 @@ import IconDots from 'react-native-vector-icons/Entypo';
       getDataUser()
     }, [properties]);
   return (
-    <View style={styles.container}>
-      <Icon onPress={() => {
-          navigation.replace('Profile');
-        }}
-        name="arrow-back" size={27} color="#444444"/>
-      <Text style={styles.title}>My Properties</Text>
-      <ScrollView>
-        {properties.map((property, index) => {
-              const details = `Guest: ${property.guests} | Bedrooms: ${property.bedrooms} | Beds: ${property.beds} | Bathrooms: ${property.bathrooms}`;
+    <>
+      <HeaderNavigation whereNav="Main" />
+      <View style={styles.container}>
+        
+        <Text style={styles.title}>My Properties</Text>
+        <ScrollView>
+          {properties.length === 0 ? (
+            <EmptyState
+            imageSource={require('../images/empty-state-properties-list.png')}
+            message="You haven't added any properties yet."
+            />
+          ) : (
+            properties.map((property, index) => {
+              const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;
               const showOptions = (index : number) => {setActiveOptions(activeOptions === index ? null : index)};
               const editProperty: () => void = () => {navigation.navigate('HostModeUpdateProperties', { property: property });}
               //const editProperty: () => void = () => {console.log(property.avaliabilityDates)}
@@ -43,20 +49,20 @@ import IconDots from 'react-native-vector-icons/Entypo';
                   [
                     {text: 'Cancel'},
                     {text: 'Delete',
-                      onPress: async () => { 
-                        try{
-                          await firestore().collection('properties').doc(properties[index].id).delete();
-                          Alert.alert('Property Deleted!')
-                          setActiveOptions(null)
-                        }catch(err){
-                          console.log(err)
-                        }
-                      }}
+                    onPress: async () => { 
+                      try{
+                        await firestore().collection('properties').doc(properties[index].id).delete();
+                        Alert.alert('Property Deleted!')
+                        setActiveOptions(null)
+                      }catch(err){
+                        console.log(err)
+                      }
+                    }}
                   ]
                 ) 
               }
-          return (
-            <View style={styles.containerItem} key={index}>
+              return (
+                <View style={styles.containerItem} key={index}>
 
               <Image
                 style={styles.img}
@@ -66,7 +72,7 @@ import IconDots from 'react-native-vector-icons/Entypo';
               />
               <View style={styles.propertyContainer}>
                 <Text style={styles.name}>{property.propertyName}</Text>
-                <Text style={styles.location}>{property.location}</Text>
+                <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
                 <Text numberOfLines={1} style={styles.details}>{details}</Text>
               </View>
               <View>
@@ -83,12 +89,22 @@ import IconDots from 'react-native-vector-icons/Entypo';
                     <Text style={styles.optionsTitle}>Delete</Text>
                   </TouchableOpacity>
                 </View>
-              )}
-            </View>
-          );
-        })}
-      </ScrollView>
-    </View>
+                {activeOptions === index && (
+                  <View style={styles.optionsContainer}>
+                    <TouchableOpacity style={styles.optionEdit} onPress={editProperty}>
+                      <Text style={styles.optionsTitle}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.optionDelete} onPress={() => deleteProperty(index)}>
+                      <Text style={styles.optionsTitle}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            );
+          }))}
+        </ScrollView>
+      </View>
+    </>
   )
 }
 
@@ -173,5 +189,22 @@ const styles = StyleSheet.create({
       color: '#444444',
       alignItems: 'center',
       // borderWidth: 1,
-    }
+    },
+    emptyStateContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    emptyStateImage: {
+      width: 200,
+      height: 200,
+      marginBottom: 20,
+      marginTop: '25%',
+    },
+    emptyStateText: {
+      fontSize: 18,
+      color: '#888',
+      paddingHorizontal: 60,
+      textAlign: 'center',
+    },
 })

@@ -2,34 +2,59 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React,{useState, useEffect} from 'react'
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import firestore from '@react-native-firebase/firestore';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LineDesign from './LineDesign';
 
-const signinWithGoogle = async () => {
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    const { idToken } = await GoogleSignin.signIn();
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    const user = await auth().signInWithCredential(googleCredential);
-    console.log(user)
-} 
-GoogleSignin.configure({
-    webClientId: '950063643166-imhvslitr5ti6q900i4sqqmgg8oe4gat.apps.googleusercontent.com',
-  });
-
 const LoginAccounts = () => {
     const navigation = useNavigation();
-    const [user, setUser] = useState<FirebaseAuthTypes.User|null >(null);
-    const handleGoogleSignIn = async () => {
+
+    const newUser = {
+        name: '',
+        lastname: '',
+        phoneNumber: '',
+        birthday: '',
+        description: '',
+        profileImage: '',
+        HostMode: false,
+        defaultCity: '',
+      };
+
+      const handleGoogleSignIn = async () => {
         try {
             await signinWithGoogle();
-            setUser(auth().currentUser);
             navigation.navigate('Main')
         } catch (error) {
             console.log(error)
         }
     }
+    const signinWithGoogle = async () => {
+        try {
+            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+            const { idToken, user } = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            await auth().signInWithCredential(googleCredential);
+            const currentUser = auth().currentUser;
+            if(currentUser){
+                onSend(currentUser.uid, {...newUser, name: user.givenName, lastname:user.familyName, profileImage:user.photo})
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    } 
+    GoogleSignin.configure({
+        webClientId: '950063643166-imhvslitr5ti6q900i4sqqmgg8oe4gat.apps.googleusercontent.com',
+      });
+
+    const onSend = async (uid: string, objUser:any) => {
+        try {
+            await firestore().collection('users').doc(uid).set(objUser)
+        } catch (error) {
+            console.error('Error sending user data to Firestore: ', error);
+        }
+      }
   return (
     <View style={styles.container}>
         <LineDesign/>

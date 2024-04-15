@@ -75,7 +75,7 @@ const Trips = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Trips</Text>
+      <Text style={styles.title}>Next trips</Text>
 
       {reservations !== undefined &&
         reservations.map((reservation, index) => {
@@ -90,7 +90,7 @@ const Trips = () => {
           );
         })}
 
-      <Text style={styles.subTitle}>Viajes Pasados</Text>
+      <Text style={styles.subTitle}>Trips you made</Text>
 
       {DATA2.map((trip, index) => {
         return (
@@ -115,13 +115,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#444444',
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 20,
   },
   subTitle: {
     color: '#444444',
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 15,

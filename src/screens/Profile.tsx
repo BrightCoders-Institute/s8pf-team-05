@@ -6,8 +6,6 @@ import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import OptionsButtons from '../components/ProfileScreenComponents/OptionsButtons';
 
-
-
 const Profile = ({navigation}: any) => {
   const [infoUser, setInfoUser] = useState({
     name: '',
@@ -62,7 +60,7 @@ const Profile = ({navigation}: any) => {
         />
         <View style={styles.userInformationContainer}>
           <Text style={styles.nameUser}>{infoUser.name} {infoUser.lastname}</Text>
-          {isHost ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Huesped</Text>}
+          {isHost ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Guest</Text>}
         </View>
       </View>
 
