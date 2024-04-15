@@ -8,7 +8,6 @@ const App = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const [defaultCity, setDefaultCity] = useState(null);
-
   // Función para verificar si la ciudad está vacía
   async function checkDefaultCity(userId: string) {
     const userInfo = (

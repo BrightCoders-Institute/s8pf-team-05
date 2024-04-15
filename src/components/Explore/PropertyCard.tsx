@@ -31,6 +31,8 @@ const renderItem = ({item}: {item: string}) => (
 
 const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
 
+  console.log(property.images)
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.propertyCard}>

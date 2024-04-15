@@ -1,10 +1,14 @@
 /* eslint-disable */
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 const CardWish = () => {
+    const navigate = useNavigation();
   return (
-    <View>
+    <TouchableOpacity
+    onPress={()=>navigate.navigate('LikedPropertys')}
+    >
         <View style={styles.container}>
             <View style={styles.img_container}>
                 <Image style={styles.img}source={{uri: 'https://hips.hearstapps.com/hmg-prod/images/casa-de-madera-de-diseno-moderno21-645b7b443ba61.jpg'}}/>
@@ -13,9 +17,10 @@ const CardWish = () => {
                 <Text style={styles.cardTitle}>Casa</Text>
                 <Text style={styles.cardDescription}>Guardados: 2</Text>
             </View>
-
         </View>
-    </View>
+    </TouchableOpacity>
+
+
   )
 }
 
