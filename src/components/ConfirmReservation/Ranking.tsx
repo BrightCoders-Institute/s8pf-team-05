@@ -1,13 +1,42 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import firestore from '@react-native-firebase/firestore';
 
-export default function Ranking() {
+export default function Ranking({idProperty}: {idProperty: string}) {
+  const [averageRating, setAverageRating] = useState<number>(0);
+  const [totalReviews, setTotalReviews] = useState<number>(0);
+
+  useEffect(() => {
+    async function getRanking() {
+      const query = await firestore()
+        .collection('reviews')
+        .where('propertyId', '==', idProperty)
+        .get();
+
+      let totalRating = 0;
+      let totalReviewsCount = 0;
+
+      query.forEach(doc => {
+        const reviewData = doc.data();
+        totalRating += reviewData.rating;
+        totalReviewsCount++;
+      });
+
+      const avgRating =
+        totalReviewsCount > 0 ? totalRating / totalReviewsCount : 0;
+      setAverageRating(avgRating);
+      setTotalReviews(query.size);
+    }
+    getRanking();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Icon name="star" color={'#e7b13d'} size={15} />
-      <Text style={styles.text}>4.92</Text>
-      <Text style={styles.textCount}>(63)</Text>
+
+      <Icon name="star" color={'black'} />
+      <Text style={styles.text}>{averageRating.toFixed(1)}</Text>
+      <Text style={styles.textCount}>({totalReviews})</Text>
     </View>
   );
 }

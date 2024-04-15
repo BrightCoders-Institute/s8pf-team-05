@@ -1,19 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 interface HostInfoProps {
-  hostName: string;
-  hostImage: any;
+  hostId: string;
 }
 
-const HostInfo: React.FC<HostInfoProps> = ({hostName, hostImage}) => {
+const HostInfo: React.FC<HostInfoProps> = ({hostId}) => {
+  const [hostInfo, setHostInfo] = useState({
+    hostName: '',
+    profileImage: '',
+  });
+
+  useEffect(() => {
+    async function getInfoUser() {
+      const doc = await firestore().collection('users').doc(hostId).get();
+      const userData = doc.data();
+
+      if (userData) {
+        const {name, lastname, profileImage} = userData;
+        const hostName = name + ' ' + lastname;
+        setHostInfo({hostName, profileImage});
+      }
+    }
+    getInfoUser();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.container}>
-        <Image source={{uri: hostImage}} style={styles.hostImage} />
+        <Image
+          source={
+            hostInfo.profileImage === ''
+              ? require('../../source/defaultUserImage.jpg')
+              : {uri: hostInfo.profileImage}
+          }
+          style={styles.hostImage}
+        />
         <View style={styles.infoContainer}>
           <Text style={styles.hostTitle}>Host:</Text>
-          <Text style={styles.hostName}>{hostName}</Text>
+
+          <Text>{hostInfo.hostName}</Text>
         </View>
       </View>
     </View>

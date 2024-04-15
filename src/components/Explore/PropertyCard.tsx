@@ -18,7 +18,6 @@ interface PropertyCardProps {
     city: string;
     rating: number;
     propertyName: string;
-    avaliabilityDates: Date;
     price: string;
   };
   onPress: () => void;

@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import CarouselComponent from '../components/PropertyDetails/Carousel';
 import RatingBox from '../components/PropertyDetails/RatingBox';
 import HostInfo from '../components/PropertyDetails/HostInfo';
 import PropertyBottomTab from '../components/PropertyDetails/PropertyBottomTab';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import HeaderNavigation from '../navigation/HeaderNavigation';
 
@@ -12,7 +18,11 @@ const PropertyDetails: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
   const {property} = route.params;
 
-  const [hostInfo, setHostInfo] = useState<{ name: string, lastname: string, profileImage: string | null }>({
+  const [hostInfo, setHostInfo] = useState<{
+    name: string;
+    lastname: string;
+    profileImage: string | null;
+  }>({
     name: '',
     lastname: '',
     profileImage: null,
@@ -27,13 +37,16 @@ const PropertyDetails: React.FC = ({ route }: any) => {
         const hostId = property.hostId;
 
         if (hostId) {
-          const userDoc = await firestore().collection('users').doc(hostId).get();
-          
+          const userDoc = await firestore()
+            .collection('users')
+            .doc(hostId)
+            .get();
+
           const userData = userDoc.data();
 
           if (userData) {
-            const { name, lastname, profileImage } = userData;
-            setHostInfo({ name, lastname, profileImage });
+            const {name, lastname, profileImage} = userData;
+            setHostInfo({name, lastname, profileImage});
           }
         }
       } catch (error) {
@@ -43,7 +56,10 @@ const PropertyDetails: React.FC = ({ route }: any) => {
 
     const fetchReviews = async () => {
       try {
-        const reviewsSnapshot = await firestore().collection('reviews').where('propertyId', '==', property.id).get();
+        const reviewsSnapshot = await firestore()
+          .collection('reviews')
+          .where('propertyId', '==', property.id)
+          .get();
         let totalRating = 0;
         let totalReviewsCount = 0;
 
@@ -53,7 +69,8 @@ const PropertyDetails: React.FC = ({ route }: any) => {
           totalReviewsCount++;
         });
 
-        const avgRating = totalReviewsCount > 0 ? totalRating / totalReviewsCount : 0;
+        const avgRating =
+          totalReviewsCount > 0 ? totalRating / totalReviewsCount : 0;
         setAverageRating(avgRating);
         setTotalReviews(totalReviewsCount);
       } catch (error) {
@@ -66,11 +83,23 @@ const PropertyDetails: React.FC = ({ route }: any) => {
   }, [property.hostId, property.id]);
 
   const handleReservePress = () => {
-    navigation.navigate('ConfirmReservation');
+    navigation.navigate('DateSelect', {
+      property: {
+        id: property.id,
+        hostId: property.hostId,
+        name: property.propertyName,
+        location: property.location,
+        images: property.images,
+        startDate: null,
+        endDate: null,
+        guestAdults: null,
+        guestKids: null,
+      }
+    });
   };
 
   const handleRatingPress = () => {
-    navigation.navigate('ReviewScreen', { property });
+    navigation.navigate('ReviewScreen', {property});
   };
 
   return (
@@ -87,9 +116,15 @@ const PropertyDetails: React.FC = ({ route }: any) => {
             Guests: {property.guests} · Bedrooms: {property.bedrooms} · Beds: {property.beds} · Bathrooms: {property.bathrooms}
           </Text>
           <TouchableOpacity onPress={handleRatingPress}>
-            <RatingBox averageRating={averageRating} totalReviews={totalReviews} />
+            <RatingBox
+              averageRating={averageRating}
+              totalReviews={totalReviews}
+            />
           </TouchableOpacity>
-          <HostInfo hostName={`${hostInfo.name} ${hostInfo.lastname}`} hostImage={hostInfo.profileImage} />
+          <HostInfo
+            hostName={`${hostInfo.name} ${hostInfo.lastname}`}
+            hostImage={hostInfo.profileImage}
+          />
         </View>
         <View style={styles.propertyDescription}>
           <Text style={styles.descriptionTitle}>Description:</Text>
@@ -97,7 +132,10 @@ const PropertyDetails: React.FC = ({ route }: any) => {
         </View>
       </ScrollView>
       <View style={styles.bottomTab}>
-        <PropertyBottomTab pricePerNight={property.price} onReservePress={handleReservePress} />
+        <PropertyBottomTab
+          pricePerNight={property.price}
+          onReservePress={handleReservePress}
+        />
       </View>
     </View>
   );

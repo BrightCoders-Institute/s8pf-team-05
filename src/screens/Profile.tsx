@@ -59,7 +59,7 @@ const Profile = ({navigation}: any) => {
           source={infoUser.profileImage === '' ? require('../source/defaultUserImage.jpg') : {uri: infoUser.profileImage}}
         />
         <View style={styles.userInformationContainer}>
-          <Text style={styles.nameUser}>{nameUser} {lastnameUser}</Text>
+          <Text style={styles.nameUser}>{infoUser.name} {infoUser.lastname}</Text>
           {isHost ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Guest</Text>}
         </View>
       </View>
@@ -82,13 +82,14 @@ const Profile = ({navigation}: any) => {
           infoUser.HostMode ? navigation.navigate('HostModeScreen') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
         }}
       />
-      <OptionsButtons
-        icon="reorder-three-outline"
-        text="Registered properties"
-        onPress={() => {
-          infoUser.HostMode ? navigation.navigate('HostModePropertiesList') : navigation.navigate('HostModeInactive'); //Cambiar a screen Host mode.
-        }}
-      />
+       {infoUser.HostMode && 
+        <OptionsButtons
+          icon="home-outline"
+          text="Listed properties"
+          onPress={() => {
+             navigation.navigate('HostModePropertiesList')
+          }}
+      />}
       <View style={styles.logoutContainer}>
         <Text style={styles.logout} onPress={handleLogOut}>
           Log out

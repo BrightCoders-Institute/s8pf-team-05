@@ -7,19 +7,19 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import EmptyState from '../components/EmptyState';
 
-const Explore = ({ navigation }: any) => {
+const Explore = ({navigation}: any) => {
   const categories = [
-    { name: 'Apartments', icon: 'building', value: 'apartment' },
-    { name: 'Houses', icon: 'house-chimney', value: 'house' },
-    { name: 'Pool', icon: 'house-flood-water', value: 'pool' },
-    { name: 'Countryside', icon: 'tree', value: 'countryside' },
-    { name: 'Beach', icon: 'umbrella-beach', value: 'beach' },
-    { name: 'Mountain', icon: 'mountain', value: 'mountain' },
-    { name: 'Other', icon: 'home-city', value: 'other' },
+    {name: 'Apartments', icon: 'building', value: 'apartment'},
+    {name: 'Houses', icon: 'house-chimney', value: 'house'},
+    {name: 'Pool', icon: 'house-flood-water', value: 'pool'},
+    {name: 'Countryside', icon: 'tree', value: 'countryside'},
+    {name: 'Beach', icon: 'umbrella-beach', value: 'beach'},
+    {name: 'Mountain', icon: 'mountain', value: 'mountain'},
+    {name: 'Other', icon: 'plus', value: 'other'},
   ];
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    categories[0].value
+    categories[0].value,
   );
 
   const [properties, setProperties] = useState<any[]>([]);
@@ -51,7 +51,10 @@ const Explore = ({ navigation }: any) => {
           .where('city', '==', defaultCity)
           .get();
 
-        const fetchedProperties = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const fetchedProperties = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setProperties(fetchedProperties);
         setPropertiesFound(fetchedProperties.length > 0);
 
@@ -113,7 +116,17 @@ const Explore = ({ navigation }: any) => {
                 
               )}
               <View style={styles.propertiesContainer}>
-                
+                {properties.map(property => (
+                  <PropertyCard
+                    key={property.id}
+                    property={property}
+                    onPress={() => {
+                      navigation.navigate('PropertyDetails', {
+                        property: property,
+                      });
+                    }}
+                  />
+                ))}
               </View>
             </View>
           </View>
