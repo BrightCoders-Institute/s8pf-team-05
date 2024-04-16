@@ -53,8 +53,10 @@ const DateSelect = ({route}: any) => {
     };
 
   return (
+    <>
+    <HeaderNavigation />
     <View style={styles.container}>
-        <HeaderNavigation />
+        
         <View>
             <View style={styles.date_container}>
                 <Text style={styles.date_txt}>When's your trip?</Text>
@@ -66,6 +68,7 @@ const DateSelect = ({route}: any) => {
             </View>
         </View>
     </View>
+    </>
   )
 }
 

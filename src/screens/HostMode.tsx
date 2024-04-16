@@ -151,7 +151,7 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
 
   return (
     <>
-      <HeaderNavigation whereNav="Main" />
+      <HeaderNavigation />
       <View style={styles.container}>
         
         <Text style={styles.title}>Add a new property</Text>

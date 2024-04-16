@@ -51,7 +51,7 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
       
       setRating(0);
       setReview('');
-      navigation.navigate('PropertyDetails');
+      navigation.goBack();
     } catch (error) {
       console.error('Error submitting review: ', error);
     }
