@@ -105,8 +105,11 @@ const PropertyDetails: React.FC = ({ route }: any) => {
   };
 
   return (
+    <>
+    <HeaderNavigation style={styles.goBackButton} />
+
     <View style={styles.container}>
-      <HeaderNavigation whereNav="Main" />
+      
       <ScrollView>
         <View>
           <CarouselComponent images={property.images} />
@@ -128,8 +131,8 @@ const PropertyDetails: React.FC = ({ route }: any) => {
           </TouchableOpacity>
           <HostInfo
             hostName={`${hostInfo.name} ${hostInfo.lastname}`}
-            hostImage={hostInfo.profileImage}
-          />
+            hostImage={hostInfo.profileImage !== null ? hostInfo.profileImage : 'https://static-cse.canva.com/blob/698516/FunnyQuotesMX28.png'}
+            />
         </View>
         <View style={styles.propertyDescription}>
           <Text style={styles.descriptionTitle}>Description:</Text>
@@ -144,6 +147,7 @@ const PropertyDetails: React.FC = ({ route }: any) => {
       </View>
       
     </View>
+  </>
   );
 };
 
@@ -193,7 +197,20 @@ const styles = StyleSheet.create({
   heart:{
     flexDirection: 'row',
     justifyContent: 'space-between'
-  }
+  },
+  goBackButton: {
+    backgroundColor: '#ffffff',
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    position: 'absolute',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 15,
+    left: 15,
+    zIndex: 100,
+  },
 });
 
 export default PropertyDetails;

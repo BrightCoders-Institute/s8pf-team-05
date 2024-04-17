@@ -26,67 +26,58 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
     }, [properties]);
   return (
     <>
-      <HeaderNavigation whereNav="Main" />
+      <HeaderNavigation />
       <View style={styles.container}>
         
         <Text style={styles.title}>My Properties</Text>
         <ScrollView>
-          {properties.length === 0 ? (
-            <EmptyState
+        {properties.length === 0 ? (
+          <EmptyState
             imageSource={require('../images/empty-state-properties-list.png')}
             message="You haven't added any properties yet."
-            />
-          ) : (
-            properties.map((property, index) => {
-              const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;
-              const showOptions = (index : number) => {setActiveOptions(activeOptions === index ? null : index)};
-              const editProperty: () => void = () => {navigation.navigate('HostModeUpdateProperties', { property: property });}
-              //const editProperty: () => void = () => {console.log(property.avaliabilityDates)}
-              const deleteProperty = (index : number) => {
-                Alert.alert(
-                  `Delete ${property.propertyName}`,
-                  'Are you sure?',
-                  [
-                    {text: 'Cancel'},
-                    {text: 'Delete',
+          />
+        ) : (
+          properties.map((property, index) => {
+            const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;
+            const showOptions = (index : number) => {setActiveOptions(activeOptions === index ? null : index)};
+            const editProperty = () => {navigation.navigate('HostModeUpdateProperties', { property: property });};
+            const deleteProperty = () => {
+              Alert.alert(
+                `Delete ${property.propertyName}`,
+                'Are you sure?',
+                [
+                  {text: 'Cancel'},
+                  {
+                    text: 'Delete',
                     onPress: async () => { 
-                      try{
+                      try {
                         await firestore().collection('properties').doc(properties[index].id).delete();
-                        Alert.alert('Property Deleted!')
-                        setActiveOptions(null)
-                      }catch(err){
-                        console.log(err)
+                        Alert.alert('Property Deleted!');
+                        setActiveOptions(null);
+                      } catch(err) {
+                        console.log(err);
                       }
-                    }}
-                  ]
-                ) 
-              }
-              return (
-                <View style={styles.containerItem} key={index}>
-
-              <Image
-                style={styles.img}
-                source={{
-                  uri: property.images && property.images.length > 0 ? property.images[0] : 'fallback_image_url',
-                }}
-              />
-              <View style={styles.propertyContainer}>
-                <Text style={styles.name}>{property.propertyName}</Text>
-                <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
-                <Text numberOfLines={1} style={styles.details}>{details}</Text>
-              </View>
-              <View>
-                <TouchableOpacity onPress={() => showOptions(index)}>
-                  <IconDots name="dots-three-vertical" size={27} color="#444444" style={styles.icon}/>
-                </TouchableOpacity>
-              </View>
-              {activeOptions === index && (
-                <View style={styles.optionsContainer}>
-                  <TouchableOpacity style={styles.optionEdit} onPress={editProperty}>
-                    <Text style={styles.optionsTitle}>Edit</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.optionDelete} onPress={() => deleteProperty(index)}>
-                    <Text style={styles.optionsTitle}>Delete</Text>
+                    }
+                  }
+                ]
+              ); 
+            };
+            return (
+              <View style={styles.containerItem} key={index}>
+                <Image
+                  style={styles.img}
+                  source={{
+                    uri: property.images && property.images.length > 0 ? property.images[0] : 'fallback_image_url',
+                  }}
+                />
+                <View style={styles.propertyContainer}>
+                  <Text style={styles.name}>{property.propertyName}</Text>
+                  <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
+                  <Text numberOfLines={1} style={styles.details}>{details}</Text>
+                </View>
+                <View>
+                  <TouchableOpacity onPress={() => showOptions(index)}>
+                    <IconDots name="dots-three-vertical" size={27} color="#444444" style={styles.icon}/>
                   </TouchableOpacity>
                 </View>
                 {activeOptions === index && (
@@ -101,7 +92,8 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
                 )}
               </View>
             );
-          }))}
+          })
+        )}
         </ScrollView>
       </View>
     </>
@@ -111,6 +103,18 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
 export default HostModePropertiesList
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    backgroundColor: '#5f6cf0',
+    width: 60,
+    height: 60,
+    borderRadius: 100,
+    position: 'absolute',
+    alignSelf: 'center',
+    right: 15,
+    bottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
     container: {
       flex: 1,
       paddingLeft: 25,

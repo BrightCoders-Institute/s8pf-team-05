@@ -44,8 +44,10 @@ const DateSelect = ({route}: any) => {
     }
 
   return (
-    <View style={styles.container}>
+    <>
         <HeaderNavigation />
+    <View style={styles.container}>
+        
         <View>
             <View style={styles.guest_container}>
                 <Text style={styles.title}>How many guests?</Text>
@@ -68,7 +70,9 @@ const DateSelect = ({route}: any) => {
                 <SaveButton saveNumbers={saveNumbers}/>
             </View>
         </View>
-    </View>
+    </View>    
+    </>
+
   )
 }
 
