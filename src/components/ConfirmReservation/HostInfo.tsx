@@ -40,7 +40,7 @@ const HostInfo: React.FC<HostInfoProps> = ({hostId}) => {
         <View style={styles.infoContainer}>
           <Text style={styles.hostTitle}>Host:</Text>
 
-          <Text>{hostInfo.hostName}</Text>
+          <Text style={styles.hostName}>{hostInfo.hostName}</Text>
         </View>
       </View>
     </View>
