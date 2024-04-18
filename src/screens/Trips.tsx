@@ -1,43 +1,16 @@
+/* eslint-disable */
 import {StyleSheet, Text, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardTrip from '../components/TripsScreenComponents/CardTrip';
+import EmptyState from '../components/EmptyState';
 import firebase, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-const DATA = [
-  {
-    id: '1',
-    place: 'Manzanillo',
-    host: 'Arturo',
-    date: '22 de febrero de 2022 - 24 de febrero de 2022',
-  },
-];
-
-const DATA2 = [
-  {
-    id: '1',
-    place: 'Manzanillo',
-    host: 'Arturo',
-    date: '22 de febrero de 2022 - 24 de febrero de 2022',
-  },
-  {
-    id: '2',
-    place: 'Colima',
-    host: 'Jose',
-    date: '10 de marzo de 2022 - 21 de marzo de 2022',
-  },
-  {
-    id: '3',
-    place: 'Guadalajara',
-    host: 'Pancha',
-    date: '5 de julio de 2022 - 8 de julio de 2022',
-  },
-];
 
 const Trips = () => {
-  const [reservations, setReservations] = useState<any[]>();
+  const [reservations, setReservations] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchReservations() {
@@ -71,28 +44,34 @@ const Trips = () => {
     fetchReservations();
   }, []);
 
-  console.log(reservations);
+  //console.log(reservations);
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Next trips</Text>
 
-      {reservations !== undefined &&
-        reservations.map((reservation, index) => {
-          return (
-            <CardTrip
-              key={index}
-              place={reservation.propertyName}
-              host={reservation.hostId}
-              date={reservation.id}
-              img={reservation.images[0]}
-            />
-          );
-        })}
+      {reservations.length === 0 ? (
+        <EmptyState
+          imageSource={require('../images/empty-state-properties-list.png')}
+          message="You haven't rented any property yet."
+        />) : (
+          reservations.map((reservation, index) => {
+            return (
+              <CardTrip
+                key={index}
+                place={reservation.propertyName}
+                host={reservation.hostId}
+                date={reservation.id}
+                img={reservation.images[0]}
+              />
+            );
+          })
+        )
+      }
 
-      <Text style={styles.subTitle}>Trips you made</Text>
+      {/* <Text style={styles.subTitle}>Trips you made</Text>
 
-      {DATA2.map((trip, index) => {
+      {[instertar aqui variable de 'VIAJES PASADOS' a mapear].map((trip, index) => {
         return (
           <CardTrip
             key={index}
@@ -101,7 +80,7 @@ const Trips = () => {
             date={trip.date}
           />
         );
-      })}
+      })} */}
     </ScrollView>
   );
 };
