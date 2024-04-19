@@ -25,7 +25,7 @@ export default function Header({
           color={'black'}
           onPress={onPressExit}
         />
-        <Text style={styles.title}>Solicitar Confirmación</Text>
+        <Text style={styles.title}>Request Confirmation</Text>
       </View>
 
       {/* Linea */}
