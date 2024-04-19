@@ -136,8 +136,8 @@ export default function ConfirmReservation({route}: any) {
 
 
           <Text style={styles.title}>Write to the host</Text>
-          <Text>
-            Tell him why you are traveling, who is accompanying you and what you like most about the place
+          <Text style={styles.description}>
+            Tell him why you are traveling, who is accompanying you and what you like most about the place.
           </Text>
           <HostInfo hostId={property.hostId} />
           <CommentBox placeholder="Write a comment here..." />
@@ -186,8 +186,11 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 25,
     color: 'black',
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '600',
+  },
+  description: {
+    color: '#7C7C7C',
   },
   writeDescrption: {
     color: '#999898',

@@ -1,7 +1,9 @@
+/* eslint-disable */
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import EmptyState from '../components/EmptyState';
 
 const CardFavorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -41,19 +43,25 @@ const CardFavorites = () => {
     <ScrollView>
       <View style={styles.containerPrincipal}>
         <Text style={styles.header}>Wishlist</Text>
-        {favorites.map((favorite, index) => (
+        {favorites.length === 0 ? (
+          <EmptyState
+            imageSource={require('../images/empty-state-properties-list.png')}
+            message="You haven't liked any property yet."
+          />
+        ) : (
+          favorites.map((favorite, index) => (
           <View key={index} style={styles.container}>
             <Image style={styles.img} source={{ uri: favorite.images[0] }} />
             <View style={styles.container_description}>
-              <Text style={styles.text_name} numberOfLines={1}>{favorite.propertyName}</Text>
-              <Text style={styles.textinf} numberOfLines={1}>Adress: { favorite.propertyAdress}</Text>
-              <Text style={styles.textinf} numberOfLines={1}>Price: ${favorite.price}</Text>
-              <Text style={{color:"black"}}>Description</Text>
-              <Text style={styles.textinf} numberOfLines={2}> {favorite.description}</Text>
-
+              <Text style={styles.textName} numberOfLines={1}>{favorite.propertyName}</Text>
+              <Text style={styles.textLocation} numberOfLines={1}>{ favorite.propertyAdress || favorite.location}</Text>
+              <Text style={styles.textPrice} numberOfLines={1}>$ {favorite.price}.00 night</Text>
+              <Text style={styles.textDescription} numberOfLines={1}> {favorite.description}</Text>
             </View>
           </View>
-        ))}
+        ))
+      )
+    }
       </View>
     </ScrollView>
   )
@@ -63,8 +71,11 @@ export default CardFavorites
 
 const styles = StyleSheet.create({
     header:{
-      fontSize: 35,
-      marginBottom: 20
+      color: '#444444',
+      fontSize: 32,
+      fontWeight: 'bold',
+      marginTop: 20,
+      marginBottom: 20,
     },
     containerPrincipal:{
       margin:20
@@ -75,8 +86,8 @@ const styles = StyleSheet.create({
       
     },
     img:{
-      width: 150,
-      height:150,
+      width: 100,
+      height:100,
       borderBottomLeftRadius: 10,
       borderTopLeftRadius: 10,
     },
@@ -84,23 +95,37 @@ const styles = StyleSheet.create({
       flex:1,
       borderBottomRightRadius: 10,
       borderTopRightRadius: 10,
-      alignItems: 'center',
+      alignItems: 'flex-start',
       elevation: 10,
       backgroundColor: 'white'
     },
     description_text:{
-      fontSize:15,
-  
+      fontSize:12,
     },
-    text_name:{
-      color:'black',
-      fontWeight: 'bold',
-      fontSize: 20
+    textName:{
+      color:'#444444',
+      fontWeight: '500',
+      fontSize: 16,
+      paddingLeft: 10,
+      marginTop: 10,
     },
-    textinf:{
-      color:'black',
+    textLocation:{
+      fontSize: 12,
+      color: '#7C7C7C',
       textAlign:'justify',
-      paddingHorizontal:20
+      paddingLeft:10,
+    },
+    textPrice: {
+      color: '#575757',
+      fontWeight: '500',
+      textAlign:'justify',
+      paddingLeft:10,
+    },
+    textDescription:{
+      fontSize: 11,
+      color: '#7C7C7C',
+      textAlign:'justify',
+      paddingLeft:10,
     },
     container_btn:{
       position:'absolute',
