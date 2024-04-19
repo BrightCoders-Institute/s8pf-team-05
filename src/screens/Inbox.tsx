@@ -50,6 +50,24 @@ const Inbox = ({ navigation }) => {
 
   
   useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <View style={{ marginLeft: 20 }}>
+          <Avatar
+            rounded
+            source={{
+              uri: userInfo.profileImage ?? 'https://placeimg.com/140/140/any',
+            }}
+          />
+        </View>
+      ),
+      headerRight: () => (
+        <TouchableOpacity style={{ marginRight: 10 }}>
+          <Text>Xd</Text>
+        </TouchableOpacity>
+      ),
+    });
+  
     const unsubscribe = firestore().collection('chats')
       .orderBy('createdAt', 'desc')
       .onSnapshot(snapshot => {
@@ -66,6 +84,8 @@ const Inbox = ({ navigation }) => {
     };
   }, [navigation]);
   
+    
+
     useEffect(() => {
       setMessages([
         {
