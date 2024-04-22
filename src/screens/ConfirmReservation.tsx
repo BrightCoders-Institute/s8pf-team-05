@@ -255,6 +255,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginTop: 7,
   },
+  description: {
+    color: '#7C7C7C',
+  },
   writeDescrption: {
     color: '#999898',
   },
