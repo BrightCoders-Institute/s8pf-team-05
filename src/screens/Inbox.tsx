@@ -1,42 +1,128 @@
+import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
+import db from '@react-native-firebase/firestore';
+import signOut from '@react-native-firebase/auth';
+import { GiftedChat } from 'react-native-gifted-chat';
+import firestore from '@react-native-firebase/firestore';
 
-import { StyleSheet, Text, View, Button } from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native';
-import InboxItem from '../components/Inbox/InboxItem'
-
-
-const Inbox = () => {
-  const img1 = 'https://www.perfocal.com/blog/content/images/2021/01/Perfocal_17-11-2019_TYWFAQ_100_standard-3.jpg';
-  const img2 = 'https://www.elitesingles.co.uk/wp-content/uploads/sites/59/2019/11/2b_en_articleslide_sm2-350x264.jpg';
-  const img3 = 'https://superblog.supercdn.cloud/site_cuid_clilou76g4798113tmf1lw59vru/images/instagram-man-ideas-3-1687868963182-compressed.PNG';
+const Inbox = ({ navigation }) => {
+  const [messages, setMessages] = useState([] as any[]); // Initialize messages state with an empty array
+  const currentUser = auth().currentUser;
   
-  return (
-    <View style={styles.first_container}>
-      <View style={styles.second_container}>
-        <Text style={styles.title}>Inbox</Text>
-        <InboxItem image={img1}/>
-        <InboxItem image={img2}/>
-        <InboxItem image={img3}/>
-      </View>
-    </View>
-  )
+  
+  const [userInfo, setuserInfo] = useState<{
+    name: string;
+    lastname: string;
+    profileImage: string | null;
+  }>({
+    name: '',
+    lastname: '',
+    profileImage: null,
+  });
+
+  const fetchHostInfo = async () => {
+    try {
+      const userId = currentUser?.uid;
+      
+      if (userId) {
+        const userDoc = await firestore()
+          .collection('users')
+          .doc(userId)
+          .get();
+
+        const userData = userDoc.data();
+        
+        if (userData) {
+          const {name, lastname, profileImage} = userData;
+          setuserInfo({name, lastname, profileImage});
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching host info: ', error);
+    }
+  };
+  fetchHostInfo();
+  
+
+  
+
+  
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <View style={{ marginLeft: 20 }}>
+          <Avatar
+            rounded
+            source={{
+              uri: userInfo.profileImage ?? 'https://placeimg.com/140/140/any',
+            }}
+          />
+        </View>
+      ),
+      headerRight: () => (
+        <TouchableOpacity style={{ marginRight: 10 }}>
+          <Text>Xd</Text>
+        </TouchableOpacity>
+      ),
+    });
+  
+    const unsubscribe = firestore().collection('chats')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(snapshot => {
+        setMessages(snapshot.docs.map(doc => ({
+          _id: doc.id,
+          createdAt: doc.data().createdAt.toDate(),
+          text: doc.data().text,
+          user: doc.data().user,
+        })));
+      });
+  
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
+  
+    
+
+    useEffect(() => {
+      setMessages([
+        {
+          _id: 1,
+          text: 'Hello developer',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+          },
+        },
+      ])
+    }, []);
+
+    const onSend = useCallback(async (messages = []) => {
+      setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+      const { _id, createdAt, text, user } = messages[0];
+      try {
+        await firestore().collection('chats').add({ _id, createdAt, text, user });
+      } catch (error) {
+        console.error('Error adding message to Firestore: ', error);
+      }
+    }, []);
+
+    return (
+      <GiftedChat
+        messages={messages}
+        showAvatarForEveryMessage={true}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: currentUser?.uid ?? '',
+          name: userInfo.name,
+          avatar: userInfo.profileImage ?? '', 
+        }}
+      />
+    );
 }
 
-const styles = StyleSheet.create({
-  first_container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  second_container: {
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-  },
-  title: {
-    fontSize: 32,
-    color: '#444444',
-    fontWeight: 'bold',
-  },
-})
-
-export default Inbox
+export default Inbox;
