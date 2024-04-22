@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet, Modal, Button} from 'react-native';
-import HeaderNavigation from '../../navigation/HeaderNavigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 type Props = {
@@ -25,7 +24,7 @@ export default function Header({
           color={'black'}
           onPress={onPressExit}
         />
-        <Text style={styles.title}>Solicitar Confirmación</Text>
+        <Text style={styles.title}>Confirm your information</Text>
       </View>
 
       {/* Linea */}

@@ -14,15 +14,26 @@ import HostInfo from '../components/ConfirmReservation/HostInfo';
 import CommentBox from '../components/ConfirmReservation/CommentBox';
 import Button from '../components/ConfirmReservation/Button';
 import LoadingComponent from '../components/LoadingComponent';
-import {useNavigation, StackActions} from '@react-navigation/native';
-import renderer from 'react-test-renderer';
+import {
+  useNavigation,
+  useIsFocused,
+  StackActions,
+} from '@react-navigation/native';
 import firebase from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 export default function ConfirmReservation({route}: any) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const {property} = route.params;
 
+  const [dates, setDates] = useState({
+    startDate: new Date(),
+    startParseDate: '',
+    endDate: new Date(),
+    endParseDate: '',
+  });
+  const [numberOfNights, setNumberOfNights] = useState<number>();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -30,13 +41,30 @@ export default function ConfirmReservation({route}: any) {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        //setShowModal(true);
-        return true;
+        // Mostrar el modal solo si estamos en la pantalla principal
+        if (isFocused) {
+          setShowModal(true);
+          return true;
+        }
+        return false; // Permitir que el botón de retroceso actúe normalmente si no estamos en la pantalla principal
       },
     );
 
+    const dateStart = new Date(property.startDate);
+    const dateEnd = new Date(property.endDate);
+
+    let diff = dateEnd.getTime() - dateStart.getTime();
+
+    setNumberOfNights(diff / (1000 * 60 * 60 * 24));
+    setDates({
+      startDate: dateStart,
+      startParseDate: dateStart.toDateString(),
+      endDate: dateEnd,
+      endParseDate: dateEnd.toDateString(),
+    });
+
     return () => backHandler.remove();
-  }, []);
+  }, [isFocused]);
 
   function requestReservation() {
     setLoading(true);
@@ -46,8 +74,8 @@ export default function ConfirmReservation({route}: any) {
       .collection('reservations')
       .add({
         idGuest: auth().currentUser?.uid,
-        date_of_arrival: property.startDate,
-        departure_date: property.endDate,
+        date_of_arrival: dates.startDate,
+        departure_date: dates.endDate,
         guestKids: property.guestKids,
         guestAdults: property.guestAdults,
       })
@@ -60,7 +88,10 @@ export default function ConfirmReservation({route}: any) {
             .doc(auth().currentUser?.uid)
             .collection('reservations')
             .add({
-              propertyReference: path.ref,
+              propertyReservationReference: path.ref,
+              propertyDataReference: firebase()
+                .collection('properties')
+                .doc(property.id),
             })
             .then(() => {
               setLoading(false);
@@ -81,7 +112,7 @@ export default function ConfirmReservation({route}: any) {
             setShowModal(false);
           }}
           onPressExit={() => setShowModal(true)}
-          onPressLeave={() => navigation.navigate('Main')}
+          onPressLeave={() => navigation.dispatch(StackActions.replace('Main'))}
         />
 
         <ScrollView>
@@ -104,19 +135,15 @@ export default function ConfirmReservation({route}: any) {
 
           <Text style={styles.title}>Your Trip</Text>
           <DetailsReservation
-            title="Fecha"
-            info={`${property.startDate.substring(
+            title="Date"
+            info={`${dates.startParseDate.substring(
               4,
               11,
-            )} to  ${property.endDate.substring(4, 11)}`}
-            btnEditar={() =>
-              navigation.dispatch(
-                StackActions.replace('DateSelect', {property}),
-              )
-            }
+            )} to  ${dates.endParseDate.substring(4, 11)}`}
+            btnEditar={() => navigation.navigate('DateSelect', {property})}
           />
           <DetailsReservation
-            title="Huéspedes"
+            title="Guests"
             info={
               property.guestKids +
               property.guestAdults +
@@ -124,23 +151,37 @@ export default function ConfirmReservation({route}: any) {
                 ? ' Guests'
                 : ' Guest')
             }
-            btnEditar={() =>
-              navigation.dispatch(
-                StackActions.replace('GuestSelect', {property}),
-              )
-            }
+            btnEditar={() => navigation.navigate('GuestSelect', {property})}
           />
 
           {/* Line */}
           <View style={styles.line1} />
 
-
           <Text style={styles.title}>Write to the host</Text>
           <Text>
-            Tell him why you are traveling, who is accompanying you and what you like most about the place
+            Tell him why you are traveling, who is accompanying you and what you
+            like most about the place
           </Text>
           <HostInfo hostId={property.hostId} />
           <CommentBox placeholder="Write a comment here..." />
+
+          {/* Line */}
+          <View style={[styles.line1, styles.line2]} />
+
+          <Text style={styles.title}>Price Details</Text>
+
+          <Text style={styles.price}>
+            {numberOfNights} {numberOfNights > 1 ? 'Nights' : 'Night'} x $
+            {property.price}
+          </Text>
+
+          {/* Line */}
+          <View style={[styles.line1, styles.line3]} />
+
+          <Text style={styles.subTitle}>Total</Text>
+          <Text style={styles.totalPrice}>
+            ${numberOfNights * property.price}
+          </Text>
 
           <Button text="Request reservation" onPress={requestReservation} />
         </ScrollView>
@@ -183,11 +224,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: -100,
     backgroundColor: '#CDCDCD',
   },
+  line2: {
+    marginTop: 5,
+  },
+  line3: {
+    marginTop: 5,
+    marginHorizontal: 6,
+    height: 1,
+  },
   title: {
     marginTop: 25,
     color: 'black',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  price: {
+    color: '#7C7C7C',
+    fontSize: 15,
+    marginVertical: 5,
+  },
+  totalPrice: {
+    color: 'black',
     fontSize: 15,
     fontWeight: '600',
+    marginBottom: 30,
+  },
+  subTitle: {
+    color: 'black',
+    fontSize: 15,
+    fontWeight: '500',
+    marginTop: 7,
   },
   writeDescrption: {
     color: '#999898',
