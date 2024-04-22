@@ -1,37 +1,35 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import firebase from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 
 type Props = {
-  place: string;
-  host: string;
-  propertyId: string;
-  img?: string;
+  propertyName: string;
+  hostId: string;
+  date_of_arrival: Date;
+  departure_date: Date;
+  img: string;
 };
 
-export default function CardTrip({place, host, propertyId, img}: Props) {
+export default function CardTrip({
+  propertyName,
+  hostId,
+  date_of_arrival,
+  departure_date,
+  img,
+}: Props) {
   const [hostName, setHostName] = useState('');
 
   useEffect(() => {
     firebase()
       .collection('users')
-      .doc(host)
+      .doc(hostId)
       .get()
       .then(query => {
         const data = query.data();
         setHostName(data?.name);
       });
-
-    // firebase()
-    //   .collection('properties')
-    //   .doc(propertyId)
-    //   .collection('resevations')
-    //   .where('idGuest', '==', auth().currentUser?.uid)
-    //   .get()
-    //   .then();
   }, []);
-
+  
   return (
     <View style={styles.container}>
       <Image
@@ -42,9 +40,11 @@ export default function CardTrip({place, host, propertyId, img}: Props) {
       />
 
       <View style={styles.tripInformationContainer}>
-        <Text style={styles.place}>{place}</Text>
+        <Text style={styles.place}>{propertyName}</Text>
         <Text style={styles.host}>Anfitrión: {hostName}</Text>
-        <Text style={styles.date}>{propertyId}</Text>
+        <Text style={styles.date}>
+          {date_of_arrival.toDateString()} ---- {departure_date.toDateString()}
+        </Text>
       </View>
     </View>
   );
