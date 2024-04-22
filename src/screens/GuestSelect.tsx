@@ -5,7 +5,7 @@ import ClearButton from '../components/Guest/ClearButton';
 import SaveButton from '../components/Guest/SaveButton';
 import NumericInput from '../components/HostMode/NumericInput';
 import HeaderNavigation from '../navigation/HeaderNavigation';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 
 const DateSelect = ({route}: any) => {
@@ -24,22 +24,37 @@ const DateSelect = ({route}: any) => {
     }, []);
     
     const handleIncrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
-        setState(prevValue => prevValue + 1);
-      };
+        if ((numberAdults + numberKids) !== property.guests) {
+            setState(prevValue => prevValue + 1);
+        } else {
+            setAlert('Limit of users reached')
+        }
+        
+    };
     const handleDecrease = (setState: React.Dispatch<React.SetStateAction<number>>) => {
-    setState(prevValue => Math.max(0, prevValue - 1));
+        setState(prevValue => Math.max(0, prevValue - 1));
+        setAlert('')
     };
     const clearNumbers = () => {
         setNumberAdults(0);
         setNumberKids(0);
     }
+
     const saveNumbers = () => {
         if(numberAdults < 1) {
             setAlert('Select at least one adult');
         } else {
             property.guestAdults = numberAdults;
             property.guestKids = numberKids;
-            navigation.navigate('ConfirmReservation',{property});
+            navigation.reset({
+                index: 1,
+                routes: [
+                    {
+                        name: 'ConfirmReservation',
+                        params: {property},
+                    },
+                ]
+            });
         }
     }
 

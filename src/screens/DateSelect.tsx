@@ -2,12 +2,16 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import Calendar from '../components/Date/Calendar';
-import CloseButton from '../components/Date/CloseButton';
-import Options from '../components/Date/Options';
 import ClearButton from '../components/Date/ClearButton';
 import SaveButton from '../components/Date/SaveButton';
 import HeaderNavigation from '../navigation/HeaderNavigation';
 import { useNavigation } from '@react-navigation/native';
+import firebase from '@react-native-firebase/firestore';
+
+type DisabledDates = {
+    from: Date;
+    to: Date
+}
 
 
 const DateSelect = ({route}: any) => {
@@ -16,16 +20,38 @@ const DateSelect = ({route}: any) => {
 
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const [disabledDays, setDisabledDays] = useState<DisabledDates[]>([]);
     const [routeNavigate, setRouteNavigate] = useState('GuestSelect');
     const [btnDisabled, setBtnDisabled] = useState(true);
 
     useEffect(() => {
         if (property.startDate !== null && property.endDate !== null ) {
-            console.log("Viene del Confirm")
             setRouteNavigate('ConfirmReservation')
             setStartDate(property.startDate);
             setEndDate(property.endDate);
         }
+
+        //Getting available dates
+        firebase()
+        .collection('properties')
+        .doc(property.id)
+        .collection('reservations')
+        .get()
+        .then(query => {
+            const disabledDaysTmp: DisabledDates[] = [];
+
+            query.docs.map(doc => {
+                const date_of_arrival = doc.data().date_of_arrival;
+                const departure_date = doc.data().departure_date;
+
+                disabledDaysTmp.push({
+                    from: new Date(date_of_arrival.seconds * 1000),
+                    to: new Date(departure_date.seconds * 1000)
+                })
+            });
+
+            setDisabledDays(disabledDaysTmp);
+        })
     }, []);
 
     useEffect(() => {
@@ -43,8 +69,8 @@ const DateSelect = ({route}: any) => {
 
     function confirmDates () {
         if (startDate && endDate) {
-            property.startDate = startDate.toDateString();
-            property.endDate = endDate.toDateString();
+            property.startDate = startDate.toISOString();
+            property.endDate = endDate.toISOString();
             navigation.navigate(routeNavigate, {property});
         } else {
             console.log('Todavia no seleccionas las dos fechas');
@@ -60,7 +86,18 @@ const DateSelect = ({route}: any) => {
         <View>
             <View style={styles.date_container}>
                 <Text style={styles.date_txt}>When's your trip?</Text>
-                <Calendar start={startDate} end={endDate} onDateChange={(start, end) => {setStartDate(start); setEndDate(end);}} clearDates={clearDates}/>
+                <Calendar 
+                    start={startDate} 
+                    end={endDate} 
+                    onDateChange={(date, type) => {
+                        if (type === "START_DATE") {
+                            setStartDate(date);
+                        } else if (type === "END_DATE") {
+                            setEndDate(date)
+                        }
+                    }} 
+                    clearDates={clearDates}
+                    disabledDays={disabledDays}/>
             </View>
             <View style={styles.confirm_container}>
                 <ClearButton clearDates={clearDates}/>

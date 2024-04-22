@@ -92,6 +92,8 @@ const PropertyDetails: React.FC = ({ route }: any) => {
         name: property.propertyName,
         location: property.location,
         images: property.images,
+        price: property.price,
+        guests: property.guests,
         startDate: null,
         endDate: null,
         guestAdults: null,

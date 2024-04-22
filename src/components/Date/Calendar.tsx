@@ -4,36 +4,44 @@ import React, {useState} from 'react'
 import CalendarPicker from 'react-native-calendar-picker'
 import ClearButton from './ClearButton'
 
+type DisabledDates = {
+    from: Date;
+    to: Date
+}
+
 interface CalendarProps {
     start: Date | null;
     end: Date | null;
-    onDateChange: (start: Date | null, end: Date | null) => void;
+    disabledDays: DisabledDates[];
+    onDateChange: (date : Date, type: string) => void;
     clearDates: () => void;
 }
 
-const Calendar: React.FC<CalendarProps> = ({start, end, onDateChange, clearDates}) => {
+const Calendar: React.FC<CalendarProps> = ({start, end, disabledDays, onDateChange}) => {
     const minDate = new Date();
     const selectedStartDate = start ? start : undefined;
     const selectedEndDate = end ? end : undefined;
 
-    const onDateChanges = (date:Date, type:string) => {
-        if(type === 'END_DATE'){
-            onDateChange(start, date)
-            //console.log(date)
-        }else{
-            onDateChange(date, end)
-            //console.log(date)
+    const isDisabled = (day: Date) => {
+        for (const range of disabledDays) {
+          if (day >= range.from && day <= range.to) {
+            return true;
+          }
         }
-    }
+        return false;
+      };
+
   return (
     <View style={styles.calendar_container}>
         <CalendarPicker 
             weekdays={['S', 'M', 'T', 'W', 'T', 'F', 'S' ]}
             allowRangeSelection={true}
-            todayBackgroundColor="#575757"
-            selectedDayColor="#222222"
-            selectedDayTextColor="#FFFFFF"
-            horizontal={false}
+            selectedDayColor="#000"
+            selectedDayTextColor="#fff"
+            todayBackgroundColor='#fff'
+            todayTextStyle={styles.todayTextStyle}
+            textStyle={styles.textStyle}
+            horizontal={true}
             scrollable={true}
             width={350}
             height={380}
@@ -44,9 +52,11 @@ const Calendar: React.FC<CalendarProps> = ({start, end, onDateChange, clearDates
             monthTitleStyle={styles.monthTitleStyle}
             yearTitleStyle={styles.yearTitleStyle}
             minDate={minDate}
-            onDateChange={onDateChanges}
+            onDateChange={onDateChange}
             selectedStartDate={selectedStartDate}
             selectedEndDate={selectedEndDate}
+            disabledDates={isDisabled}
+            disabledDatesTextStyle={styles.disabledDays}
         />
         {/* <View>
           <Text style={styles.date_txt}>START DATE:{start ? start.toDateString() : null}</Text>
@@ -61,13 +71,6 @@ const styles = StyleSheet.create({
     calendar_container:{
         marginTop: 40,
         paddingTop: 10,
-    },
-    date_txt: {
-        fontSize: 10,
-        color: '#444444',
-        fontWeight: 'bold',
-        marginVertical: 10,
-        marginHorizontal: 10,
     },
     headerWrapperStyle:{
         justifyContent: 'flex-start',
@@ -88,7 +91,16 @@ const styles = StyleSheet.create({
         fontSize: 18, 
         fontWeight:'500',
         marginLeft: 10,
-    }
+    },
+    disabledDays: {
+        fontWeight: '300',
+    },
+    todayTextStyle: {
+        color: '#32C2DF',
+    },
+    textStyle: {
+        fontWeight: 'bold',
+    },
 })
 
 export default Calendar

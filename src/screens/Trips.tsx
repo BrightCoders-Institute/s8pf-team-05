@@ -3,84 +3,125 @@ import {StyleSheet, Text, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardTrip from '../components/TripsScreenComponents/CardTrip';
 import EmptyState from '../components/EmptyState';
-import firebase, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
+import firebase from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-
 const Trips = () => {
-  const [reservations, setReservations] = useState<any[]>([]);
+  const [reservations, setReservations] = useState<any[]>();
+  const [loading, setLoading] = useState(true);
+  const [somePastTrip, setSomePastTrip] = useState('');
 
   useEffect(() => {
     async function fetchReservations() {
-      const querySnapshot = await firebase()
-        .collection('users')
-        .doc(auth().currentUser?.uid)
-        .collection('reservations')
-        .get();
+      try {
+        const reservationsRef = await firebase()
+          .collection('users')
+          .doc(auth().currentUser?.uid)
+          .collection('reservations')
+          .get();
 
-      const tmpReservations: any[] = [];
+        const tmpReservations: any[] = [];
 
-      await Promise.all(
-        querySnapshot.docs.map(async doc => {
-          const idProperty =
-            doc.data().propertyReference._documentPath._parts[1];
-          const propertyDoc = await firebase()
-            .collection('properties')
-            .doc(idProperty)
-            .get();
+        await Promise.all(
+          reservationsRef.docs.map(async doc => {
+            const propertyReservationRef =
+              doc.data().propertyReservationReference;
+            const propertyDataRef = doc.data().propertyDataReference;
 
-          tmpReservations.push({
-            id: propertyDoc.id,
-            ...propertyDoc.data(),
-          });
-        }),
-      );
+            const propertyReservationDoc = await propertyReservationRef.get();
+            const propertyReservationData = propertyReservationDoc.data();
 
-      setReservations(tmpReservations);
+            const propertyDataDoc = await propertyDataRef.get();
+            const propertyDataData = propertyDataDoc.data();
+
+            tmpReservations.push({
+              propertyName: propertyDataData.propertyName,
+              images: propertyDataData.images[0],
+              hostId: propertyDataData.hostId,
+              date_of_arrival: propertyReservationData.date_of_arrival,
+              departure_date: propertyReservationData.departure_date,
+            });
+          }),
+        );
+
+        setReservations(tmpReservations);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching reservations:', error);
+      }
     }
 
     fetchReservations();
   }, []);
 
-  //console.log(reservations);
+  const pastTrips = reservations?.filter(reservation => {
+    const currentDate = new Date();
+    const departureDate = new Date(reservation.departure_date.seconds * 1000);
+    return currentDate > departureDate;
+  });
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Next trips</Text>
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <>
+          <Text style={styles.title}>Next trips</Text>
 
-      {reservations.length === 0 ? (
-        <EmptyState
-          imageSource={require('../images/empty-state-properties-list.png')}
-          message="You haven't rented any property yet."
-        />) : (
-          reservations.map((reservation, index) => {
-            return (
-              <CardTrip
-                key={index}
-                place={reservation.propertyName}
-                host={reservation.hostId}
-                date={reservation.id}
-                img={reservation.images[0]}
-              />
-            );
-          })
-        )
-      }
+          {reservations.length === 0 ? (
+            <EmptyState
+              imageSource={require('../images/empty-state-properties-list.png')}
+              message="You haven't rented any property yet."
+          />) : (
+            reservations.map((reservation, index) => {
+              const currentDate = new Date();
+              const departureDate = new Date(
+                reservation.departure_date.seconds * 1000,
+              );
 
-      {/* <Text style={styles.subTitle}>Trips you made</Text>
+              // Verificar si la fecha de salida ya ha pasado
+              const isDeparturePast = currentDate > departureDate;
 
-      {[instertar aqui variable de 'VIAJES PASADOS' a mapear].map((trip, index) => {
-        return (
-          <CardTrip
-            key={index}
-            place={trip.place}
-            host={trip.host}
-            date={trip.date}
-          />
-        );
-      })} */}
+              if (!isDeparturePast) {
+                return (
+                  <CardTrip
+                    key={index}
+                    propertyName={reservation.propertyName}
+                    img={reservation.images}
+                    hostId={reservation.hostId}
+                    date_of_arrival={
+                      new Date(reservation.date_of_arrival.seconds * 1000)
+                    }
+                    departure_date={
+                      new Date(reservation.departure_date.seconds * 1000)
+                    }
+                  />
+                );
+              }
+            })
+          )}
+
+          {pastTrips.length > 0 && (
+            <>
+              <Text style={styles.subTitle}>Trips you made</Text>
+              {pastTrips?.map((reservation, index) => (
+                <CardTrip
+                  key={index}
+                  propertyName={reservation.propertyName}
+                  img={reservation.images}
+                  hostId={reservation.hostId}
+                  date_of_arrival={
+                    new Date(reservation.date_of_arrival.seconds * 1000)
+                  }
+                  departure_date={
+                    new Date(reservation.departure_date.seconds * 1000)
+                  }
+                />
+              ))}
+            </>
+          )}
+        </>
+      )}
     </ScrollView>
   );
 };
