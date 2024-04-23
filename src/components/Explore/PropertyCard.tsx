@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import FavoriteButton from './FavoriteButton';
+import firestore from '@react-native-firebase/firestore';
 import Rating from './Rating';
 import Carousel from 'react-native-snap-carousel';
 import Moment from 'moment'
@@ -31,7 +32,35 @@ const renderItem = ({item}: {item: string}) => (
 
 const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
 
-  console.log(property.images)
+  //console.log(property.images)
+  const [averageRating, setAverageRating] = useState<number>(0);
+
+  useEffect(() => {
+
+    const fetchReviews = async () => {
+      try {
+        const reviewsSnapshot = await firestore()
+          .collection('reviews')
+          .where('propertyId', '==', property.id)
+          .get();
+        let totalRating = 0;
+        let totalReviewsCount = 0;
+
+        reviewsSnapshot.forEach(doc => {
+          const reviewData = doc.data();
+          totalRating += reviewData.rating;
+          totalReviewsCount++;
+        });
+
+        const avgRating =
+        totalReviewsCount > 0 ? totalRating / totalReviewsCount : 0;
+        setAverageRating(avgRating);
+      } catch (error) {
+        console.error('Error fetching reviews: ', error);
+      }
+    };
+    fetchReviews();
+  }, [property.id]);
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
@@ -45,12 +74,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
           />
         </View>
 
-        <FavoriteButton />
+        {/* <FavoriteButton /> */}
 
         <View style={styles.propertyInfo}>
           <View style={styles.propertyHeader}>
             <Text style={styles.propertyLocation}>{property.city}</Text>
-            <Rating rating={property.rating} />
+            <Rating averageRating={averageRating} />
           </View>
           <Text style={styles.propertyDescription}>{property.propertyName}</Text>
 
