@@ -64,12 +64,6 @@ const LoginAccounts = () => {
                 <Text style={styles.text}>Continue with Google</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-            <View style={styles.login_btn}>
-                <Icon name="logo-facebook" size={27} color="#A663CC" style={styles.icon}/>
-                <Text style={styles.text}>Continue with Facebook</Text>
-            </View>
-        </TouchableOpacity>
     </View>
   )
 }
