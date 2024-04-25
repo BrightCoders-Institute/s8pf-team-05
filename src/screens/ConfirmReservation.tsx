@@ -97,7 +97,7 @@ export default function ConfirmReservation({route}: any) {
           .add({ users: chatUsers, reservationDetails })
           .then(chatRef => {
             // Chat sent
-            const comment = 'Automatic Messege: ' + commentText; // Agregar comentario automático
+            const comment = 'Reservation Comment: ' + commentText; // Agregar comentario automático
             firebase()
               .collection('chats')
               .doc(chatRef.id)

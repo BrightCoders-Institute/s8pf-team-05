@@ -57,7 +57,7 @@ const ChatList = ({ navigation }) => {
                   imageSource={require('../images/empty-state-chat-list.png')}
                   message="No messages yet!"
                 />
-          } // Usa el componente EmptyState si la lista está vacía
+          } // EmptyState component
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => navigation.navigate('Inbox', { chatId: item.id })}>
               <View style={styles.chatItem}>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: 'purple',
+    borderBottomColor: '#CDCDCD',
     paddingVertical: 10,
   },
   userInfo: {

@@ -1,17 +1,18 @@
-import React, { useLayoutEffect, useState, useCallback } from 'react';
+import React, { useLayoutEffect, useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Composer } from 'react-native-gifted-chat';
+import Icon from 'react-native-vector-icons/AntDesign';
 
-const Inbox = ({ route }) => {
+const Inbox = ({ route, navigation }) => {
   const { chatId } = route.params;
   const currentUser = auth().currentUser;
   const [messages, setMessages] = useState([] as any[]); // Initialize messages state with an empty array
 
-  const [userInfo, setuserInfo] = useState<{
+  const [userInfo, setUserInfo] = useState<{
     name: string;
     lastname: string;
     profileImage: string | null;
@@ -21,28 +22,53 @@ const Inbox = ({ route }) => {
     profileImage: null,
   });
 
-  const fetchHostInfo = async () => {
-    try {
-      const userId = currentUser?.uid;
-      
-      if (userId) {
-        const userDoc = await firestore()
-          .collection('users')
-          .doc(userId)
-          .get();
+  const [reservationDetails, setReservationDetails] = useState<{
+    propertyName: string;
+    startDate: Date;
+    endDate: Date;
+  }>({
+    propertyName: '',
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
-        const userData = userDoc.data();
-        
-        if (userData) {
-          const {name, lastname, profileImage} = userData;
-          setuserInfo({name, lastname, profileImage});
+  useEffect(() => {
+    const fetchChatInfo = async () => {
+      try {
+        // Fetching user information
+        const userId = currentUser?.uid;
+        if (userId) {
+          const userDoc = await firestore()
+            .collection('users')
+            .doc(userId)
+            .get();
+
+          const userData = userDoc.data();
+          if (userData) {
+            const { name, lastname, profileImage } = userData;
+            setUserInfo({ name, lastname, profileImage });
+          }
         }
+
+        // Fetching reservation details
+        const chatDoc = await firestore()
+          .collection('chats')
+          .doc(chatId)
+          .get();
+        
+        const chatData = chatDoc.data();
+        const { reservationDetails: chatReservationDetails } = chatData || {};
+        if (chatReservationDetails) {
+          const { propertyName, startDate, endDate } = chatReservationDetails;
+          setReservationDetails({ propertyName, startDate: startDate.toDate(), endDate: endDate.toDate() });
+        }
+      } catch (error) {
+        console.error('Error fetching chat info: ', error);
       }
-    } catch (error) {
-      console.error('Error fetching host info: ', error);
-    }
-  };
-  fetchHostInfo();
+    };
+
+    fetchChatInfo();
+  }, [chatId, currentUser]);
 
   useLayoutEffect(() => {
     const unsubscribe = firestore()
@@ -75,24 +101,58 @@ const Inbox = ({ route }) => {
     }
   }, [chatId]);
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <GiftedChat
-      messages={messages}
-      showAvatarForEveryMessage={true}
-      onSend={messages => onSend(messages)}
-      user={{
-        _id: currentUser?.uid ?? '',
-        name: userInfo.name,
-        avatar: userInfo.profileImage ?? '',
-      }}
-      renderComposer={(props) => <Composer textInputStyle={{ color: 'black' }} {...props} />}
-    />
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleGoBack}>
+          <Icon name='arrowleft' size={27} color={'black'} />
+        </TouchableOpacity>
+        <View style={styles.headerText}>
+          <Text style={styles.headerTitle}>Chat with {userInfo.name}</Text>
+          <Text style={styles.headerSubTitle}>{reservationDetails.propertyName}</Text>
+          <Text style={styles.headerSubTitle}>{reservationDetails.startDate.toDateString()} - {reservationDetails.endDate.toDateString()}</Text>
+        </View>
+      </View>
+      <GiftedChat
+        messages={messages}
+        showAvatarForEveryMessage={true}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: currentUser?.uid ?? '',
+          name: userInfo.name,
+          avatar: userInfo.profileImage ?? '',
+        }}
+        renderComposer={(props) => <Composer textInputStyle={{ color: 'black' }} {...props} />}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC',
+  },
+  headerText: {
+    marginLeft: 10,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  headerSubTitle: {
+    fontSize: 14,
+    color: 'gray',
   },
 });
 
