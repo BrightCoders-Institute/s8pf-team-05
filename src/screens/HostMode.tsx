@@ -15,7 +15,6 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
 import storage from '@react-native-firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
 import SelectLocation from '../components/SelectCity/SelectLocation';
@@ -31,7 +30,6 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   const [propertyDescription, setPropertyDescription] = React.useState('');
   const [propertyImages, setPropertyImages] = React.useState<string[]>([]);
   const [price, setPrice] = React.useState<number | undefined>();
-  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [propertyType, setPropertyType] = React.useState<string>('');
   const userId = firebase.auth().currentUser?.uid || '';
 
@@ -72,14 +70,6 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
     const updatedImages = [...propertyImages];
     updatedImages.splice(index, 1);
     setPropertyImages(updatedImages);
-  };
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
   };
 
   const handleAddProperty = async () => {
@@ -181,6 +171,7 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
             <View style={styles.inputWrapper}>
               <SelectLocation
                 title="Select the property city"
+                defaultValue={'Select City'}
                 selectedCity={val => {
                   setSelectedCity(val);
                 }}

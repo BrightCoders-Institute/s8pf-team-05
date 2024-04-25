@@ -16,7 +16,6 @@ import {useNavigation} from '@react-navigation/native';
 import storage from '@react-native-firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
 import SelectLocation from '../components/SelectCity/SelectLocation';
@@ -35,8 +34,6 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
   const [propertyDescription1, setPropertyDescription] = React.useState(property.description);
   const [propertyImages1, setPropertyImages] = React.useState<string[]>(property.images);
   const [price1, setPrice] = React.useState<number | undefined>(property.price);
-  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
   const [propertyType1, setPropertyType] = React.useState<string>(property.propertyType);
   const userId = firebase.auth().currentUser?.uid || '';
 
@@ -45,7 +42,6 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
   const handlePropertyTypeSelection = (type: string) => {
     setPropertyType(type);
   };
-
   const handleIncrease = (
     setState: React.Dispatch<React.SetStateAction<number>>,
   ) => {
@@ -81,19 +77,6 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
     setPropertyImages(updatedImages);
   };
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date: Date) => {
-    setSelectedDate(date);
-    hideDatePicker();
-  };
-
   const handleUpdateProperty = async () => {
     if (
       !propertyName1 ||
@@ -124,7 +107,6 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
         beds: beds1,
         bathrooms: bathrooms1,
         description: propertyDescription1,
-        avaliabilityDates: selectedDate,
         price: price1,
         propertyType: propertyType1,
       });
@@ -147,7 +129,6 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
       setBeds(0);
       setBathrooms(0);
       setPropertyDescription('');
-      setSelectedDate(null);
       setPrice(undefined);
       setPropertyImages([]);
       setSelectedCity('');
@@ -190,8 +171,9 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
           <View style={styles.inputWrapper}>
             <SelectLocation
               title="Select the property city"
-              selectedCity={val => {
-                setSelectedCity(val);
+              defaultValue={property.city}
+              selectedCity={selectedCity => {
+                setSelectedCity(selectedCity);
               }}
             />
           </View>
@@ -269,22 +251,6 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
             />
             <View style={styles.line} />
           </View>
-
-          <TouchableOpacity style={styles.addButton} onPress={showDatePicker}>
-            <Text style={styles.addButtonText}>
-              {selectedDate
-                ? selectedDate.toLocaleDateString()
-                : 'Select Availability Dates'}
-            </Text>
-            <Icon name="calendar" size={30} color="gray" />
-          </TouchableOpacity>
-
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
 
           <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
             <Text style={styles.addButtonText}>Add Images</Text>
