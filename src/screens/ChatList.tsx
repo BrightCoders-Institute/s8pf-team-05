@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { Avatar } from 'react-native-elements';
 
 const ChatList = ({ navigation }) => {
   const [chats, setChats] = useState([]);
-  const [newChatId, setNewChatId] = useState('');
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -19,10 +18,17 @@ const ChatList = ({ navigation }) => {
           const otherUserID = chatData.users.find(userID => userID !== auth().currentUser.uid);
           const userDoc = await firestore().collection('users').doc(otherUserID).get();
           const userData = userDoc.data();
+          const propertyDoc = await firestore().collection('properties').doc(chatData.propertyId).get();
+          const propertyData = propertyDoc.data();
+          const startDate = new Date(chatData.startDate);
+          const endDate = new Date(chatData.endDate);
+          const stayDate = startDate.toDateString() === endDate.toDateString() ? startDate.toDateString() : `${startDate.toDateString()} - ${endDate.toDateString()}`;
           chatsData.push({
             id: doc.id,
             profileImage: userData?.profileImage || 'https://placeimg.com/140/140/any',
             userName: userData?.name || 'Unknown',
+            propertyName: propertyData?.title || 'Unknown Property',
+            stayDate: stayDate || 'Unknown Dates',
           });
         }
         setChats(chatsData);
@@ -30,50 +36,6 @@ const ChatList = ({ navigation }) => {
   
     return () => unsubscribe();
   }, []);
-  
-
-  const handleStartChat = async () => {
-    try {
-      // Verificar si la ID del nuevo chat está vacía
-      if (!newChatId.trim()) {
-        console.warn('Por favor, introduce la ID del otro usuario.');
-        return;
-      }
-  
-      // Obtener la ID del usuario actual
-      const currentUserID = auth().currentUser.uid;
-  
-      // Verificar si el usuario está intentando iniciar un chat consigo mismo
-      if (newChatId.trim() === currentUserID) {
-        console.warn('No puedes iniciar un chat contigo mismo.');
-        return;
-      }
-  
-      // Verificar si ya existe un chat entre los usuarios
-      const existingChat = await firestore()
-        .collection('chats')
-        .where('users', '==', [currentUserID, newChatId.trim()])
-        .get();
-  
-      if (!existingChat.empty) {
-        console.warn('Ya tienes un chat con este usuario.');
-        return;
-      }
-  
-      // Crear un nuevo chat en Firestore
-      const newChatRef = await firestore().collection('chats').add({
-        // Aquí puedes definir la estructura del chat según tus requisitos
-        users: [currentUserID, newChatId.trim()],
-        // Otras propiedades del chat, como mensajes, estado, etc.
-      });
-  
-      // Redireccionar al usuario al chat recién creado
-      navigation.navigate('Inbox', { chatId: newChatRef.id });
-    } catch (error) {
-      console.error('Error starting chat: ', error);
-    }
-  };
-  
 
   return (
     <View style={styles.container}>
@@ -82,29 +44,24 @@ const ChatList = ({ navigation }) => {
         data={chats}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('Inbox', { chatId: item.id })}>
+          <TouchableOpacity onPress={() => navigation.navigate('Inbox', { chatId: item.id })}>
             <View style={styles.chatItem}>
-                <Avatar
+              <Avatar
                 rounded
                 source={{
-                    uri: item.profileImage ? item.profileImage : 'https://placeimg.com/140/140/any',
+                  uri: item.profileImage ? item.profileImage : 'https://placeimg.com/140/140/any',
                 }}
                 size="medium"
-                />
+              />
+              <View style={styles.userInfo}>
+                <Text style={styles.propertyName}>{item.propertyName}</Text>
                 <Text style={styles.userName}>{item.userName}</Text>
+                <Text style={styles.stayDate}>{item.stayDate}</Text>
+              </View>
             </View>
-            </TouchableOpacity>
+          </TouchableOpacity>
         )}
-        />
-      <View style={styles.newChatContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Introduce la ID del otro usuario"
-          value={newChatId}
-          onChangeText={text => setNewChatId(text)}
-        />
-        <Button title="Iniciar Chat" onPress={handleStartChat} />
-      </View>
+      />
     </View>
   );
 };
@@ -120,19 +77,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   chatItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'purple',
     paddingVertical: 10,
   },
-  newChatContainer: {
-    marginTop: 20,
+  userInfo: {
+    marginLeft: 10,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+  propertyName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  userName: {
+    fontSize: 16,
+  },
+  stayDate: {
+    fontSize: 14,
+    color: '#888',
   },
 });
 

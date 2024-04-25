@@ -80,8 +80,10 @@ export default function ConfirmReservation({route}: any) {
         departure_date: dates.endDate,
         guestKids: property.guestKids,
         guestAdults: property.guestAdults,
+        chatId: null,
       })
       .then(data => {
+        const reservationId = data.id;
         const chatUsers = [auth().currentUser?.uid, property.hostId]; // Agregar usuarios al chat
         const reservationDetails = {
           propertyName: property.name,
@@ -105,6 +107,13 @@ export default function ConfirmReservation({route}: any) {
                 text: comment,
                 user: { _id: auth().currentUser?.uid },
               })
+              const chatId = chatRef.id
+              firebase()
+              .collection('properties')
+              .doc(property.id)
+              .collection('reservations')
+              .doc(reservationId)
+              .update({ chatId: chatId })
               .then(() => {
                 async function getPath() {
                   const path = await data.get();
