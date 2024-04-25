@@ -135,7 +135,7 @@ const HostModeUpdateProperties: React.FC = ({route}: any) => {
 
       // Mostrar una alerta de éxito al usuario
       Alert.alert('Success', 'Property updated successfully!');
-      navigation.replace('HostModePropertiesList');
+      navigation.goBack();
       //console.log('Property added!');
     } catch (error) {
       console.error('Error adding property: ', error);
