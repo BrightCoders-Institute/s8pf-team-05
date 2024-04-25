@@ -10,7 +10,7 @@ const HeaderNavigation = ({style}: headerProps) => {
   return (
 
     <View style={style ? style : styles.button}>
-      <TouchableOpacity onPress={() => navigate.goBack()}>
+      <TouchableOpacity onPress={() => navigate.navigate('Signin')}>
         <Icon name="arrowleft" size={27} color={'black'} />
       </TouchableOpacity>
     </View>
