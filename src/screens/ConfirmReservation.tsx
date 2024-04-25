@@ -21,6 +21,7 @@ import {
 } from '@react-navigation/native';
 import firebase from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+// import { document } from 'dom';
 
 export default function ConfirmReservation({route}: any) {
   const navigation = useNavigation();
@@ -36,6 +37,7 @@ export default function ConfirmReservation({route}: any) {
   const [numberOfNights, setNumberOfNights] = useState<number>();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [commentText, setCommentText] = useState('');
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -80,25 +82,46 @@ export default function ConfirmReservation({route}: any) {
         guestAdults: property.guestAdults,
       })
       .then(data => {
-        async function getPath() {
-          const path = await data.get();
-
-          firebase()
-            .collection('users')
-            .doc(auth().currentUser?.uid)
-            .collection('reservations')
-            .add({
-              propertyReservationReference: path.ref,
-              propertyDataReference: firebase()
-                .collection('properties')
-                .doc(property.id),
-            })
-            .then(() => {
-              setLoading(false);
-              navigation.dispatch(StackActions.replace('ReservationCompleted'));
-            });
-        }
-        getPath();
+        const chatUsers = [auth().currentUser?.uid, property.hostId]; // Agregar usuarios al chat
+        firebase()
+          .collection('chats')
+          .add({ users: chatUsers })
+          .then(chatRef => {
+            // Envío de comentario al chat
+            const comment = 'Mensaje automático: ' + commentText; // Agregar comentario automático
+            firebase()
+              .collection('chats')
+              .doc(chatRef.id)
+              .collection('messages')
+              .add({
+                _id: new Date().getTime().toString(),
+                createdAt: new Date(),
+                text: comment,
+                user: { _id: auth().currentUser?.uid },
+              })
+              .then(() => {
+                async function getPath() {
+                  const path = await data.get();
+                  firebase()
+                    .collection('users')
+                    .doc(auth().currentUser?.uid)
+                    .collection('reservations')
+                    .add({
+                      propertyReservationReference: path.ref,
+                      propertyDataReference: firebase()
+                        .collection('properties')
+                        .doc(property.id),
+                    })
+                    .then(() => {
+                      setLoading(false);
+                      navigation.dispatch(
+                        StackActions.replace('ReservationCompleted'),
+                      );
+                    });
+                }
+                getPath();
+              });
+          });
       });
   }
 
@@ -163,7 +186,18 @@ export default function ConfirmReservation({route}: any) {
             like most about the place
           </Text>
           <HostInfo hostId={property.hostId} />
-          <CommentBox placeholder="Write a comment here..." />
+          <CommentBox 
+            placeholder="Write a comment here..." 
+            onChangeText={(text: string) => setCommentText(text)} // Guardar el texto del comentario
+            onSend={() => {
+              // Enviar comentario al chat
+              const comment = commentText.trim();
+              if (comment) {
+                onSend([{ text: comment }]); // Llamar a la función onSend del ChatBox
+                setCommentText(''); // Limpiar el texto del comentario después de enviar
+              }
+            }}
+          />
 
           {/* Line */}
           <View style={[styles.line1, styles.line2]} />
