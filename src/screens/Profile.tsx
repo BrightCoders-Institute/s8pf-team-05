@@ -13,10 +13,6 @@ const Profile = ({navigation}: any) => {
     profileImage: '',
     HostMode: null,
   });
-  const [nameUser, setNameUser] = useState('');
-  const [lastnameUser, setLastnameUser] = useState('');
-  const [photoUser, setPhotoUser] = useState('');
-  const [isHost, setIsHost] = useState<boolean>();
 
   useEffect(() => {
     const subscriber = firestore()
@@ -60,7 +56,7 @@ const Profile = ({navigation}: any) => {
         />
         <View style={styles.userInformationContainer}>
           <Text style={styles.nameUser}>{infoUser.name} {infoUser.lastname}</Text>
-          {isHost ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Guest</Text>}
+          {infoUser.HostMode ? <Text style={styles.rolUser}>Host</Text> : <Text style={styles.rolUser}>Guest</Text>}
         </View>
       </View>
 
