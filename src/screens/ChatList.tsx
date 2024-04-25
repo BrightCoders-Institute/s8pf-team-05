@@ -18,17 +18,10 @@ const ChatList = ({ navigation }) => {
           const otherUserID = chatData.users.find(userID => userID !== auth().currentUser.uid);
           const userDoc = await firestore().collection('users').doc(otherUserID).get();
           const userData = userDoc.data();
-          const propertyDoc = await firestore().collection('properties').doc(chatData.propertyId).get();
-          const propertyData = propertyDoc.data();
-          const startDate = new Date(chatData.startDate);
-          const endDate = new Date(chatData.endDate);
-          const stayDate = startDate.toDateString() === endDate.toDateString() ? startDate.toDateString() : `${startDate.toDateString()} - ${endDate.toDateString()}`;
           chatsData.push({
             id: doc.id,
             profileImage: userData?.profileImage || 'https://placeimg.com/140/140/any',
             userName: userData?.name || 'Unknown',
-            propertyName: propertyData?.title || 'Unknown Property',
-            stayDate: stayDate || 'Unknown Dates',
           });
         }
         setChats(chatsData);
@@ -53,11 +46,7 @@ const ChatList = ({ navigation }) => {
                 }}
                 size="medium"
               />
-              <View style={styles.userInfo}>
-                <Text style={styles.propertyName}>{item.propertyName}</Text>
-                <Text style={styles.userName}>{item.userName}</Text>
-                <Text style={styles.stayDate}>{item.stayDate}</Text>
-              </View>
+              <Text style={styles.userName}>{item.userName}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -83,19 +72,9 @@ const styles = StyleSheet.create({
     borderBottomColor: 'purple',
     paddingVertical: 10,
   },
-  userInfo: {
-    marginLeft: 10,
-  },
-  propertyName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   userName: {
+    marginLeft: 10,
     fontSize: 16,
-  },
-  stayDate: {
-    fontSize: 14,
-    color: '#888',
   },
 });
 

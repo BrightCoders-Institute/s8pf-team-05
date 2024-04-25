@@ -89,7 +89,8 @@ export default function ConfirmReservation({route}: any) {
           propertyName: property.name,
           startDate: dates.startDate,
           endDate: dates.endDate,
-          // More details can be added here
+          propertyId: property.id, 
+          reservationId: reservationId, 
         };
         firebase()
           .collection('chats')
