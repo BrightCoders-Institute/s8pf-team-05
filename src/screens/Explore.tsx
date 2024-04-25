@@ -113,21 +113,7 @@ const Explore = ({navigation}: any) => {
                   imageSource={require('../images/empty-state-explore.png')}
                   message="No properties found matching the search criteria."
                 />
-                
               )}
-              <View style={styles.propertiesContainer}>
-                {properties.map(property => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property}
-                    onPress={() => {
-                      navigation.navigate('PropertyDetails', {
-                        property: property,
-                      });
-                    }}
-                  />
-                ))}
-              </View>
             </View>
           </View>
         </View>
