@@ -83,12 +83,18 @@ export default function ConfirmReservation({route}: any) {
       })
       .then(data => {
         const chatUsers = [auth().currentUser?.uid, property.hostId]; // Agregar usuarios al chat
+        const reservationDetails = {
+          propertyName: property.name,
+          startDate: dates.startDate,
+          endDate: dates.endDate,
+          // More details can be added here
+        };
         firebase()
           .collection('chats')
-          .add({ users: chatUsers })
+          .add({ users: chatUsers, reservationDetails })
           .then(chatRef => {
-            // Envío de comentario al chat
-            const comment = 'Mensaje automático: ' + commentText; // Agregar comentario automático
+            // Chat sent
+            const comment = 'Automatic Messege: ' + commentText; // Agregar comentario automático
             firebase()
               .collection('chats')
               .doc(chatRef.id)
@@ -188,13 +194,13 @@ export default function ConfirmReservation({route}: any) {
           <HostInfo hostId={property.hostId} />
           <CommentBox 
             placeholder="Write a comment here..." 
-            onChangeText={(text: string) => setCommentText(text)} // Guardar el texto del comentario
+            onChangeText={(text: string) => setCommentText(text)} // Save the comment
             onSend={() => {
-              // Enviar comentario al chat
+              // Send the comment
               const comment = commentText.trim();
               if (comment) {
-                onSend([{ text: comment }]); // Llamar a la función onSend del ChatBox
-                setCommentText(''); // Limpiar el texto del comentario después de enviar
+                onSend([{ text: comment }]); 
+                setCommentText(''); 
               }
             }}
           />
