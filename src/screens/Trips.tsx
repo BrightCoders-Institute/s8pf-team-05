@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {StyleSheet, Text, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardTrip from '../components/TripsScreenComponents/CardTrip';
 import EmptyState from '../components/EmptyState';
@@ -61,13 +61,13 @@ const Trips = () => {
   });
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {loading ? (
-        <Text>Loading...</Text>
+        <Text style={styles.title}>Loading...</Text>
       ) : (
         <>
           <Text style={styles.title}>Next trips</Text>
-
+          <ScrollView>
           {reservations.length === 0 ? (
             <EmptyState
               imageSource={require('../images/empty-state-properties-list.png')}
@@ -84,6 +84,29 @@ const Trips = () => {
 
               if (!isDeparturePast) {
                 return (
+                    <CardTrip
+                      key={index}
+                      propertyName={reservation.propertyName}
+                      img={reservation.images}
+                      hostId={reservation.hostId}
+                      date_of_arrival={
+                        new Date(reservation.date_of_arrival.seconds * 1000)
+                      }
+                      departure_date={
+                        new Date(reservation.departure_date.seconds * 1000)
+                      }
+                    />
+                );
+              }
+            })
+          )}
+          </ScrollView>
+
+          {pastTrips.length > 0 && (
+            <>
+              <Text style={styles.subTitle}>Trips you made</Text>
+              <ScrollView>
+                {pastTrips?.map((reservation, index) => (
                   <CardTrip
                     key={index}
                     propertyName={reservation.propertyName}
@@ -96,33 +119,13 @@ const Trips = () => {
                       new Date(reservation.departure_date.seconds * 1000)
                     }
                   />
-                );
-              }
-            })
-          )}
-
-          {pastTrips.length > 0 && (
-            <>
-              <Text style={styles.subTitle}>Trips you made</Text>
-              {pastTrips?.map((reservation, index) => (
-                <CardTrip
-                  key={index}
-                  propertyName={reservation.propertyName}
-                  img={reservation.images}
-                  hostId={reservation.hostId}
-                  date_of_arrival={
-                    new Date(reservation.date_of_arrival.seconds * 1000)
-                  }
-                  departure_date={
-                    new Date(reservation.departure_date.seconds * 1000)
-                  }
-                />
-              ))}
+                ))}
+              </ScrollView>
             </>
           )}
         </>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
