@@ -78,10 +78,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
 
         <View style={styles.propertyInfo}>
           <View style={styles.propertyHeader}>
-            <Text style={styles.propertyLocation}>{property.city}</Text>
+            <Text style={styles.propertyName}>{property.propertyName}</Text>
             <Rating averageRating={averageRating} />
           </View>
-          <Text style={styles.propertyDescription}>{property.propertyName}</Text>
+          <Text style={styles.propertyLocation}>{property.city}</Text>
 
           <Text style={styles.propertyPrice}>${property.price} night</Text>
         </View>
@@ -117,14 +117,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    propertyLocation: {
+    propertyName: {
         fontSize: 15,
         fontWeight: 'bold',
         color: '#444444',
     },
-    propertyDescription: {
+    propertyLocation: {
         fontSize: 13,
-        marginTop: 5,
         color: '#7C7C7C',
     },
     propertyDateAvailable: {
