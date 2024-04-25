@@ -15,7 +15,7 @@ const Explore = ({navigation}: any) => {
     {name: 'Countryside', icon: 'tree', value: 'countryside'},
     {name: 'Beach', icon: 'umbrella-beach', value: 'beach'},
     {name: 'Mountain', icon: 'mountain', value: 'mountain'},
-    {name: 'Other', icon: 'plus', value: 'other'},
+    {name: 'Other', icon: 'ellipsis', value: 'other'}, //elipsis, circle-plus, location-dot, grip
   ];
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
