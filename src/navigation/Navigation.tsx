@@ -18,6 +18,8 @@ import HostModeInactiveScreen from '../screens/HostModeInactive';
 import ReviewScreen from '../screens/ReviewScreen';
 import ReviewForm from '../components/Review/ReviewForm';
 import LikedPropertys from '../screens/LikedPropertys';
+import ChatList from '../screens/ChatList';
+import Inbox from '../screens/Inbox';
 
 // type RootStackParams = {
 //   Signin: undefined;
@@ -69,6 +71,10 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       <Stack.Screen name="ReservationCompleted" component={ReservationCompleted}/>
 
       <Stack.Screen name="ReviewScreen" component={ReviewScreen} />
+
+      <Stack.Screen name="ChatList" component={ChatList} />
+
+      <Stack.Screen name="Inbox" component={Inbox} />
 
     </Stack.Navigator>
   );
