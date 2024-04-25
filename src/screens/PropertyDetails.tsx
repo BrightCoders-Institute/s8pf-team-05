@@ -90,7 +90,7 @@ const PropertyDetails: React.FC = ({ route }: any) => {
         id: property.id,
         hostId: property.hostId,
         name: property.propertyName,
-        location: property.location,
+        location: property.propertyAdress,
         images: property.images,
         price: property.price,
         guests: property.guests,

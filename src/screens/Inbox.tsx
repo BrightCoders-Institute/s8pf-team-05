@@ -6,6 +6,7 @@ import db from '@react-native-firebase/firestore';
 import signOut from '@react-native-firebase/auth';
 import { GiftedChat } from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
+import { Composer } from 'react-native-gifted-chat';
 
 const Inbox = ({ navigation }) => {
   const [messages, setMessages] = useState([] as any[]); // Initialize messages state with an empty array
@@ -121,6 +122,7 @@ const Inbox = ({ navigation }) => {
           name: userInfo.name,
           avatar: userInfo.profileImage ?? '', 
         }}
+        renderComposer={(props) => <Composer textInputStyle={{color: 'black'}} {...props} />}
       />
     );
 }
