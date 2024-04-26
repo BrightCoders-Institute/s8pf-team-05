@@ -127,6 +127,7 @@ export default function ConfirmReservation({route}: any) {
                       propertyDataReference: firebase()
                         .collection('properties')
                         .doc(property.id),
+                      propertyId: property.id,
                     })
                     .then(() => {
                       setLoading(false);

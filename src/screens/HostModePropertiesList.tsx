@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, Alert } fr
 import React, {useEffect, useState} from 'react'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconDots from 'react-native-vector-icons/Entypo';
 import EmptyState from '../components/EmptyState';
@@ -49,9 +50,33 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
                   {text: 'Cancel'},
                   {
                     text: 'Delete',
-                    onPress: async () => { 
+                    onPress: async () => {
                       try {
+                        //Eliminar la propiedad
                         await firestore().collection('properties').doc(properties[index].id).delete();
+
+                        //Eliminar tus reservaciones a esa propiedad
+                        await firestore()
+                        .collection('users')
+                        .doc(auth().currentUser?.uid)
+                        .collection('reservations')
+                        .where('propertyId', '==', properties[index].id)
+                        .get()
+                        .then((query) => {
+                          query.docs.forEach((doc) => {
+                            doc.ref.delete();
+                          })
+                        })
+
+                        //Eliminar las imágenes de la propiedad
+                        const imagesRef = storage().ref().child(`images/${properties[index].id}`);
+                        const imageNames = await imagesRef.listAll();
+                        const deleteImagePromises = imageNames.items.map(async (imageRef) => {
+                          await imageRef.delete();
+                        });
+                        
+                        await Promise.all(deleteImagePromises);
+
                         Alert.alert('Property Deleted!');
                         setActiveOptions(null);
                       } catch(err) {
