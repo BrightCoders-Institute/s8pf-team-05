@@ -40,8 +40,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
     const fetchReviews = async () => {
       try {
         const reviewsSnapshot = await firestore()
+          .collection('properties')
+          .doc(property.id)
           .collection('reviews')
-          .where('propertyId', '==', property.id)
           .get();
         let totalRating = 0;
         let totalReviewsCount = 0;
