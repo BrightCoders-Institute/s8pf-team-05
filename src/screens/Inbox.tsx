@@ -124,7 +124,7 @@ const Inbox = ({ route, navigation }) => {
         user={{
           _id: currentUser?.uid ?? '',
           name: userInfo.name,
-          avatar: userInfo.profileImage ?? '',
+          avatar: userInfo.profileImage ? { uri: userInfo.profileImage } : require('../source/defaultUserImage.jpg'),
         }}
         renderComposer={(props) => <Composer textInputStyle={{ color: 'black' }} {...props} />}
       />
