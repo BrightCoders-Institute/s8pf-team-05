@@ -70,7 +70,7 @@ const ChatList = ({ navigation }) => {
                 />
                 <View style={styles.userInfo}>
                   <Text style={styles.propertyName}>{item.propertyName}</Text>
-                  <Text style={styles.userName}>Host: {item.userName}</Text>
+                  <Text style={styles.userName}>Chat with {item.userName}</Text>
                   <Text style={styles.dates}>{item.dateText}</Text>
                 </View>
               </View>
