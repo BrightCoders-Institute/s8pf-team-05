@@ -5,6 +5,7 @@ import ReviewItem from '../components/Review/ReviewItem';
 import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/AntDesign';
+import auth from '@react-native-firebase/auth';
 
 const ReviewScreen: React.FC = ({ route }: any) => {
   const navigation = useNavigation();
@@ -12,6 +13,7 @@ const ReviewScreen: React.FC = ({ route }: any) => {
 
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reservationEnded, setReservationEnded] = useState(false);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -31,7 +33,33 @@ const ReviewScreen: React.FC = ({ route }: any) => {
       }
     };
 
+    const checkReservationStatus = async () => {
+      try {
+        const reservationSnapshot = await firestore()
+          .collection('properties')
+          .doc(property.id)
+          .collection('reservations')
+          .where('idGuest', '==', auth().currentUser.uid) // Assuming user authentication is implemented
+          .get();
+
+        if (!reservationSnapshot.empty) {
+          const reservationData = reservationSnapshot.docs[0].data();
+          const endDate = new Date(reservationData.departure_date.seconds * 1000);
+          
+          const currentDate = new Date();
+
+          if (endDate < currentDate) {
+            setReservationEnded(true);
+          }
+        }
+        
+      } catch (error) {
+        console.error('Error checking reservation status: ', error);
+      }
+    };
+
     fetchReviews();
+    checkReservationStatus();
   }, [property.id]);
 
   const handleGoBack = () => {
@@ -57,7 +85,11 @@ const ReviewScreen: React.FC = ({ route }: any) => {
         <ScrollView>
           <Text style={styles.title}>Leave your review</Text>
           <View style={styles.formContainer}>
-            <ReviewForm propertyId={property.id} />
+            {reservationEnded ? (
+              <ReviewForm propertyId={property.id} />
+            ) : (
+              <Text style={styles.notAllowedText}>You can leave a review after you make a reservation for this property and the reservation ends.</Text>
+            )}
           </View>
           {reviews.length === 0 ? (
             <View style={styles.emptyContainer}>
@@ -132,6 +164,13 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     color: '#888',
+  },
+  notAllowedText: {
+    paddingHorizontal: 40,
+    fontSize: 16,
+    color: 'purple',
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 
