@@ -23,12 +23,13 @@ const LoginAccounts = () => {
       };
 
       const handleGoogleSignIn = async () => {
-        try {
-            await signinWithGoogle();
-            navigation.navigate('Main')
-        } catch (error) {
-            console.log(error)
-        }
+ 
+            try {
+                await signinWithGoogle();
+            } catch (error) {
+                console.log(error)
+            }
+        
     }
     const signinWithGoogle = async () => {
         try {
@@ -37,8 +38,16 @@ const LoginAccounts = () => {
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
             await auth().signInWithCredential(googleCredential);
             const currentUser = auth().currentUser;
-            if(currentUser){
-                onSend(currentUser.uid, {...newUser, name: user.givenName, lastname:user.familyName, profileImage:user.photo})
+            // if(currentUser){
+            //     console.log(user)
+            //         //onSend(currentUser.uid, {...newUser, name: user.givenName, lastname:user.familyName})
+            //       }
+            const infoUser = (await firestore().collection('users').doc(currentUser?.uid).get()).data()
+            if(infoUser?.name === user.givenName){
+                navigation.navigate('Main')
+            } else {
+                onSend(currentUser.uid, {...newUser, name: user.givenName, lastname:user.familyName})
+                navigation.navigate('SelectCity')
             }
         } catch (error) {
             console.log(error)
@@ -51,6 +60,7 @@ const LoginAccounts = () => {
     const onSend = async (uid: string, objUser:any) => {
         try {
             await firestore().collection('users').doc(uid).set(objUser)
+            
         } catch (error) {
             console.error('Error sending user data to Firestore: ', error);
         }
@@ -62,12 +72,6 @@ const LoginAccounts = () => {
             <View style={styles.login_btn}>
                 <Icon name="logo-google" size={27} color="#A663CC" style={styles.icon}/>
                 <Text style={styles.text}>Continue with Google</Text>
-            </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-            <View style={styles.login_btn}>
-                <Icon name="logo-facebook" size={27} color="#A663CC" style={styles.icon}/>
-                <Text style={styles.text}>Continue with Facebook</Text>
             </View>
         </TouchableOpacity>
     </View>

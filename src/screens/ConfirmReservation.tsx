@@ -21,6 +21,7 @@ import {
 } from '@react-navigation/native';
 import firebase from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+// import { document } from 'dom';
 
 export default function ConfirmReservation({route}: any) {
   const navigation = useNavigation();
@@ -36,6 +37,7 @@ export default function ConfirmReservation({route}: any) {
   const [numberOfNights, setNumberOfNights] = useState<number>();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [commentText, setCommentText] = useState('');
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -78,28 +80,65 @@ export default function ConfirmReservation({route}: any) {
         departure_date: dates.endDate,
         guestKids: property.guestKids,
         guestAdults: property.guestAdults,
+        chatId: null,
       })
       .then(data => {
-        async function getPath() {
-          const path = await data.get();
-
-          firebase()
-            .collection('users')
-            .doc(auth().currentUser?.uid)
-            .collection('reservations')
-            .add({
-              propertyReservationReference: path.ref,
-              propertyDataReference: firebase()
-                .collection('properties')
-                .doc(property.id),
-              propertyId: property.id,
-            })
-            .then(() => {
-              setLoading(false);
-              navigation.dispatch(StackActions.replace('ReservationCompleted'));
-            });
-        }
-        getPath();
+        const reservationId = data.id;
+        const chatUsers = [auth().currentUser?.uid, property.hostId]; // Agregar usuarios al chat
+        const reservationDetails = {
+          propertyName: property.name,
+          startDate: dates.startDate,
+          endDate: dates.endDate,
+          propertyId: property.id, 
+          reservationId: reservationId, 
+        };
+        firebase()
+          .collection('chats')
+          .add({ users: chatUsers, reservationDetails })
+          .then(chatRef => {
+            // Chat sent
+            const comment = 'Reservation Comment: ' + commentText; // Agregar comentario automático
+            firebase()
+              .collection('chats')
+              .doc(chatRef.id)
+              .collection('messages')
+              .add({
+                _id: new Date().getTime().toString(),
+                createdAt: new Date(),
+                text: comment,
+                user: { _id: auth().currentUser?.uid },
+              })
+              const chatId = chatRef.id
+              firebase()
+              .collection('properties')
+              .doc(property.id)
+              .collection('reservations')
+              .doc(reservationId)
+              .update({ chatId: chatId })
+              .then(() => {
+                async function getPath() {
+                  const path = await data.get();
+                  firebase()
+                    .collection('users')
+                    .doc(auth().currentUser?.uid)
+                    .collection('reservations')
+                    .add({
+                      propertyReservationReference: path.ref,
+                      propertyDataReference: firebase()
+                        .collection('properties')
+                        .doc(property.id),
+                      propertyId: property.id,
+                    })
+                    .then(() => {
+                      setLoading(false);
+                      navigation.dispatch(
+                        StackActions.replace('ReservationCompleted'),
+                      );
+                    });
+                }
+                getPath();
+              });
+          });
       });
   }
 
@@ -140,7 +179,7 @@ export default function ConfirmReservation({route}: any) {
             info={`${dates.startParseDate.substring(
               4,
               11,
-            )} to  ${dates.endParseDate.substring(4, 11)}`}
+            )} -  ${dates.endParseDate.substring(4, 11)}`}
             btnEditar={() => navigation.navigate('DateSelect', {property})}
           />
           <DetailsReservation
@@ -159,12 +198,23 @@ export default function ConfirmReservation({route}: any) {
           <View style={styles.line1} />
 
           <Text style={styles.title}>Write to the host</Text>
-          <Text>
+          <Text style={styles.description}>
             Tell him why you are traveling, who is accompanying you and what you
             like most about the place
           </Text>
           <HostInfo hostId={property.hostId} />
-          <CommentBox placeholder="Write a comment here..." />
+          <CommentBox 
+            placeholder="Write a comment here..." 
+            onChangeText={(text: string) => setCommentText(text)} // Save the comment
+            onSend={() => {
+              // Send the comment
+              const comment = commentText.trim();
+              if (comment) {
+                onSend([{ text: comment }]); 
+                setCommentText(''); 
+              }
+            }}
+          />
 
           {/* Line */}
           <View style={[styles.line1, styles.line2]} />
@@ -236,6 +286,11 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 25,
     color: 'black',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  description: {
+    color: '#444444',
     fontSize: 17,
     fontWeight: '600',
   },

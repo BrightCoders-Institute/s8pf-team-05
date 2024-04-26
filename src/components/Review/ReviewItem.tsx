@@ -30,14 +30,18 @@ const ReviewItem: React.FC<{ review: { rating: number; review: string; userId: s
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
-        {userInfo.profileImage && <Image source={{ uri: userInfo.profileImage }} style={styles.avatar} />}
+        {userInfo.profileImage ? (
+          <Image source={{ uri: userInfo.profileImage }} style={styles.avatar} />
+        ) : (
+          <Image source={require('../../source/defaultUserImage.jpg')} style={styles.avatar} />
+        )}
         <Text style={styles.userName}>{userInfo.name}</Text>
       </View>
       <StarRatingDisplay 
-      rating={review.rating} 
-      starSize={20} 
-      color="#444444"
-      starStyle={{ marginHorizontal: 0 }} />
+        rating={review.rating} 
+        starSize={20} 
+        color="#444444"
+        starStyle={{ marginHorizontal: 0 }} />
       <Text style={styles.userReview}>{review.review}</Text>
     </View>
   );

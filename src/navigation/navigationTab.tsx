@@ -7,6 +7,7 @@ import Profile from '../screens/Profile';
 import Trips from '../screens/Trips';
 import Wishlist from '../screens/Wishlist';
 import Explore from '../screens/Explore';
+import ChatList from '../screens/ChatList';
 
 const NavigationTab = () => {
   const Tab = createBottomTabNavigator();
@@ -25,8 +26,8 @@ const NavigationTab = () => {
             <Icon name="chatbubbles-outline" size={size} color={color} />
           ),
         }}
-        name="Inbox"
-        component={Inbox}
+        name="Chat"
+        component={ChatList}
       />
       {/* Trips */}
       <Tab.Screen

@@ -59,8 +59,9 @@ const PropertyDetails: React.FC = ({ route }: any) => {
     const fetchReviews = async () => {
       try {
         const reviewsSnapshot = await firestore()
+          .collection('properties')
+          .doc(property.id)
           .collection('reviews')
-          .where('propertyId', '==', property.id)
           .get();
         let totalRating = 0;
         let totalReviewsCount = 0;
@@ -90,7 +91,7 @@ const PropertyDetails: React.FC = ({ route }: any) => {
         id: property.id,
         hostId: property.hostId,
         name: property.propertyName,
-        location: property.location,
+        location: property.propertyAdress,
         images: property.images,
         price: property.price,
         guests: property.guests,

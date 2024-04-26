@@ -16,9 +16,10 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
     const userId = currentUser ? currentUser.uid : '';
 
     const unsubscribe = firestore()
+      .collection('properties')
+      .doc(propertyId)
       .collection('reviews')
       .where('userId', '==', userId)
-      .where('propertyId', '==', propertyId)
       .onSnapshot(snapshot => {
         if (!snapshot.empty) {
           snapshot.forEach(doc => {
@@ -34,21 +35,24 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
 
   const handleSubmit = async () => {
     try {
-    if (userReview) {
+      if (userReview) {
         Alert.alert('You have already made a review for this property.');
         return;
-    }
+      }
 
-    const currentUser = auth().currentUser;
-    const userId = currentUser ? currentUser.uid : '';
+      const currentUser = auth().currentUser;
+      const userId = currentUser ? currentUser.uid : '';
 
-      await firestore().collection('reviews').add({
-        propertyId,
-        userId,
-        rating,
-        review,
-      });
-      
+      await firestore()
+        .collection('properties')
+        .doc(propertyId)
+        .collection('reviews')
+        .add({
+          userId,
+          rating,
+          review,
+        });
+
       setRating(0);
       setReview('');
       navigation.goBack();
@@ -75,9 +79,9 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
         onChangeText={text => setReview(text)}
         multiline
       />
-        <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-            <Text style={styles.submitText}>Send</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+        <Text style={styles.submitText}>Send</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -118,13 +122,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     alignItems: 'center',
-
   },
-    submitText: {
-        color: '#FFFFFF',
-        fontWeight: '500',
-        
-    },
+  submitText: {
+    color: '#FFFFFF',
+    fontWeight: '500',
+  },
 });
 
 export default ReviewForm;
