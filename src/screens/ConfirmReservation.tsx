@@ -139,7 +139,7 @@ export default function ConfirmReservation({route}: any) {
             info={`${dates.startParseDate.substring(
               4,
               11,
-            )} to  ${dates.endParseDate.substring(4, 11)}`}
+            )} -  ${dates.endParseDate.substring(4, 11)}`}
             btnEditar={() => navigation.navigate('DateSelect', {property})}
           />
           <DetailsReservation
@@ -158,7 +158,7 @@ export default function ConfirmReservation({route}: any) {
           <View style={styles.line1} />
 
           <Text style={styles.title}>Write to the host</Text>
-          <Text>
+          <Text style={styles.description}>
             Tell him why you are traveling, who is accompanying you and what you
             like most about the place
           </Text>
@@ -235,6 +235,11 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 25,
     color: 'black',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  description: {
+    color: '#444444',
     fontSize: 17,
     fontWeight: '600',
   },

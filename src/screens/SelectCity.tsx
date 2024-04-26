@@ -30,7 +30,7 @@ export default function SelectCity() {
 
   return (
     <>
-      <HeaderNavigation whereNav="Main" />
+      <HeaderNavigation />
       <ScrollView style={styles.container}>
         <CarouselComponent />
         <View style={styles.containerInfo}>
