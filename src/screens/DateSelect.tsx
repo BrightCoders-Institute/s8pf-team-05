@@ -51,16 +51,15 @@ const DateSelect = ({route}: any) => {
             });
 
             setDisabledDays(disabledDaysTmp);
+            setBtnDisabled(true)
         })
     }, []);
 
     useEffect(() => {
-        if (startDate && endDate) {
+        if (endDate) {
             setBtnDisabled(false);
-        } else {
-            setBtnDisabled(true);
-        }
-    }, [startDate, endDate]);
+         }
+    }, [endDate]);
 
     const clearDates = () => {
         setStartDate(null);
@@ -68,19 +67,20 @@ const DateSelect = ({route}: any) => {
     }
 
     function confirmDates () {
-        if (startDate && endDate) {
-            property.startDate = startDate.toISOString();
-            property.endDate = endDate.toISOString();
-            navigation.navigate(routeNavigate, {property});
-        } else {
-            console.log('Todavia no seleccionas las dos fechas');
+        try {
+            if (startDate && endDate) {
+                property.startDate = startDate.toISOString();
+                property.endDate = endDate.toISOString();
+                navigation.navigate(routeNavigate, {property});
+            }
+        } catch (error) {
+            console.log(error, 'Todavia no seleccionas las dos fechas');
         }
-        
     };
 
   return (
     <>
-    <HeaderNavigation />
+    <HeaderNavigation/>
     <View style={styles.container}>
         
         <View>

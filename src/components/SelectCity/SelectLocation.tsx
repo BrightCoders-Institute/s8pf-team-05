@@ -3,7 +3,7 @@ import React from 'react';
 import { SelectList } from 'react-native-dropdown-select-list';
 import city from '../../data/city.json';
 
-const SelectLocation = ({ title, selectedCity }: { title: string, selectedCity: Function }) => {
+const SelectLocation = ({ title, selectedCity, defaultValue }: { title: string, selectedCity: Function, defaultValue: string}) => {
   return (
     <View>
       <Text style={styles.title}>{title}</Text>
@@ -11,7 +11,7 @@ const SelectLocation = ({ title, selectedCity }: { title: string, selectedCity: 
         setSelected={selectedCity}
         data={city}
         save="value"
-        placeholder="Select a city"
+        placeholder={defaultValue}
         boxStyles={{ borderColor: '#DBDADA' }}
         inputStyles={{ color: '#444444' }}
         dropdownStyles={{ borderColor: '#DBDADA' }}

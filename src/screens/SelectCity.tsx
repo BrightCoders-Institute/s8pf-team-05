@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -30,8 +30,8 @@ export default function SelectCity() {
 
   return (
     <>
-      <HeaderNavigation whereNav="Main" />
-      <View style={styles.container}>
+      <HeaderNavigation />
+      <ScrollView style={styles.container}>
         <CarouselComponent />
         <View style={styles.containerInfo}>
           <Text style={styles.title_Text}>Find places to stay</Text>
@@ -41,13 +41,14 @@ export default function SelectCity() {
           </Text>
           <SelectLocation
             title='In which city do you want to search?'
+            defaultValue={'Select City'}
             selectedCity={val => {
               setSelectedCity(val);
             }}
             />
           <Btn_buscar onPress={handleSelectedCity} disabled={disabledBtn} />
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }

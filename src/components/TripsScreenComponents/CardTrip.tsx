@@ -43,7 +43,7 @@ export default function CardTrip({
         <Text style={styles.place}>{propertyName}</Text>
         <Text style={styles.host}>Anfitrión: {hostName}</Text>
         <Text style={styles.date}>
-          {date_of_arrival.toDateString()} ---- {departure_date.toDateString()}
+          {date_of_arrival.toDateString()} - {departure_date.toDateString()}
         </Text>
       </View>
     </View>
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
   tripInformationContainer: {
-    flex: 1,
+    //flex: 1,
     marginLeft: 13,
     justifyContent: 'center',
   },

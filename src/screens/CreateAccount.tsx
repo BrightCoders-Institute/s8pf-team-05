@@ -102,7 +102,7 @@ const CreateAccount = ({navigation}: any) => {
                   placeholder={"Name"}
                   placeholderTextColor={'#B4B2B2'}
                   onFocus={() => setIsFocusedName(true)}
-                  onBlur={() => setIsFocusedName(true)}/>
+                  onBlur={() => setIsFocusedName(false)}/>
                   <Text style={styles.errorTxt}/>
                 </View>
                 <View style={styles.input_container}>
