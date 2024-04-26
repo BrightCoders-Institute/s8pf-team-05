@@ -49,7 +49,7 @@ const Inbox = ({ route, navigation }) => {
             setUserInfo({ name, lastname, profileImage });
           }
         }
-
+        
         // Fetching reservation details
         const chatDoc = await firestore()
           .collection('chats')
@@ -57,10 +57,23 @@ const Inbox = ({ route, navigation }) => {
           .get();
         
         const chatData = chatDoc.data();
-        const { reservationDetails: chatReservationDetails } = chatData || {};
+        const { reservationDetails: chatReservationDetails, users } = chatData || {};
         if (chatReservationDetails) {
           const { propertyName, startDate, endDate } = chatReservationDetails;
           setReservationDetails({ propertyName, startDate: startDate.toDate(), endDate: endDate.toDate() });
+
+          // Finding ID of the other user in the chat
+          const otherUserId = users.find((userId: string) => userId !== currentUser?.uid);
+
+          // Fetching name of the other user
+          if (otherUserId) {
+            const otherUserDoc = await firestore().collection('users').doc(otherUserId).get();
+            const otherUserData = otherUserDoc.data();
+            if (otherUserData) {
+              const { name } = otherUserData;
+              setUserInfo(prevState => ({ ...prevState, name }));
+            }
+          }
         }
       } catch (error) {
         console.error('Error fetching chat info: ', error);
@@ -124,7 +137,7 @@ const Inbox = ({ route, navigation }) => {
         user={{
           _id: currentUser?.uid ?? '',
           name: userInfo.name,
-          avatar: userInfo.profileImage ?? '',
+          avatar: userInfo.profileImage ? { uri: userInfo.profileImage } : require('../source/defaultUserImage.jpg'),
         }}
         renderComposer={(props) => <Composer textInputStyle={{ color: 'black' }} {...props} />}
       />
