@@ -33,7 +33,7 @@ const ReviewScreen: React.FC = ({ route }: any) => {
     fetchReviews();
   }, [property.id]);
 
-  // Renderizar la imagen y el mensaje si no hay reviews
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
