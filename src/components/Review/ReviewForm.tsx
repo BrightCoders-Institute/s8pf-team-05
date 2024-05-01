@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, Alert, TouchableOpacity } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import StarRating from 'react-native-star-rating-widget';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import CommentBox from '../ConfirmReservation/CommentBox';
 
 const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
   const navigation = useNavigation();
@@ -72,12 +73,10 @@ const ReviewForm: React.FC<{ propertyId: string }> = ({ propertyId }) => {
         enableHalfStar={false}
         color="#e7b13d"
       />
-      <Text style={styles.label}>Review:</Text>
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        value={review}
-        onChangeText={text => setReview(text)}
-        multiline
+      <CommentBox
+        placeholder="Write your review here..."
+        onChangeText={(text: string) => setReview(text)}
+        onSend={handleSubmit}
       />
       <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
         <Text style={styles.submitText}>Send</Text>
@@ -98,15 +97,6 @@ const styles = StyleSheet.create({
     color: '#444444',
     fontSize: 16,
     marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    color: 'black',
-    borderColor: '#CCCCCC',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    width: '100%',
   },
   submit: {
     backgroundColor: '#6F2DBD',
