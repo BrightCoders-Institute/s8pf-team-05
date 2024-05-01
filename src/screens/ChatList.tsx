@@ -64,9 +64,10 @@ const ChatList = ({ navigation }) => {
                 <Avatar
                   rounded
                   source={{
-                    uri: item.profileImage ? item.profileImage : 'https://placeimg.com/140/140/any',
+                    uri: item.profileImage ? item.profileImage : require('../source/defaultUserImage.jpg'),
                   }}
                   size="medium"
+                  icon={{ name: 'user', type: 'font-awesome', color: 'white' }}
                 />
                 <View style={styles.userInfo}>
                   <Text style={styles.propertyName}>{item.propertyName}</Text>

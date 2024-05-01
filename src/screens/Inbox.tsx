@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -10,8 +10,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 const Inbox = ({ route, navigation }) => {
   const { chatId } = route.params;
   const currentUser = auth().currentUser;
-  const [messages, setMessages] = useState([] as any[]); // Initialize messages state with an empty array
-
+  const [messages, setMessages] = useState([] as any[]);
   const [userInfo, setUserInfo] = useState<{
     name: string;
     lastname: string;
@@ -21,7 +20,6 @@ const Inbox = ({ route, navigation }) => {
     lastname: '',
     profileImage: null,
   });
-
   const [reservationDetails, setReservationDetails] = useState<{
     propertyName: string;
     startDate: Date;
@@ -31,41 +29,35 @@ const Inbox = ({ route, navigation }) => {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchChatInfo = async () => {
       try {
-        // Fetching user information
         const userId = currentUser?.uid;
         if (userId) {
           const userDoc = await firestore()
             .collection('users')
             .doc(userId)
             .get();
-
           const userData = userDoc.data();
           if (userData) {
             const { name, lastname, profileImage } = userData;
             setUserInfo({ name, lastname, profileImage });
           }
         }
-        
-        // Fetching reservation details
+
         const chatDoc = await firestore()
           .collection('chats')
           .doc(chatId)
           .get();
-        
         const chatData = chatDoc.data();
         const { reservationDetails: chatReservationDetails, users } = chatData || {};
         if (chatReservationDetails) {
           const { propertyName, startDate, endDate } = chatReservationDetails;
           setReservationDetails({ propertyName, startDate: startDate.toDate(), endDate: endDate.toDate() });
 
-          // Finding ID of the other user in the chat
           const otherUserId = users.find((userId: string) => userId !== currentUser?.uid);
-
-          // Fetching name of the other user
           if (otherUserId) {
             const otherUserDoc = await firestore().collection('users').doc(otherUserId).get();
             const otherUserData = otherUserDoc.data();
@@ -75,6 +67,7 @@ const Inbox = ({ route, navigation }) => {
             }
           }
         }
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching chat info: ', error);
       }
@@ -118,6 +111,14 @@ const Inbox = ({ route, navigation }) => {
     navigation.goBack();
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -132,7 +133,7 @@ const Inbox = ({ route, navigation }) => {
       </View>
       <GiftedChat
         messages={messages}
-        showAvatarForEveryMessage={true}
+        renderAvatar={null}
         onSend={messages => onSend(messages)}
         user={{
           _id: currentUser?.uid ?? '',
@@ -166,6 +167,11 @@ const styles = StyleSheet.create({
   headerSubTitle: {
     fontSize: 14,
     color: 'gray',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
