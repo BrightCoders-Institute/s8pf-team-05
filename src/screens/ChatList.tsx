@@ -11,27 +11,38 @@ const ChatList = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
       .collection('chats')
-      .where('users', 'array-contains', auth().currentUser.uid)
       .onSnapshot(async snapshot => {
         const chatsData = [];
         for (const doc of snapshot.docs) {
           const chatData = doc.data();
-          const otherUserID = chatData.users.find(userID => userID !== auth().currentUser.uid);
+          const propertyId = chatData.propertyId;
+          const reservationId = chatData.reservationId;
+          const chatId = chatData.chatId;
+
+          const chatRef = await firestore().collection('properties').doc(propertyId).collection('reservations').doc(reservationId).collection('chat').doc(chatId).get();
+          const chat = chatRef.data();
+
+          const otherUserID = chat.users.find(userID => userID !== auth().currentUser.uid);
           const userDoc = await firestore().collection('users').doc(otherUserID).get();
           const userData = userDoc.data();
-          const reservationDetails = chatData.reservationDetails || {};
-          const arrivalDate = new Date(reservationDetails.startDate.seconds * 1000);
-          const endDate = new Date(reservationDetails.endDate.seconds * 1000);
+
+          const arrivalDate = new Date(chat.reservationDetails.startDate.seconds * 1000);
+          const endDate = new Date(chat.reservationDetails.endDate.seconds * 1000);
           const startDateString = arrivalDate.toDateString();
           const endDateString = endDate.toDateString();
           const dateText = startDateString === endDateString ? startDateString : `${startDateString} - ${endDateString}`;
+
           chatsData.push({
-            id: doc.id,
+            id: chatId,
             profileImage: userData?.profileImage || 'https://placeimg.com/140/140/any',
             userName: userData?.name || 'Unknown',
-            propertyName: reservationDetails.propertyName || '',
+            propertyName: chat.reservationDetails.propertyName || '',
             dateText: dateText || '',
+            reservationId: reservationId,
+            propertyId: propertyId
           });
         }
         setChats(chatsData);
@@ -40,8 +51,6 @@ const ChatList = ({ navigation }) => {
   
     return () => unsubscribe();
   }, []);
-
-  // Componente para mostrar el estado vacío
 
   return (
     <View style={styles.container}>
@@ -59,7 +68,7 @@ const ChatList = ({ navigation }) => {
                 />
           } // EmptyState component
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('Inbox', { chatId: item.id })}>
+            <TouchableOpacity onPress={() => navigation.navigate('Inbox', { chatId: item.id, reservationId: item.reservationId, propertyId: item.propertyId })}>
               <View style={styles.chatItem}>
                 <Avatar
                   rounded

@@ -9,15 +9,14 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 const Inbox = ({ route, navigation }) => {
   const { chatId } = route.params;
+  const { reservationId, propertyId } = route.params;
   const currentUser = auth().currentUser;
   const [messages, setMessages] = useState([] as any[]);
   const [userInfo, setUserInfo] = useState<{
     name: string;
-    lastname: string;
     profileImage: string | null;
   }>({
     name: '',
-    lastname: '',
     profileImage: null,
   });
   const [reservationDetails, setReservationDetails] = useState<{
@@ -34,23 +33,15 @@ const Inbox = ({ route, navigation }) => {
   useEffect(() => {
     const fetchChatInfo = async () => {
       try {
-        const userId = currentUser?.uid;
-        if (userId) {
-          const userDoc = await firestore()
-            .collection('users')
-            .doc(userId)
-            .get();
-          const userData = userDoc.data();
-          if (userData) {
-            const { name, lastname, profileImage } = userData;
-            setUserInfo({ name, lastname, profileImage });
-          }
-        }
-
+        
         const chatDoc = await firestore()
-          .collection('chats')
-          .doc(chatId)
-          .get();
+        .collection('properties')
+        .doc(propertyId)
+        .collection('reservations')
+        .doc(reservationId)
+        .collection('chat')
+        .doc(chatId)
+        .get();
         const chatData = chatDoc.data();
         const { reservationDetails: chatReservationDetails, users } = chatData || {};
         if (chatReservationDetails) {
@@ -78,7 +69,11 @@ const Inbox = ({ route, navigation }) => {
 
   useLayoutEffect(() => {
     const unsubscribe = firestore()
-      .collection('chats')
+      .collection('properties')
+      .doc(propertyId)
+      .collection('reservations')
+      .doc(reservationId)
+      .collection('chat')
       .doc(chatId)
       .collection('messages')
       .orderBy('createdAt', 'desc')
@@ -98,7 +93,11 @@ const Inbox = ({ route, navigation }) => {
     const { _id, createdAt, text, user } = messages[0];
     try {
       await firestore()
-        .collection('chats')
+        .collection('properties')
+        .doc(propertyId)
+        .collection('reservations')
+        .doc(reservationId)
+        .collection('chat')
         .doc(chatId)
         .collection('messages')
         .add({ _id, createdAt, text, user });
