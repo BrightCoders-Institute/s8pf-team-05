@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,7 +9,7 @@ interface RatingProps {
 
 const Rating: React.FC<RatingProps> = ({ averageRating }) => {
     return (
-        <View style={styles.ratingContainer}>
+        <View style={styles.ratingContainer} testID="average-rating">
             <Icon name="star" size={17} color="#e7b13d" />
             <Text style={styles.ratingText}>{averageRating.toFixed(1)}</Text>
             
