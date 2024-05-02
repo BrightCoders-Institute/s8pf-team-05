@@ -97,7 +97,7 @@ const PersonalInformation = () => {
           onPressModal={() => setShowModal(false)}
         />
       )}
-      <HeaderNavigation whereNav="Main" />
+      <HeaderNavigation />
       <View style={styles.container}>
         
         <Text style={styles.text}>Personal information</Text>
@@ -202,12 +202,14 @@ export default PersonalInformation;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   text: {
-    fontSize: 30,
-    marginBottom: 20,
     color: '#444444',
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 30,
   },
   profile: {
     justifyContent: 'center',

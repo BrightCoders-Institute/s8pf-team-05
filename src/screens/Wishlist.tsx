@@ -72,13 +72,13 @@ export default CardFavorites
 const styles = StyleSheet.create({
     header:{
       color: '#444444',
-      fontSize: 32,
+      fontSize: 30,
       fontWeight: 'bold',
-      marginTop: 20,
       marginBottom: 20,
     },
     containerPrincipal:{
-      margin:20
+      paddingHorizontal: 30,
+      paddingVertical: 20,
     },
     container:{
       flexDirection:'row',

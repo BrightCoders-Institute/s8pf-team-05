@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoryText: {
-        fontSize: 14,
+        fontSize: 12,
         //fontWeight: 'bold',
         color: '#444444',
     },

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, Image } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, ScrollView, StyleSheet, Text, Image} from 'react-native';
 import SearchBar from '../components/Explore/SearchBar';
 import CategoryButton from '../components/Explore/CategoryButton';
 import PropertyCard from '../components/Explore/PropertyCard';
@@ -9,7 +9,7 @@ import EmptyState from '../components/EmptyState';
 
 const Explore = ({navigation}: any) => {
   const categories = [
-    {name: 'Apartments', icon: 'building', value: 'apartment'},
+    {name: 'Apartments', icon: 'building-wheat', value: 'apartment'},
     {name: 'Houses', icon: 'house-chimney', value: 'house'},
     {name: 'Pool', icon: 'house-flood-water', value: 'pool'},
     {name: 'Countryside', icon: 'tree', value: 'countryside'},
@@ -57,7 +57,6 @@ const Explore = ({navigation}: any) => {
         }));
         setProperties(fetchedProperties);
         setPropertiesFound(fetchedProperties.length > 0);
-
       } catch (error) {
         console.error('Error fetching properties: ', error);
       }
@@ -71,63 +70,59 @@ const Explore = ({navigation}: any) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <SearchBar
           onPress={() => {
             navigation.navigate('SelectCity');
           }}
         />
-        <View>
-          <View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.categoryContainer}>
-              {categories.map((category, index) => (
-                <CategoryButton
-                  key={index}
-                  name={category.name}
-                  icon={category.icon}
-                  onPress={() => goToCategory(category.value)}
-                  isSelected={category.value === selectedCategory}
-                />
-              ))}
-            </ScrollView>
-            
-            <View>
-              {propertiesFound ? (
-                <View style={styles.propertiesContainer}>
-                  {properties.map(property => (
-                    <PropertyCard
-                      key={property.id}
-                      property={property}
-                      onPress={() => {
-                        navigation.navigate('PropertyDetails', { property: property });
-                      }}
-                    />
-                  ))}
-                </View>
-              ) : (
-                <EmptyState
-                  imageSource={require('../images/empty-state-explore.png')}
-                  message="No properties found matching the search criteria."
-                />
-              )}
-            </View>
-          </View>
-        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoryContainer}>
+          {categories.map((category, index) => (
+            <CategoryButton
+              key={index}
+              name={category.name}
+              icon={category.icon}
+              onPress={() => goToCategory(category.value)}
+              isSelected={category.value === selectedCategory}
+            />
+          ))}
+        </ScrollView>
       </View>
-    </ScrollView>
+
+      {propertiesFound ? (
+        <ScrollView style={styles.propertiesContainer}>
+          {properties.map(property => (
+            <PropertyCard
+              key={property.id}
+              property={property}
+              onPress={() => {
+                navigation.navigate('PropertyDetails', {property: property});
+              }}
+            />
+          ))}
+        </ScrollView>
+      ) : (
+        <EmptyState
+          imageSource={require('../images/empty-state-explore.png')}
+          message="No properties found matching the search criteria."
+          style={styles.emptyState}
+        />
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
-    paddingBottom: 30,
     backgroundColor: '#F3F3F3',
+  },
+  header: {
+    elevation: 1.2,
   },
   categoryContainer: {
     marginTop: 20,
@@ -137,8 +132,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: 'center',
     marginTop: 20,
-    marginHorizontal: 35,
-    backgroundColor: '#F3F3F3',
   },
   emptyStateContainer: {
     flex: 1,
@@ -150,12 +143,8 @@ const styles = StyleSheet.create({
     height: 200,
     marginTop: '25%',
   },
-  emptyStateText: {
-    marginTop: 10,
-    paddingHorizontal: 60,
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#888',
+  emptyState: {
+    marginBottom: 120,
   },
 });
 
