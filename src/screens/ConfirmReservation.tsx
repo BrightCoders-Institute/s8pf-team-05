@@ -75,7 +75,6 @@ export default function ConfirmReservation({route}: any) {
       .doc(property.id)
       .collection('reservations')
       .add({
-        idGuest: auth().currentUser?.uid,
         date_of_arrival: dates.startDate,
         departure_date: dates.endDate,
         guestKids: property.guestKids,
@@ -89,12 +88,12 @@ export default function ConfirmReservation({route}: any) {
           propertyName: property.name,
           startDate: dates.startDate,
           endDate: dates.endDate,
-          propertyId: property.id, 
-          reservationId: reservationId, 
+          propertyId: property.id,
+          reservationId: reservationId,
         };
         firebase()
           .collection('chats')
-          .add({ users: chatUsers, reservationDetails })
+          .add({users: chatUsers, reservationDetails})
           .then(chatRef => {
             // Chat sent
             const comment = 'Reservation Comment: ' + commentText; // Agregar comentario automático
@@ -106,15 +105,15 @@ export default function ConfirmReservation({route}: any) {
                 _id: new Date().getTime().toString(),
                 createdAt: new Date(),
                 text: comment,
-                user: { _id: auth().currentUser?.uid },
-              })
-              const chatId = chatRef.id
-              firebase()
+                user: {_id: auth().currentUser?.uid},
+              });
+            const chatId = chatRef.id;
+            firebase()
               .collection('properties')
               .doc(property.id)
               .collection('reservations')
               .doc(reservationId)
-              .update({ chatId: chatId })
+              .update({chatId: chatId})
               .then(() => {
                 async function getPath() {
                   const path = await data.get();
@@ -129,11 +128,18 @@ export default function ConfirmReservation({route}: any) {
                         .doc(property.id),
                       propertyId: property.id,
                     })
-                    .then(() => {
-                      setLoading(false);
-                      navigation.dispatch(
-                        StackActions.replace('ReservationCompleted'),
-                      );
+                    .then(async query => {
+                      const pathUser = await query.get();
+                      data
+                        .update({
+                          userReservationReference: pathUser.ref,
+                        })
+                        .then(() => {
+                          setLoading(false);
+                          navigation.dispatch(
+                            StackActions.replace('ReservationCompleted'),
+                          );
+                        });
                     });
                 }
                 getPath();
@@ -203,15 +209,15 @@ export default function ConfirmReservation({route}: any) {
             like most about the place
           </Text>
           <HostInfo hostId={property.hostId} />
-          <CommentBox 
-            placeholder="Write a comment here..." 
+          <CommentBox
+            placeholder="Write a comment here..."
             onChangeText={(text: string) => setCommentText(text)} // Save the comment
             onSend={() => {
               // Send the comment
               const comment = commentText.trim();
               if (comment) {
-                onSend([{ text: comment }]); 
-                setCommentText(''); 
+                onSend([{text: comment}]);
+                setCommentText('');
               }
             }}
           />
