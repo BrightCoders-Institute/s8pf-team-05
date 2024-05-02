@@ -26,10 +26,10 @@ const ReviewScreen: React.FC = ({ route }: any) => {
 
         const fetchedReviews = reviewsSnapshot.docs.map(doc => doc.data());
         setReviews(fetchedReviews);
-        setLoading(false); // Mark loading as false once reviews are fetched
+        setLoading(false); 
       } catch (error) {
         console.error('Error fetching reviews: ', error);
-        setLoading(false); // Mark loading as false in case of error
+        setLoading(false); 
       }
     };
 
@@ -39,20 +39,19 @@ const ReviewScreen: React.FC = ({ route }: any) => {
           .collection('properties')
           .doc(property.id)
           .collection('reservations')
-          .where('idGuest', '==', auth().currentUser.uid) // Assuming user authentication is implemented
+          .where('idGuest', '==', auth().currentUser.uid) 
           .get();
 
         if (!reservationSnapshot.empty) {
-          const reservationData = reservationSnapshot.docs[0].data();
-          const endDate = new Date(reservationData.departure_date.seconds * 1000);
+          const reservations = reservationSnapshot.docs.map(doc => doc.data());
+          const reservationEnded = reservations.some(reservation => {
+            const endDate = new Date(reservation.departure_date.seconds * 1000);
+            const currentDate = new Date();
+            return endDate < currentDate;
+          });
           
-          const currentDate = new Date();
-
-          if (endDate < currentDate) {
-            setReservationEnded(true);
-          }
+          setReservationEnded(reservationEnded);
         }
-        
       } catch (error) {
         console.error('Error checking reservation status: ', error);
       }

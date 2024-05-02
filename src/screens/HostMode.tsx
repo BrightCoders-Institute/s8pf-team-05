@@ -18,6 +18,7 @@ import firestore from '@react-native-firebase/firestore';
 import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
 import SelectLocation from '../components/SelectCity/SelectLocation';
+import CommentBox from '../components/ConfirmReservation/CommentBox';
 
 const HostModeScreen: React.FC = ({navigation}: any) => {
   const [guests, setGuests] = React.useState(0);
@@ -240,17 +241,11 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
               </SelectPicker>
             </View>
 
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={[styles.textArea]}
-                value={propertyDescription}
-                onChangeText={setPropertyDescription}
+            <CommentBox
                 placeholder="Property description"
-                placeholderTextColor={'#7C7C7C'}
-                multiline
-              />
-              <View style={styles.line} />
-            </View>
+                onChangeText={setPropertyDescription}
+                value={propertyDescription}
+            />
 
             <TouchableOpacity style={styles.addButton} onPress={handleAddImages}>
               <Text style={styles.addButtonText}>Add Images</Text>
@@ -289,7 +284,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 25,
   },
   title: {

@@ -80,67 +80,68 @@ export default function ConfirmReservation({route}: any) {
         departure_date: dates.endDate,
         guestKids: property.guestKids,
         guestAdults: property.guestAdults,
-        chatId: null,
       })
       .then(data => {
         const reservationId = data.id;
-        const chatUsers = [auth().currentUser?.uid, property.hostId]; // Agregar usuarios al chat
+        const chatUsers = [auth().currentUser?.uid, property.hostId];
         const reservationDetails = {
           propertyName: property.name,
           startDate: dates.startDate,
           endDate: dates.endDate,
-          propertyId: property.id, 
-          reservationId: reservationId, 
+          propertyId: property.id,
+          reservationId: reservationId,
         };
         firebase()
-          .collection('chats')
+          .collection('properties')
+          .doc(property.id)
+          .collection('reservations')
+          .doc(reservationId)
+          .collection('chat')
           .add({ users: chatUsers, reservationDetails })
           .then(chatRef => {
-            // Chat sent
-            const comment = 'Reservation Comment: ' + commentText; // Agregar comentario automático
+            const comment = 'Reservation Comment: ' + commentText;
+            chatRef.collection('messages').add({
+              _id: new Date().getTime().toString(),
+              createdAt: new Date(),
+              text: comment,
+              user: { _id: auth().currentUser?.uid },
+            });
+
+            const chatId = chatRef.id;
+
+            // Crear referencia al chat en la colección del host
             firebase()
+              .collection('users')
+              .doc(property.hostId)
               .collection('chats')
               .doc(chatRef.id)
-              .collection('messages')
-              .add({
-                _id: new Date().getTime().toString(),
-                createdAt: new Date(),
-                text: comment,
-                user: { _id: auth().currentUser?.uid },
+              .set({
+                chatId: chatRef.id,
+                reservationId: reservationId,
+                propertyId: property.id,
               })
-              const chatId = chatRef.id
-              firebase()
-              .collection('properties')
-              .doc(property.id)
-              .collection('reservations')
-              .doc(reservationId)
-              .update({ chatId: chatId })
               .then(() => {
-                async function getPath() {
-                  const path = await data.get();
-                  firebase()
-                    .collection('users')
-                    .doc(auth().currentUser?.uid)
-                    .collection('reservations')
-                    .add({
-                      propertyReservationReference: path.ref,
-                      propertyDataReference: firebase()
-                        .collection('properties')
-                        .doc(property.id),
-                      propertyId: property.id,
-                    })
-                    .then(() => {
-                      setLoading(false);
-                      navigation.dispatch(
-                        StackActions.replace('ReservationCompleted'),
-                      );
-                    });
-                }
-                getPath();
+                // Crear referencia al chat en la colección del usuario actual
+                firebase()
+                  .collection('users')
+                  .doc(auth().currentUser?.uid)
+                  .collection('chats')
+                  .doc(chatRef.id)
+                  .set({
+                    chatId: chatRef.id,
+                    reservationId: reservationId,
+                    propertyId: property.id,
+                  })
+                  .then(() => {
+                    setLoading(false);
+                    navigation.dispatch(StackActions.replace('ReservationCompleted'));
+                  });
               });
           });
       });
   }
+  
+  
 
   return (
     <>
