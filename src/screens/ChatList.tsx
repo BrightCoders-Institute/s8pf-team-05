@@ -38,7 +38,9 @@ const ChatList = ({ navigation }) => {
         setLoading(false); 
       });
   
-    return () => unsubscribe();
+      return () => {
+        unsubscribe();
+      };
   }, []);
 
   // Componente para mostrar el estado vacío
