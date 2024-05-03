@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -7,11 +6,9 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from 'react-native';
-import FavoriteButton from './FavoriteButton';
 import firestore from '@react-native-firebase/firestore';
 import Rating from './Rating';
 import Carousel from 'react-native-snap-carousel';
-import Moment from 'moment'
 
 interface PropertyCardProps {
   property: {

@@ -14,10 +14,10 @@ const renderStars = (rating: number) => {
 
   const stars = [];
   for (let i = 0; i < filledStars; i++) {
-    stars.push(<Icon key={i} name="star" size={16} color="#444444" />);
+    stars.push(<Icon key={i} name="star" size={16} color="#444444" testID={`star-icon-${i}`} />);
   }
   if (halfStar) {
-    stars.push(<Icon key="half-star" name="star-half-outline" size={16} color="#444444" />);
+    stars.push(<Icon key="half-star" name="star-half-outline" size={16} color="#444444" testID="star-icon" />);
   }
   return stars;
 };
