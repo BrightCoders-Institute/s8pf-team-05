@@ -23,7 +23,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ images }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="carousel">
       <Carousel
         data={images}
         renderItem={renderItem}

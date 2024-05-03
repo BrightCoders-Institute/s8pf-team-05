@@ -49,7 +49,9 @@ const ChatList = ({ navigation }) => {
         setLoading(false); 
       });
   
-    return () => unsubscribe();
+      return () => {
+        unsubscribe();
+      };
   }, []);
 
   return (
