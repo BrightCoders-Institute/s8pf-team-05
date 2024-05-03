@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#444444',
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   subTitle: {

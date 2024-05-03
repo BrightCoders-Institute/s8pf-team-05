@@ -138,16 +138,14 @@ const styles = StyleSheet.create({
   },
     container: {
       flex: 1,
-      paddingLeft: 25,
-      paddingRight: 25,
-      paddingTop: 40,
+      paddingHorizontal: 20
     },
     title: {
       color: '#444444',
-      fontSize: 32,
+      fontSize: 30,
       fontWeight: 'bold',
       marginTop: 20,
-      marginBottom: 20,
+      marginBottom: 30,
     },
     containerItem: {
       flexDirection: 'row',
