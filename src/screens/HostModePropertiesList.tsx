@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconDots from 'react-native-vector-icons/Entypo';
 import EmptyState from '../components/EmptyState';
 import HeaderNavigation from '../navigation/HeaderNavigation';
+import firebase from '@react-native-firebase/firestore';
 
 
   const HostModePropertiesList = ({navigation}: any) => {
@@ -52,21 +53,16 @@ import HeaderNavigation from '../navigation/HeaderNavigation';
                     text: 'Delete',
                     onPress: async () => {
                       try {
+                        //Eliminar las reservaciones del usuario a esa propiedad
+                        const reservationsQuery = await firestore().collection('properties').doc(properties[index].id).collection('reservations').get();
+                        const reservationDocs = reservationsQuery.docs;
+                        reservationDocs.map(async doc => {
+                          const reservationUserReference = doc.data().userReservationReference;
+                          await reservationUserReference.delete();
+                        })
+
                         //Eliminar la propiedad
                         await firestore().collection('properties').doc(properties[index].id).delete();
-
-                        //Eliminar tus reservaciones a esa propiedad
-                        await firestore()
-                        .collection('users')
-                        .doc(auth().currentUser?.uid)
-                        .collection('reservations')
-                        .where('propertyId', '==', properties[index].id)
-                        .get()
-                        .then((query) => {
-                          query.docs.forEach((doc) => {
-                            doc.ref.delete();
-                          })
-                        })
 
                         //Eliminar las imágenes de la propiedad
                         const imagesRef = storage().ref().child(`images/${properties[index].id}`);

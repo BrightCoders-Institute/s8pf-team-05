@@ -75,7 +75,6 @@ export default function ConfirmReservation({route}: any) {
       .doc(property.id)
       .collection('reservations')
       .add({
-        idGuest: auth().currentUser?.uid,
         date_of_arrival: dates.startDate,
         departure_date: dates.endDate,
         guestKids: property.guestKids,
@@ -133,8 +132,17 @@ export default function ConfirmReservation({route}: any) {
                     propertyId: property.id,
                   })
                   .then(() => {
-                    setLoading(false);
-                    navigation.dispatch(StackActions.replace('ReservationCompleted'));
+                    const pathUser = await query.get();
+                      data
+                        .update({
+                          userReservationReference: pathUser.ref,
+                        })
+                        .then(() => {
+                          setLoading(false);
+                          navigation.dispatch(
+                            StackActions.replace('ReservationCompleted'),
+                          );
+                        });
                   });
               });
           });
@@ -204,15 +212,15 @@ export default function ConfirmReservation({route}: any) {
             like most about the place
           </Text>
           <HostInfo hostId={property.hostId} />
-          <CommentBox 
-            placeholder="Write a comment here..." 
+          <CommentBox
+            placeholder="Write a comment here..."
             onChangeText={(text: string) => setCommentText(text)} // Save the comment
             onSend={() => {
               // Send the comment
               const comment = commentText.trim();
               if (comment) {
-                onSend([{ text: comment }]); 
-                setCommentText(''); 
+                onSend([{text: comment}]);
+                setCommentText('');
               }
             }}
           />

@@ -5,8 +5,11 @@ import CardTrip from '../components/TripsScreenComponents/CardTrip';
 import EmptyState from '../components/EmptyState';
 import firebase from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { useIsFocused } from '@react-navigation/native';
 
 const Trips = () => {
+  const isFocused = useIsFocused();
+
   const [reservations, setReservations] = useState<any[]>();
   const [loading, setLoading] = useState(true);
   const [somePastTrip, setSomePastTrip] = useState('');
@@ -52,7 +55,7 @@ const Trips = () => {
     }
 
     fetchReservations();
-  }, []);
+  }, [isFocused]);
 
   const pastTrips = reservations?.filter(reservation => {
     const currentDate = new Date();
