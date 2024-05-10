@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -88,11 +88,27 @@ const PropertyReservations = ({ route, navigation }: any) => {
             )}
             <Modal isVisible={selectedReservation !== null} onBackdropPress={() => setSelectedReservation(null)}>
                 <View style={styles.modalContainer}>
-                    {selectedReservation && (
+                    {selectedReservation && selectedReservation.userData && (
                         <>
-                            <Text>{`Arrival Date: ${new Date(selectedReservation.date_of_arrival.seconds * 1000).toDateString()}`}</Text>
-                            <Text>{`Departure Date: ${new Date(selectedReservation.departure_date.seconds * 1000).toDateString()}`}</Text>
-                            <Text>{`Guests: ${selectedReservation.guestAdults} Adults, ${selectedReservation.guestKids} Kids`}</Text>
+                            <View style={styles.userInfoContainer}>
+                                <Avatar
+                                    rounded
+                                    source={selectedReservation.userData.profileImage ? { uri: selectedReservation.userData.profileImage } : require('../source/defaultUserImage.jpg')}
+                                    size="large"
+                                />
+                                <View style={{ marginLeft: 10 }}>
+                                    <Text style={styles.userName}>{`${selectedReservation.userData.name} ${selectedReservation.userData.lastname}`}</Text>
+                                </View>
+                            </View>
+                            <View style={styles.reservationInfo}>
+                                <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Reservation Info</Text>
+                                <View>
+                                    
+                                    <Text>{`Arrival Date: ${new Date(selectedReservation.date_of_arrival.seconds * 1000).toDateString()}`}</Text>
+                                    <Text>{`Departure Date: ${new Date(selectedReservation.departure_date.seconds * 1000).toDateString()}`}</Text>
+                                    <Text>{`Guests: ${selectedReservation.guestAdults} Adults, ${selectedReservation.guestKids} Kids`}</Text>
+                                </View>
+                            </View>
                         </>
                     )}
                 </View>
@@ -120,6 +136,25 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
+    },
+    userInfoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+        justifyContent: 'center',
+        width: 200,
+        alignSelf: 'center',
+    },
+    userName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    reservationInfo: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginBottom: 10,
+        justifyContent: 'center',
+
     },
 });
 
