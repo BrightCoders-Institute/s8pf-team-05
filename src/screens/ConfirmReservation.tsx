@@ -139,6 +139,7 @@ export default function ConfirmReservation({route}: any) {
                       .doc(auth().currentUser?.uid)
                       .collection('reservations')
                       .add({
+                        reservationId: reservationId,
                         propertyReservationReference: path.ref,
                         propertyDataReference: firebase()
                           .collection('properties')

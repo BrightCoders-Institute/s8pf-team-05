@@ -4,65 +4,127 @@ import firestore from '@react-native-firebase/firestore';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
+import auth from '@react-native-firebase/auth';
+import EmptyState from '../components/EmptyState';
 
 const PropertyReservations = ({ route, navigation }: any) => {
+    const hostId = auth().currentUser.uid;
     const { propertyId } = route.params;
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState(null);
+    const [otherUserId, setOtherUserId] = useState('');
 
     const handleGoBack = () => {
         navigation.goBack();
     };
 
     const handleDeleteReservation = (reservationId: string) => {
-        // Mostrar un cuadro de diálogo de confirmación antes de eliminar la reserva
-        Alert.alert(
-            'Delete Reservation',
-            'Are you sure you want to delete this reservation?',
-            [
-                {
-                    text: 'Cancel',
-                    style: 'cancel',
-                },
-                {
-                    text: 'Delete',
-                    onPress: () => {
-                        // Eliminar la reserva
-                        firestore()
-                            .collection('properties')
-                            .doc(propertyId)
-                            .collection('reservations')
-                            .doc(reservationId)
-                            .delete()
-                            .then(() => {
-                                // Eliminar la subcolección de chat asociada a la reserva
-                                firestore()
-                                    .collection('properties')
-                                    .doc(propertyId)
-                                    .collection('reservations')
-                                    .doc(reservationId)
-                                    .collection('chat')
-                                    .get()
-                                    .then(querySnapshot => {
-                                        querySnapshot.forEach(doc => {
-                                            doc.ref.delete();
-                                        });
-                                    })
-                                    .catch(error => {
-                                        console.log('Error deleting chat:', error);
-                                    });
-                            })
-                            .catch(error => {
-                                console.log('Error deleting reservation:', error);
+        // Obtener referencia a la subcolección de chat asociada a la reserva
+        const chatCollectionRef = firestore()
+            .collection('properties')
+            .doc(propertyId)
+            .collection('reservations')
+            .doc(reservationId)
+            .collection('chat');
+    
+        // Obtener todos los documentos dentro de la subcolección de chat
+        chatCollectionRef
+            .get()
+            .then(querySnapshot => {
+                // Eliminar cada documento dentro de la subcolección de chat y sus mensajes asociados
+                const deletePromises = [];
+                const chatIds = [];
+                querySnapshot.forEach(chatDoc => {
+                    const chatId = chatDoc.id;
+                    chatIds.push(chatId);
+                    // Eliminar los documentos de mensajes dentro del chat
+                    const messageCollectionRef = chatCollectionRef.doc(chatId).collection('messages');
+                    deletePromises.push(
+                        messageCollectionRef.get().then(messageQuerySnapshot => {
+                            const messageDeletePromises = [];
+                            messageQuerySnapshot.forEach(messageDoc => {
+                                messageDeletePromises.push(messageDoc.ref.delete());
                             });
-                        // Cerrar el modal después de eliminar la reserva
-                        setSelectedReservation(null);
-                    },
-                },
-            ],
-            { cancelable: false }
-        );
+                            return Promise.all(messageDeletePromises);
+                        })
+                    );
+                    // Eliminar el documento de chat
+                    deletePromises.push(chatDoc.ref.delete());
+                });
+                // Esperar a que se completen todas las eliminaciones
+                return Promise.all(deletePromises).then(() => chatIds);
+            })
+            .then(chatIds => {
+                // Una vez eliminados los documentos de chat, eliminar la reserva
+                return firestore()
+                    .collection('properties')
+                    .doc(propertyId)
+                    .collection('reservations')
+                    .doc(reservationId)
+                    .delete()
+                    .then(() => chatIds);
+            })
+            .then(chatIds => {
+                // Eliminar las referencias del chat en las colecciones de chats del host y del usuario
+                const deleteChatPromises = chatIds.map(chatId => {
+                    // Eliminar la referencia del chat en la colección de chats del host
+                    return firestore()
+                        .collection('users')
+                        .doc(hostId)
+                        .collection('chats')
+                        .doc(chatId)
+                        .delete()
+                        .catch(error => {
+                            console.log('Error deleting chat reference in host collection:', error);
+                        });
+                });
+                // Obtener el ID del usuario asociado a la reserva
+                const userId = selectedReservation.userData.idGuest;
+                // Eliminar la referencia del chat en la colección de chats del usuario
+                deleteChatPromises.push(
+                    firestore()
+                        .collection('users')
+                        .doc(otherUserId)
+                        .collection('chats')
+                        .doc(chatIds[0]) // Suponiendo que solo hay un chat asociado a la reserva
+                        .delete()
+                        .catch(error => {
+                            console.log('Error deleting chat reference in user collection:', error);
+                        })
+                        .then(() => {
+                            firestore()
+                                .collection('users')
+                                .doc(otherUserId)
+                                .collection('reservations')
+                                .where('reservationId', '==', reservationId) // Buscar por el campo 'reservationId'
+                                .get()
+                                .then(querySnapshot => {
+                                    querySnapshot.forEach(doc => {
+                                        // Eliminar el documento de reserva encontrado
+                                        doc.ref.delete().then(() => {
+                                            console.log('Reservation successfully deleted');
+                                        }).catch(error => {
+                                            console.error('Error deleting reservation:', error);
+                                        });
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error('Error searching for reservation:', error);
+                                });
+                        })
+                );
+                return Promise.all(deleteChatPromises);
+            })
+            .then(() => {
+                // Cerrar el modal después de eliminar la reserva
+                setSelectedReservation(null);
+            })
+            .catch(error => {
+                console.log('Error deleting reservation and chat:', error);
+            });
     };
+    
+    
 
     useEffect(() => {
         const unsubscribe = firestore()
@@ -104,7 +166,7 @@ const PropertyReservations = ({ route, navigation }: any) => {
         const departureDate = new Date(departure_date.seconds * 1000);
 
         return (
-            <TouchableOpacity onPress={() => setSelectedReservation(item)}>
+            <TouchableOpacity onPress={() => {setSelectedReservation(item); setOtherUserId(idGuest)}}>
                 <View style={styles.reservationItem}>
                     <Avatar
                         rounded
@@ -126,15 +188,20 @@ const PropertyReservations = ({ route, navigation }: any) => {
             <TouchableOpacity onPress={handleGoBack}>
                 <Icon name='arrowleft' size={27} color={'black'} />
             </TouchableOpacity>
-            <Text style={styles.title}>Reservations for this property</Text>
+            
             {reservations.length === 0 ? (
-                <Text>No reservations found</Text>
+                <EmptyState 
+                    imageSource={require('../images/empty-state-explore2.png')}
+                    message="No reservations yet!" />
             ) : (
+                <>
+                <Text style={styles.title}>Reservations for this property</Text>
                 <FlatList
                     data={reservations}
                     keyExtractor={item => item.id}
                     renderItem={renderReservationItem}
-                />
+                    />
+                </>
             )}
             <Modal isVisible={selectedReservation !== null} onBackdropPress={() => setSelectedReservation(null)}>
                 <View style={styles.modalContainer}>
