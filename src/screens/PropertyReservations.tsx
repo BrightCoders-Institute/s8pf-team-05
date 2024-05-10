@@ -19,6 +19,21 @@ const PropertyReservations = ({ route, navigation }: any) => {
     };
 
     const handleDeleteReservation = (reservationId: string) => {
+        Alert.alert(
+            "Confirm Deletion",
+            "Are you sure you want to delete this reservation?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Delete", onPress: () => confirmReservationDeletion(reservationId) }
+            ]
+        );
+    };
+
+    const confirmReservationDeletion = (reservationId: string) => {
         // Obtener referencia a la subcolección de chat asociada a la reserva
         const chatCollectionRef = firestore()
             .collection('properties')
@@ -259,9 +274,10 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 20,
+        marginTop: 20,
+        fontSize: 23,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 20,
     },
     reservationItem: {
         flexDirection: 'row',
