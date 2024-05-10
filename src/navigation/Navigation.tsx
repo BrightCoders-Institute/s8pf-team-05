@@ -20,6 +20,7 @@ import ReviewForm from '../components/Review/ReviewForm';
 import LikedPropertys from '../screens/LikedPropertys';
 import ChatList from '../screens/ChatList';
 import Inbox from '../screens/Inbox';
+import PropertyReservations from '../screens/PropertyReservations';
 
 // type RootStackParams = {
 //   Signin: undefined;
@@ -75,6 +76,8 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       <Stack.Screen name="ChatList" component={ChatList} />
 
       <Stack.Screen name="Inbox" component={Inbox} />
+
+      <Stack.Screen name="PropertyReservations" component={PropertyReservations} />
 
     </Stack.Navigator>
   );

@@ -1,4 +1,4 @@
-/* eslint-disable */
+// eslint-disable
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import auth from '@react-native-firebase/auth'
@@ -10,111 +10,117 @@ import EmptyState from '../components/EmptyState';
 import HeaderNavigation from '../navigation/HeaderNavigation';
 import firebase from '@react-native-firebase/firestore';
 
+const HostModePropertiesList = ({navigation}: any) => {
+  const [properties, setProperties] = useState<any[]>([]);
+  const [activeOptions, setActiveOptions] = useState<number | null>(null);
 
-  const HostModePropertiesList = ({navigation}: any) => {
-    const [properties, setProperties] = useState<any[]>([]);
-    const [activeOptions, setActiveOptions] = useState<number | null>(null);
-
-    useEffect(() => {
-      async function getDataUser() {
-        const propertiesList = await firestore()
+  useEffect(() => {
+    async function getDataUser() {
+      const propertiesList = await firestore()
         .collection('properties')
         .where('hostId', '==', auth().currentUser?.uid)
         .get();
-        const fetchedProperties = propertiesList.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setProperties(fetchedProperties);
-      }
-      getDataUser()
-    }, [properties]);
+      const fetchedProperties = propertiesList.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setProperties(fetchedProperties);
+    }
+    getDataUser()
+  }, [properties]);
+
+  const navigateToPropertyReservations = (propertyId: string) => {
+    navigation.navigate('PropertyReservations', { propertyId });
+  };
+
   return (
     <>
       <HeaderNavigation />
       <View style={styles.container}>
-        
         <Text style={styles.title}>My Properties</Text>
         <ScrollView>
-        {properties.length === 0 ? (
-          <EmptyState
-            imageSource={require('../images/empty-state-properties-list.png')}
-            message="You haven't added any properties yet."
-          />
-        ) : (
-          properties.map((property, index) => {
-            const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;
-            const showOptions = (index : number) => {setActiveOptions(activeOptions === index ? null : index)};
-            const editProperty = () => {navigation.navigate('HostModeUpdateProperties', { property: property });};
-            const deleteProperty = () => {
-              Alert.alert(
-                `Delete ${property.propertyName}`,
-                'Are you sure?',
-                [
-                  {text: 'Cancel'},
-                  {
-                    text: 'Delete',
-                    onPress: async () => {
-                      try {
-                        //Eliminar las reservaciones del usuario a esa propiedad
-                        const reservationsQuery = await firestore().collection('properties').doc(properties[index].id).collection('reservations').get();
-                        const reservationDocs = reservationsQuery.docs;
-                        reservationDocs.map(async doc => {
-                          const reservationUserReference = doc.data().userReservationReference;
-                          await reservationUserReference.delete();
-                        })
+          {properties.length === 0 ? (
+            <EmptyState
+              imageSource={require('../images/empty-state-properties-list.png')}
+              message="You haven't added any properties yet."
+            />
+          ) : (
+            properties.map((property, index) => {
+              const details = `Guest: ${property.guests} · Bedrooms: ${property.bedrooms} · Beds: ${property.beds} · Bathrooms: ${property.bathrooms}`;
+              const showOptions = (index : number) => {setActiveOptions(activeOptions === index ? null : index)};
+              const editProperty = () => {navigation.navigate('HostModeUpdateProperties', { property: property });};
+              const deleteProperty = () => {
+                Alert.alert(
+                  `Delete ${property.propertyName}`,
+                  'Are you sure?',
+                  [
+                    {text: 'Cancel'},
+                    {
+                      text: 'Delete',
+                      onPress: async () => {
+                        try {
+                          //Eliminar las reservaciones del usuario a esa propiedad
+                          const reservationsQuery = await firestore().collection('properties').doc(properties[index].id).collection('reservations').get();
+                          const reservationDocs = reservationsQuery.docs;
+                          reservationDocs.map(async doc => {
+                            const reservationUserReference = doc.data().userReservationReference;
+                            await reservationUserReference.delete();
+                          })
 
-                        //Eliminar la propiedad
-                        await firestore().collection('properties').doc(properties[index].id).delete();
+                          //Eliminar la propiedad
+                          await firestore().collection('properties').doc(properties[index].id).delete();
 
-                        //Eliminar las imágenes de la propiedad
-                        const imagesRef = storage().ref().child(`images/${properties[index].id}`);
-                        const imageNames = await imagesRef.listAll();
-                        const deleteImagePromises = imageNames.items.map(async (imageRef) => {
-                          await imageRef.delete();
-                        });
-                        
-                        await Promise.all(deleteImagePromises);
+                          //Eliminar las imágenes de la propiedad
+                          const imagesRef = storage().ref().child(`images/${properties[index].id}`);
+                          const imageNames = await imagesRef.listAll();
+                          const deleteImagePromises = imageNames.items.map(async (imageRef) => {
+                            await imageRef.delete();
+                          });
+                          
+                          await Promise.all(deleteImagePromises);
 
-                        Alert.alert('Property Deleted!');
-                        setActiveOptions(null);
-                      } catch(err) {
-                        console.log(err);
+                          Alert.alert('Property Deleted!');
+                          setActiveOptions(null);
+                        } catch(err) {
+                          console.log(err);
+                        }
                       }
                     }
-                  }
-                ]
-              ); 
-            };
-            return (
-              <View style={styles.containerItem} key={index}>
-                <Image
-                  style={styles.img}
-                  source={{
-                    uri: property.images && property.images.length > 0 ? property.images[0] : 'fallback_image_url',
-                  }}
-                />
-                <View style={styles.propertyContainer}>
-                  <Text style={styles.name}>{property.propertyName}</Text>
-                  <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
-                  <Text numberOfLines={1} style={styles.details}>{details}</Text>
-                </View>
-                <View>
-                  <TouchableOpacity onPress={() => showOptions(index)}>
-                    <IconDots name="dots-three-vertical" size={27} color="#444444" style={styles.icon}/>
-                  </TouchableOpacity>
-                </View>
-                {activeOptions === index && (
-                  <View style={styles.optionsContainer}>
-                    <TouchableOpacity style={styles.optionEdit} onPress={editProperty}>
-                      <Text style={styles.optionsTitle}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.optionDelete} onPress={() => deleteProperty(index)}>
-                      <Text style={styles.optionsTitle}>Delete</Text>
+                  ]
+                ); 
+              };
+              return (
+                <View style={styles.containerItem} key={index}>
+                  <Image
+                    style={styles.img}
+                    source={{
+                      uri: property.images && property.images.length > 0 ? property.images[0] : 'fallback_image_url',
+                    }}
+                  />
+                  <View style={styles.propertyContainer}>
+                    <Text style={styles.name}>{property.propertyName}</Text>
+                    <Text style={styles.location}>{property.propertyAdress}, {property.city}</Text>
+                    <Text numberOfLines={1} style={styles.details}>{details}</Text>
+                  </View>
+                  <View>
+                    <TouchableOpacity onPress={() => showOptions(index)}>
+                      <IconDots name="dots-three-vertical" size={27} color="#444444" style={styles.icon}/>
                     </TouchableOpacity>
                   </View>
-                )}
-              </View>
-            );
-          })
-        )}
+                  {activeOptions === index && (
+                    <View style={styles.optionsContainer}>
+                      <TouchableOpacity style={styles.optionEdit} onPress={editProperty}>
+                        <Text style={styles.optionsTitle}>Edit</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.optionDelete} onPress={() => deleteProperty(index)}>
+                        <Text style={styles.optionsTitle}>Delete</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.optionReservations} onPress={() => navigateToPropertyReservations(property.id)}>
+                        <Text style={styles.optionsTitle}>Reservations</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+              );
+            })
+          )}
         </ScrollView>
       </View>
     </>
@@ -122,6 +128,7 @@ import firebase from '@react-native-firebase/firestore';
 }
 
 export default HostModePropertiesList
+
 
 const styles = StyleSheet.create({
   buttonContainer: {
