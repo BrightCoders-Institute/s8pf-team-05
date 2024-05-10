@@ -37,7 +37,7 @@ const ChatList = ({ navigation }) => {
 
           chatsData.push({
             id: chatId,
-            profileImage: userData?.profileImage || 'https://placeimg.com/140/140/any',
+            profileImage: userData?.profileImage || '',
             userName: userData?.name || 'Unknown',
             propertyName: chat.reservationDetails.propertyName || '',
             dateText: dateText || '',
@@ -74,11 +74,9 @@ const ChatList = ({ navigation }) => {
               <View style={styles.chatItem}>
                 <Avatar
                   rounded
-                  source={{
-                    uri: item.profileImage ? item.profileImage : require('../source/defaultUserImage.jpg'),
-                  }}
+                  source={item.profileImage === '' ? require('../source/defaultUserImage.jpg') : {uri: item.profileImage}}
                   size="medium"
-                  icon={{ name: 'user', type: 'font-awesome', color: 'white' }}
+                  
                 />
                 <View style={styles.userInfo}>
                   <Text style={styles.propertyName}>{item.propertyName}</Text>
@@ -95,6 +93,11 @@ const ChatList = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  img: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 30,

@@ -79,6 +79,7 @@ export default function ConfirmReservation({route}: any) {
         departure_date: dates.endDate,
         guestKids: property.guestKids,
         guestAdults: property.guestAdults,
+        idGuest: auth().currentUser?.uid,
       })
       .then(data => {
         const reservationId = data.id;
@@ -96,14 +97,14 @@ export default function ConfirmReservation({route}: any) {
           .collection('reservations')
           .doc(reservationId)
           .collection('chat')
-          .add({ users: chatUsers, reservationDetails })
+          .add({users: chatUsers, reservationDetails})
           .then(chatRef => {
             const comment = 'Reservation Comment: ' + commentText;
             chatRef.collection('messages').add({
               _id: new Date().getTime().toString(),
               createdAt: new Date(),
               text: comment,
-              user: { _id: auth().currentUser?.uid },
+              user: {_id: auth().currentUser?.uid},
             });
 
             const chatId = chatRef.id;
@@ -131,25 +132,36 @@ export default function ConfirmReservation({route}: any) {
                     reservationId: reservationId,
                     propertyId: property.id,
                   })
-                  .then(() => {
-                    const pathUser = await query.get();
-                      data
-                        .update({
-                          userReservationReference: pathUser.ref,
-                        })
-                        .then(() => {
-                          setLoading(false);
-                          navigation.dispatch(
-                            StackActions.replace('ReservationCompleted'),
-                          );
-                        });
+                  .then(async () => {
+                    const path = await data.get();
+                    firebase()
+                      .collection('users')
+                      .doc(auth().currentUser?.uid)
+                      .collection('reservations')
+                      .add({
+                        propertyReservationReference: path.ref,
+                        propertyDataReference: firebase()
+                          .collection('properties')
+                          .doc(property.id),
+                      })
+                      .then(async query => {
+                        const pathUser = await query.get();
+                        data
+                          .update({
+                            userReservationReference: pathUser.ref,
+                          })
+                          .then(() => {
+                            setLoading(false);
+                            navigation.dispatch(
+                              StackActions.replace('ReservationCompleted'),
+                            );
+                          });
+                      });
                   });
               });
           });
       });
   }
-  
-  
 
   return (
     <>

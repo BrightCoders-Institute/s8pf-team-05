@@ -133,6 +133,7 @@ const Inbox = ({ route, navigation }) => {
       <GiftedChat
         messages={messages}
         renderAvatar={null}
+        renderUsernameOnMessage = {true}
         onSend={messages => onSend(messages)}
         user={{
           _id: currentUser?.uid ?? '',
