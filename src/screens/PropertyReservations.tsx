@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -12,6 +12,56 @@ const PropertyReservations = ({ route, navigation }: any) => {
 
     const handleGoBack = () => {
         navigation.goBack();
+    };
+
+    const handleDeleteReservation = (reservationId: string) => {
+        // Mostrar un cuadro de diálogo de confirmación antes de eliminar la reserva
+        Alert.alert(
+            'Delete Reservation',
+            'Are you sure you want to delete this reservation?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Delete',
+                    onPress: () => {
+                        // Eliminar la reserva
+                        firestore()
+                            .collection('properties')
+                            .doc(propertyId)
+                            .collection('reservations')
+                            .doc(reservationId)
+                            .delete()
+                            .then(() => {
+                                // Eliminar la subcolección de chat asociada a la reserva
+                                firestore()
+                                    .collection('properties')
+                                    .doc(propertyId)
+                                    .collection('reservations')
+                                    .doc(reservationId)
+                                    .collection('chat')
+                                    .get()
+                                    .then(querySnapshot => {
+                                        querySnapshot.forEach(doc => {
+                                            doc.ref.delete();
+                                        });
+                                    })
+                                    .catch(error => {
+                                        console.log('Error deleting chat:', error);
+                                    });
+                            })
+                            .catch(error => {
+                                console.log('Error deleting reservation:', error);
+                            });
+                        // Cerrar el modal después de eliminar la reserva
+                        setSelectedReservation(null);
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
     };
 
     useEffect(() => {
@@ -103,11 +153,16 @@ const PropertyReservations = ({ route, navigation }: any) => {
                             <View style={styles.reservationInfo}>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Reservation Info</Text>
                                 <View>
-                                    
-                                    <Text>{`Arrival Date: ${new Date(selectedReservation.date_of_arrival.seconds * 1000).toDateString()}`}</Text>
-                                    <Text>{`Departure Date: ${new Date(selectedReservation.departure_date.seconds * 1000).toDateString()}`}</Text>
-                                    <Text>{`Guests: ${selectedReservation.guestAdults} Adults, ${selectedReservation.guestKids} Kids`}</Text>
+                                    <Text>{`Arrival Date: ${new Date((selectedReservation as any).date_of_arrival.seconds * 1000).toDateString()}`}</Text>
+                                    <Text>{`Departure Date: ${new Date((selectedReservation as any).departure_date.seconds * 1000).toDateString()}`}</Text>
+                                    <Text>{`Guests: ${(selectedReservation as any).guestAdults} Adults, ${(selectedReservation as any).guestKids} Kids`}</Text>
                                 </View>
+                            </View>
+                            
+                            <View style={styles.buttonContainer}>
+                                <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteReservation(selectedReservation.id)}>
+                                    <Text style={styles.deleteButtonText}>Delete Reservation</Text>
+                                </TouchableOpacity>
                             </View>
                         </>
                     )}
@@ -118,6 +173,20 @@ const PropertyReservations = ({ route, navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
+    buttonContainer: {
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    deleteButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
         padding: 20,
