@@ -1,11 +1,15 @@
 /* eslint-disable */
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import EmptyState from '../components/EmptyState';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 const CardFavorites = () => {
+  const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
@@ -37,7 +41,7 @@ const CardFavorites = () => {
     };
 
     fetchFavorites();
-  }, [favorites]);
+  }, [isFocused]);
 
   return (
     <ScrollView>
@@ -50,15 +54,20 @@ const CardFavorites = () => {
           />
         ) : (
           favorites.map((favorite, index) => (
-          <View key={index} style={styles.container}>
-            <Image style={styles.img} source={{ uri: favorite.images[0] }} />
-            <View style={styles.container_description}>
-              <Text style={styles.textName} numberOfLines={1}>{favorite.propertyName}</Text>
-              <Text style={styles.textLocation} numberOfLines={1}>{ favorite.propertyAdress || favorite.location}</Text>
-              <Text style={styles.textPrice} numberOfLines={1}>$ {favorite.price}.00 night</Text>
-              <Text style={styles.textDescription} numberOfLines={1}> {favorite.description}</Text>
-            </View>
-          </View>
+            <Pressable key={index} onPress={() => {
+              navigation.navigate('PropertyDetails', {property: favorite});
+            }}>
+              <View style={styles.container}>
+                <Image style={styles.img} source={{ uri: favorite.images[0] }} />
+                <View style={styles.container_description}>
+                  <Text style={styles.textName} numberOfLines={1}>{favorite.propertyName}</Text>
+                  <Text style={styles.textLocation} numberOfLines={1}>{ favorite.propertyAdress}</Text>
+                  <Text style={styles.textLocation} numberOfLines={1}>{ favorite.city}</Text>
+                  <Text style={styles.textPrice} numberOfLines={1}>$ {favorite.price}.00 night</Text>
+                </View>
+              </View>
+            </Pressable>
+          
         ))
       )
     }
@@ -114,12 +123,15 @@ const styles = StyleSheet.create({
       color: '#7C7C7C',
       textAlign:'justify',
       paddingLeft:10,
+      fontStyle: 'italic',
     },
     textPrice: {
-      color: '#575757',
-      fontWeight: '500',
+      color: 'black',
+      fontWeight: 'bold',
       textAlign:'justify',
-      paddingLeft:10,
+      marginRight: 12,
+      marginTop: 5,
+      alignSelf: 'flex-end',
     },
     textDescription:{
       fontSize: 11,
