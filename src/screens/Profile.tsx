@@ -5,6 +5,7 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import OptionsButtons from '../components/ProfileScreenComponents/OptionsButtons';
+import { Avatar } from 'react-native-elements';
 
 const Profile = ({navigation}: any) => {
   const [infoUser, setInfoUser] = useState({
