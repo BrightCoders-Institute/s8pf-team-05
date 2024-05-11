@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-const EmptyState = ({ imageSource, message, style }: { imageSource: any, message: string, style: {} }) => {
+const EmptyState = ({ imageSource, message, style }: { imageSource: any, message: string, style?: {} }) => {
   return (
     <View style={[styles.container, style]}>
       <Image
