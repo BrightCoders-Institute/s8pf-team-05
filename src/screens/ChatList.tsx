@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { Avatar } from 'react-native-elements';
@@ -58,7 +58,9 @@ const ChatList = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Chats</Text>
       {loading ? (
-        <Text>Loading...</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
       ) : (
         <FlatList
           data={chats}
@@ -139,6 +141,11 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     color: 'gray',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
