@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {StyleSheet, Text, View, ScrollView, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardTrip from '../components/TripsScreenComponents/CardTrip';
 import EmptyState from '../components/EmptyState';
@@ -66,9 +66,7 @@ const Trips = () => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
+        <Text style={styles.title}>Loading...</Text>
       ) : (
         <>
           <Text style={styles.title}>Next trips</Text>
@@ -153,11 +151,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 15,
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 
