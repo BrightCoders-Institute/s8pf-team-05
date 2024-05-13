@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F3F3',
   },
   header: {
-    elevation: 1.2,
+    elevation: 1.5,
+    backgroundColor: 'white',
   },
   categoryContainer: {
     marginTop: 20,
