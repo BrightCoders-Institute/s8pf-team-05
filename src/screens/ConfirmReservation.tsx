@@ -101,14 +101,16 @@ export default function ConfirmReservation({route}: any) {
           .collection('chat')
           .add({users: chatUsers, reservationDetails})
           .then(chatRef => {
-            const comment = 'Reservation Comment: ' + commentText;
-            chatRef.collection('messages').add({
-              _id: new Date().getTime().toString(),
-              createdAt: new Date(),
-              text: comment,
-              user: {_id: auth().currentUser?.uid},
-            });
-
+            if (commentText.trim()) {
+              const comment = 'Reservation Comment: ' + commentText;
+              chatRef.collection('messages').add({
+                _id: new Date().getTime().toString(),
+                createdAt: new Date(),
+                text: comment,
+                user: {_id: auth().currentUser?.uid},
+              });
+            }
+              
             const chatId = chatRef.id;
 
             // Crear referencia al chat en la colección del host
