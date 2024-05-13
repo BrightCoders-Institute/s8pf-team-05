@@ -56,7 +56,9 @@ export default function ConfirmReservation({route}: any) {
     const dateEnd = new Date(property.endDate);
 
     let diff = dateEnd.getTime() - dateStart.getTime();
-
+    if (diff === 0) {
+      diff = 24 * 60 * 60 * 1000; 
+    }
     setNumberOfNights(diff / (1000 * 60 * 60 * 24));
     setDates({
       startDate: dateStart,
