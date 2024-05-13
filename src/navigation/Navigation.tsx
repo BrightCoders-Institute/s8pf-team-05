@@ -21,6 +21,7 @@ import LikedPropertys from '../screens/LikedPropertys';
 import ChatList from '../screens/ChatList';
 import Inbox from '../screens/Inbox';
 import PropertyReservations from '../screens/PropertyReservations';
+import PropertyAdded from '../screens/PropertyAdded';
 
 // type RootStackParams = {
 //   Signin: undefined;
@@ -78,6 +79,8 @@ const Navigation = ({initialRoute}: {initialRoute: string}) => {
       <Stack.Screen name="Inbox" component={Inbox} />
 
       <Stack.Screen name="PropertyReservations" component={PropertyReservations} />
+
+      <Stack.Screen name="PropertyAdded" component={PropertyAdded} />
 
     </Stack.Navigator>
   );

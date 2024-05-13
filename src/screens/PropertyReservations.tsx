@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -13,6 +13,7 @@ const PropertyReservations = ({ route, navigation }: any) => {
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState(null);
     const [otherUserId, setOtherUserId] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const handleGoBack = () => {
         navigation.goBack();
@@ -149,7 +150,8 @@ const PropertyReservations = ({ route, navigation }: any) => {
             .onSnapshot(snapshot => {
                 const reservationsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 setReservations(reservationsData);
-
+                setLoading(false);
+                
                 // Fetch user data for each reservation
                 reservationsData.forEach(reservation => {
                     firestore()
@@ -204,18 +206,25 @@ const PropertyReservations = ({ route, navigation }: any) => {
                 <Icon name='arrowleft' size={27} color={'black'} />
             </TouchableOpacity>
             
-            {reservations.length === 0 ? (
-                <EmptyState 
-                    imageSource={require('../images/empty-state-explore2.png')}
-                    message="No reservations yet!" />
+            {loading ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
             ) : (
                 <>
-                <Text style={styles.title}>Reservations for this property</Text>
-                <FlatList
-                    data={reservations}
-                    keyExtractor={item => item.id}
-                    renderItem={renderReservationItem}
-                    />
+                    <Text style={styles.title}>Reservations</Text>
+                    {reservations.length === 0 ? (
+                        <EmptyState
+                            imageSource={require('../images/empty-state-properties-list.png')}
+                            message="No reservations yet."
+                        />
+                    ) : (
+                        <FlatList
+                            data={reservations}
+                            keyExtractor={(item) => item.id}
+                            renderItem={renderReservationItem}
+                        />
+                    )}
                 </>
             )}
             <Modal isVisible={selectedReservation !== null} onBackdropPress={() => setSelectedReservation(null)}>
@@ -307,6 +316,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         justifyContent: 'center',
 
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
