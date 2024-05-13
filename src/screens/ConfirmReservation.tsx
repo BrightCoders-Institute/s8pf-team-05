@@ -56,7 +56,9 @@ export default function ConfirmReservation({route}: any) {
     const dateEnd = new Date(property.endDate);
 
     let diff = dateEnd.getTime() - dateStart.getTime();
-
+    if (diff === 0) {
+      diff = 24 * 60 * 60 * 1000; 
+    }
     setNumberOfNights(diff / (1000 * 60 * 60 * 24));
     setDates({
       startDate: dateStart,
@@ -99,14 +101,16 @@ export default function ConfirmReservation({route}: any) {
           .collection('chat')
           .add({users: chatUsers, reservationDetails})
           .then(chatRef => {
-            const comment = 'Reservation Comment: ' + commentText;
-            chatRef.collection('messages').add({
-              _id: new Date().getTime().toString(),
-              createdAt: new Date(),
-              text: comment,
-              user: {_id: auth().currentUser?.uid},
-            });
-
+            if (commentText.trim()) {
+              const comment = 'Reservation Comment: ' + commentText;
+              chatRef.collection('messages').add({
+                _id: new Date().getTime().toString(),
+                createdAt: new Date(),
+                text: comment,
+                user: {_id: auth().currentUser?.uid},
+              });
+            }
+              
             const chatId = chatRef.id;
 
             // Crear referencia al chat en la colección del host

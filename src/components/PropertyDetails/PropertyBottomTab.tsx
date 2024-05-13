@@ -5,20 +5,23 @@ import { useNavigation } from '@react-navigation/native';
 interface PropertyBottomTabProps {
   pricePerNight: string;
   onReservePress: () => void;
+  isHostCurrentUser: boolean;
 }
 
-const PropertyBottomTab: React.FC<PropertyBottomTabProps> = ({ pricePerNight, onReservePress }) => {
+const PropertyBottomTab: React.FC<PropertyBottomTabProps> = ({ pricePerNight, onReservePress, isHostCurrentUser }) => {
   const navigation = useNavigation()
   return (
     <View style={styles.container}>
-        <View style={styles.priceContainer}>
-            <Text style={styles.pricePerNight}>{pricePerNight} USD</Text>
-            <Text style={styles.perNightText}>night</Text>
-        </View>
-            
-        <TouchableOpacity style={styles.reserveButton} onPress={onReservePress}>
-            <Text style={styles.reserveButtonText}>Reserve</Text>
-        </TouchableOpacity>
+      <View style={styles.priceContainer}>
+        <Text style={styles.pricePerNight}>{pricePerNight} USD</Text>
+        <Text style={styles.perNightText}>night</Text>
+      </View>
+        
+      <TouchableOpacity style={[styles.reserveButton, isHostCurrentUser && styles.disabledButton]} 
+              onPress={!isHostCurrentUser ? onReservePress : undefined}
+              disabled={isHostCurrentUser}>
+        <Text style={styles.reserveButtonText}>Reserve</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -78,6 +81,9 @@ const styles = StyleSheet.create({
   reserveButtonText: {
     color: '#fff',
     fontSize: 18,
+  },
+  disabledButton: {
+    backgroundColor: 'gray', 
   },
 });
 
