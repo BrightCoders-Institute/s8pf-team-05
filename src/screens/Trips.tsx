@@ -1,16 +1,33 @@
 /* eslint-disable */
-import {StyleSheet, Text, View, ScrollView, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, ActivityIndicator, Modal} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardTrip from '../components/TripsScreenComponents/CardTrip';
 import EmptyState from '../components/EmptyState';
 import firebase from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native';
+import CloseButton from '../components/Date/CloseButton';
+import ModalReservationDetails from '../components/TripsScreenComponents/ModalReservationDetails';
+
+type Reservations = {
+  propertyName: string;
+  images: string;
+  propertyAdress: string;
+  propertyCity: string;
+  hostId: string;
+  price: number;
+  date_of_arrival: Date;
+  departure_date: Date;
+  guestAdults: number;
+  guestKids: number
+}
 
 const Trips = () => {
   const isFocused = useIsFocused();
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const [reservations, setReservations] = useState<any[]>();
+  const [reservation, setReservation] = useState<Reservations>();
+  const [reservations, setReservations] = useState<Reservations[]>();
   const [loading, setLoading] = useState(true);
   const [somePastTrip, setSomePastTrip] = useState('');
 
@@ -23,7 +40,7 @@ const Trips = () => {
           .collection('reservations')
           .get();
 
-        const tmpReservations: any[] = [];
+        const tmpReservations: Reservations[] = [];
 
         await Promise.all(
           reservationsRef.docs.map(async doc => {
@@ -40,9 +57,14 @@ const Trips = () => {
             tmpReservations.push({
               propertyName: propertyDataData.propertyName,
               images: propertyDataData.images[0],
+              propertyAdress: propertyDataData.propertyAdress,
+              propertyCity: propertyDataData.city,
               hostId: propertyDataData.hostId,
-              date_of_arrival: propertyReservationData.date_of_arrival,
-              departure_date: propertyReservationData.departure_date,
+              price: propertyDataData.price,
+              date_of_arrival: new Date(propertyReservationData.date_of_arrival.seconds * 1000),
+              departure_date: new Date(propertyReservationData.departure_date.seconds * 1000),
+              guestAdults: propertyReservationData.guestAdults,
+              guestKids: propertyReservationData.guestKids,
             });
           }),
         );
@@ -59,9 +81,13 @@ const Trips = () => {
 
   const pastTrips = reservations?.filter(reservation => {
     const currentDate = new Date();
-    const departureDate = new Date(reservation.departure_date.seconds * 1000);
+    const departureDate = reservation.departure_date;
     return currentDate > departureDate;
   });
+
+  const hideModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   return (
     <View style={styles.container}>
@@ -94,12 +120,12 @@ const Trips = () => {
                       propertyName={reservation.propertyName}
                       img={reservation.images}
                       hostId={reservation.hostId}
-                      date_of_arrival={
-                        new Date(reservation.date_of_arrival.seconds * 1000)
-                      }
-                      departure_date={
-                        new Date(reservation.departure_date.seconds * 1000)
-                      }
+                      date_of_arrival={reservation.date_of_arrival}
+                      departure_date={reservation.departure_date}
+                      onPress={() => {
+                        setReservation(reservation);
+                        hideModal();
+                      }}
                     />
                 );
               }
@@ -117,12 +143,8 @@ const Trips = () => {
                     propertyName={reservation.propertyName}
                     img={reservation.images}
                     hostId={reservation.hostId}
-                    date_of_arrival={
-                      new Date(reservation.date_of_arrival.seconds * 1000)
-                    }
-                    departure_date={
-                      new Date(reservation.departure_date.seconds * 1000)
-                    }
+                    date_of_arrival={reservation.date_of_arrival}
+                    departure_date={reservation.departure_date}
                   />
                 ))}
               </ScrollView>
@@ -130,6 +152,15 @@ const Trips = () => {
           )}
         </>
       )}
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+            <ModalReservationDetails data={reservation} onPressClose={hideModal}/>
+      </Modal>
     </View>
   );
 };

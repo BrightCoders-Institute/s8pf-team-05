@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import firebase from '@react-native-firebase/firestore';
 
@@ -8,6 +8,7 @@ type Props = {
   date_of_arrival: Date;
   departure_date: Date;
   img: string;
+  onPress?: () => void;
 };
 
 export default function CardTrip({
@@ -16,6 +17,7 @@ export default function CardTrip({
   date_of_arrival,
   departure_date,
   img,
+  onPress,
 }: Props) {
   const [hostName, setHostName] = useState('');
 
@@ -29,24 +31,26 @@ export default function CardTrip({
         setHostName(data?.name);
       });
   }, []);
-  
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.img}
-        source={{
-          uri: img,
-        }}
-      />
 
-      <View style={styles.tripInformationContainer}>
-        <Text style={styles.place}>{propertyName}</Text>
-        <Text style={styles.host}>Anfitrión: {hostName}</Text>
-        <Text style={styles.date}>
-          {date_of_arrival.toDateString()} - {departure_date.toDateString()}
-        </Text>
+  return (
+    <Pressable onPress={onPress}>
+      <View style={styles.container}>
+        <Image
+          style={styles.img}
+          source={{
+            uri: img,
+          }}
+        />
+
+        <View style={styles.tripInformationContainer}>
+          <Text style={styles.place}>{propertyName}</Text>
+          <Text style={styles.host}>Anfitrión: {hostName}</Text>
+          <Text style={styles.date}>
+            {date_of_arrival.toDateString()} - {departure_date.toDateString()}
+          </Text>
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
@@ -56,7 +60,6 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
   tripInformationContainer: {
-    //flex: 1,
     marginLeft: 13,
     justifyContent: 'center',
   },
