@@ -19,6 +19,8 @@ import {Picker as SelectPicker} from '@react-native-picker/picker';
 import {firebase} from '@react-native-firebase/auth';
 import SelectLocation from '../components/SelectCity/SelectLocation';
 import CommentBox from '../components/ConfirmReservation/CommentBox';
+import LoadingComponent from '../components/LoadingComponent';
+
 
 const HostModeScreen: React.FC = ({navigation}: any) => {
   const [guests, setGuests] = React.useState(0);
@@ -33,6 +35,7 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   const [price, setPrice] = React.useState<number | undefined>();
   const [propertyType, setPropertyType] = React.useState<string>('');
   const userId = firebase.auth().currentUser?.uid || '';
+  const [loading, setLoading] = React.useState(false);
 
   const handlePropertyTypeSelection = (type: string) => {
     setPropertyType(type);
@@ -74,6 +77,7 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
   };
 
   const handleAddProperty = async () => {
+    setLoading(true);
     if (
       !propertyName ||
       !propertyAdress ||
@@ -132,17 +136,19 @@ const HostModeScreen: React.FC = ({navigation}: any) => {
       setPropertyImages([]);
 
       // Mostrar una alerta de éxito al usuario
-      Alert.alert('Success', 'Property added successfully!');
-      navigation.replace('HostModePropertiesList');
+      navigation.replace('PropertyAdded');
       console.log('Property added!');
     } catch (error) {
       console.error('Error adding property: ', error);
+    } finally {
+      setLoading(false); // Ocultar pantalla de carga
     }
   };
 
   return (
     <>
       <HeaderNavigation />
+      {loading && <LoadingComponent />}
       <View style={styles.container}>
         
         <Text style={styles.title}>Add a new property</Text>
