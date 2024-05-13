@@ -32,6 +32,7 @@ const PropertyDetails: React.FC = ({ route }: any) => {
 
   const [averageRating, setAverageRating] = useState<number>(0);
   const [totalReviews, setTotalReviews] = useState<number>(0);
+  const [isHostCurrentUser, setIsHostCurrentUser] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchHostInfo = async () => {
@@ -83,6 +84,10 @@ const PropertyDetails: React.FC = ({ route }: any) => {
 
     fetchHostInfo();
     fetchReviews();
+    const currentUser = auth().currentUser;
+    if (currentUser && property.hostId === currentUser.uid) {
+      setIsHostCurrentUser(true);
+    }
   }, [property.hostId, property.id]);
 
   const handleReservePress = () => {
@@ -146,6 +151,7 @@ const PropertyDetails: React.FC = ({ route }: any) => {
         <PropertyBottomTab
           pricePerNight={property.price}
           onReservePress={handleReservePress}
+          isHostCurrentUser={isHostCurrentUser}
         />
       </View>
       
