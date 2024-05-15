@@ -94,17 +94,20 @@ const Explore = ({navigation}: any) => {
       </View>
 
       {propertiesFound ? (
-        <ScrollView style={styles.propertiesContainer}>
-          {properties.map(property => (
-            <PropertyCard
+        <>
+          <ScrollView style={styles.propertiesContainer}>
+            {properties.map(property => (
+              <PropertyCard
               key={property.id}
               property={property}
               onPress={() => {
                 navigation.navigate('PropertyDetails', {property: property});
               }}
-            />
-          ))}
-        </ScrollView>
+              />
+            ))}
+            <View style={styles.marginContainer}></View>
+          </ScrollView>
+        </>
       ) : (
         <EmptyState
           imageSource={require('../images/empty-state-explore.png')}
@@ -121,6 +124,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F3F3F3',
   },
+  marginContainer: {
+    height: 20,
+  },
   header: {
     elevation: 1.5,
     backgroundColor: 'white',
@@ -132,7 +138,6 @@ const styles = StyleSheet.create({
   propertiesContainer: {
     flex: 1,
     alignContent: 'center',
-    marginTop: 20,
   },
   emptyStateContainer: {
     flex: 1,
