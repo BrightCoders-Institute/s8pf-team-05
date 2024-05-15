@@ -4,6 +4,7 @@ import CloseButton from '../Date/CloseButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TimeLine from './TimeLine';
 import firestore from '@react-native-firebase/firestore';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 type Reservations = {
   propertyName: string;
@@ -49,6 +50,7 @@ export default function ModalReservationDetails({
     getDataUser();
 
     let diff = data?.departure_date.getTime() - data?.date_of_arrival.getTime();
+    if (diff < 86400000) diff = 86400000; // 1 day (minimum stay
     setNumberOfNights(diff / (1000 * 60 * 60 * 24));
   }, []);
 
@@ -119,12 +121,12 @@ export default function ModalReservationDetails({
             <View style={styles.cardsContainer}>
               <Card titleCard="Guests">
                 <View style={styles.infoContainer}>
-                  <Icon name="person" size={20} color={'black'} />
+                  <FontAwesome6 name="person" size={20} color={'black'} />
                   <Text style={styles.txtGuest}>Adults: </Text>
                   <Text style={styles.numberGuest}>{data?.guestAdults}</Text>
                 </View>
                 <View style={styles.infoContainer}>
-                  <Icon name="person-circle" size={20} color={'black'} />
+                  <FontAwesome6 name="child" size={20} color={'black'} />
                   <Text style={styles.txtGuest}>Kids: </Text>
                   <Text style={styles.numberGuest}>{data?.guestKids}</Text>
                 </View>

@@ -6,10 +6,13 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
 import auth from '@react-native-firebase/auth';
 import EmptyState from '../components/EmptyState';
+import TimeLine2 from '../components/PropertyResevations/TimeLine2';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+
 
 const PropertyReservations = ({ route, navigation }: any) => {
     const hostId = auth().currentUser.uid;
-    const { propertyId } = route.params;
+    const { propertyId, propertyPrice } = route.params;
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState(null);
     const [otherUserId, setOtherUserId] = useState('');
@@ -200,6 +203,38 @@ const PropertyReservations = ({ route, navigation }: any) => {
         );
     };
 
+    function Section({children, subTitle}: {children: any; subTitle: string}) {
+        return (
+          <>
+            <View style={styles.subTitleModalContainer}>
+              <View style={styles.line1} />
+              <Text style={styles.subTitleModal}>{subTitle}</Text>
+              <View style={styles.line2} />
+            </View>
+            {children}
+          </>
+        );
+    }
+
+    function Card({children, titleCard}: {children: any; titleCard: string}) {
+        return (
+            <View style={styles.cardView}>
+                <Text style={styles.txtTitleCard}>{titleCard}</Text>
+                {children}
+            </View>
+        );
+    }
+
+    function calculateNumberOfNights(selectedReservation: any) {
+        const arrivalDate = new Date(selectedReservation.date_of_arrival.seconds * 1000);
+        const departureDate = new Date(selectedReservation.departure_date.seconds * 1000);
+        const numberOfNights = Math.ceil((departureDate - arrivalDate) / (1000 * 3600 * 24));
+        if (numberOfNights < 1) {
+            return { numberOfNights: 1};
+        }
+        return { numberOfNights };
+    }
+
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={handleGoBack}>
@@ -227,32 +262,65 @@ const PropertyReservations = ({ route, navigation }: any) => {
                     )}
                 </>
             )}
-            <Modal isVisible={selectedReservation !== null} onBackdropPress={() => setSelectedReservation(null)}>
+            <Modal propagateSwipe={true} isVisible={selectedReservation !== null} onBackdropPress={() => setSelectedReservation(null)}>
                 <View style={styles.modalContainer}>
                     {selectedReservation && selectedReservation.userData && (
-                        <>
-                            <View style={styles.userInfoContainer}>
-                                <Avatar
-                                    rounded
-                                    source={selectedReservation.userData.profileImage ? { uri: selectedReservation.userData.profileImage } : require('../source/defaultUserImage.jpg')}
-                                    size="large"
-                                />
-                                <View style={{ marginLeft: 10 }}>
-                                    <Text style={styles.userName}>{`${selectedReservation.userData.name} ${selectedReservation.userData.lastname}`}</Text>
+                        <>  
+                            <Section subTitle="Host Information">
+                                <View style={styles.userInfoContainer}>
+                                    <Avatar
+                                        rounded
+                                        source={selectedReservation.userData.profileImage ? { uri: selectedReservation.userData.profileImage } : require('../source/defaultUserImage.jpg')}
+                                        size="large"
+                                        />
+                                    <View style={{ marginLeft: 10 }}>
+                                        <Text style={styles.userName}>{`${selectedReservation.userData.name} ${selectedReservation.userData.lastname}`}</Text>
+                                    </View>
                                 </View>
-                            </View>
-                            <View style={styles.reservationInfo}>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Reservation Info</Text>
-                                <View>
-                                    <Text>{`Arrival Date: ${new Date((selectedReservation as any).date_of_arrival.seconds * 1000).toDateString()}`}</Text>
-                                    <Text>{`Departure Date: ${new Date((selectedReservation as any).departure_date.seconds * 1000).toDateString()}`}</Text>
-                                    <Text>{`Guests: ${(selectedReservation as any).guestAdults} Adults, ${(selectedReservation as any).guestKids} Kids`}</Text>
+                            </Section>
+                            <Section subTitle="Reservation Info">  
+                                <View style={styles.reservationInfo}>
+                                    <View>
+                                        <Text style={styles.txtArrival}>Arrival Date</Text>
+                                        <Text>{new Date((selectedReservation as any).date_of_arrival.seconds * 1000).toDateString()}</Text>
+                                    </View>
+                                    <TimeLine2 />
+                                    <View>
+                                        <Text style={styles.txtDeparture}>Departure Date</Text>
+                                        <Text>{new Date((selectedReservation as any).departure_date.seconds * 1000).toDateString()}</Text>
+                                    </View>
                                 </View>
+                            </Section>
+                            <View style={styles.cardsContainer}>
+                                <Card titleCard="Guests">
+                                    <View style={styles.infoContainer}>
+                                        <FontAwesome6 name="person" size={20} color={'black'} />
+                                        <Text style={styles.txtGuest}>Adults: </Text>
+                                        <Text style={styles.numberGuest}>{(selectedReservation as any).guestAdults}</Text>
+                                    </View>
+                                    <View style={styles.infoContainer}>
+                                        <FontAwesome6 name="child" size={20} color={'black'} />
+                                        <Text style={styles.txtGuest}>Kids: </Text>
+                                        <Text style={styles.numberGuest}>{(selectedReservation as any).guestKids}</Text>
+                                    </View>
+                                </Card>
+                                <Card titleCard="Nights / Price">
+                                    <View style={styles.priceContainer}>
+                                        <View>
+                                            <Text style={styles.priceText}>${propertyPrice}/night</Text>
+                                            <Text style={styles.priceText}>X{calculateNumberOfNights(selectedReservation).numberOfNights}</Text>
+                                            <View style={styles.line3} />
+                                            <Text style={styles.totalText}>
+                                                ${calculateNumberOfNights(selectedReservation).numberOfNights * propertyPrice}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </Card>
                             </View>
                             
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteReservation(selectedReservation.id)}>
-                                    <Text style={styles.deleteButtonText}>Delete Reservation</Text>
+                                    <Text style={styles.deleteButtonText}>Cancel Reservation</Text>
                                 </TouchableOpacity>
                             </View>
                         </>
@@ -264,6 +332,46 @@ const PropertyReservations = ({ route, navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
+    priceContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    }, 
+    priceText: {
+        fontWeight: 'bold',
+        marginLeft: 10,
+    },
+    totalText: {
+        fontWeight: 'bold',
+        color: 'black',
+        marginLeft: 10,
+        marginBottom: 10,
+    },
+    subTitleModalContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    subTitleModal: {
+        marginHorizontal: 5,
+        fontWeight: 'bold',
+    },
+    line1: {
+        width: 60,
+        height: 1,
+        marginTop: 3,
+        backgroundColor: '#CDCDCD',
+    },
+    line2: {
+        flex: 1,
+        height: 1,
+        marginTop: 3,
+        backgroundColor: '#CDCDCD',
+    },
+    line3: {
+        backgroundColor: 'black',
+        width: 100,
+        height: 2,
+        marginVertical: 2,
+    },
     buttonContainer: {
         alignItems: 'center',
         marginTop: 20,
@@ -302,6 +410,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+        marginTop: 20,
         justifyContent: 'center',
         width: 200,
         alignSelf: 'center',
@@ -311,16 +420,58 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     reservationInfo: {
-        flexDirection: 'column',
-        alignItems: 'center',
+        flexDirection: 'row',
+        marginTop: 10,
         marginBottom: 10,
-        justifyContent: 'center',
 
     },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    txtArrival: {
+        color: 'black',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'left',
+    },
+    txtDeparture: {
+        color: 'black',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'right',
+    },
+    cardView: {
+        backgroundColor: '#F0F0F0',
+        width: '47%',
+        borderRadius: 5,
+        elevation: 1,
+    },
+    txtTitleCard: {
+        color: 'black',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 5,
+    },
+    infoContainer: {
+        flexDirection: 'row',
+        paddingHorizontal: 7,
+        paddingVertical: 3,
+        justifyContent: 'center',
+    },
+    txtGuest: {
+        color: 'black',
+        marginLeft: 5,
+    },
+    numberGuest: {
+        fontWeight: 'bold',
+    },
+    cardsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
     },
 });
 

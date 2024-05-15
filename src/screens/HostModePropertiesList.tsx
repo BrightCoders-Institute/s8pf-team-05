@@ -27,8 +27,8 @@ const HostModePropertiesList = ({ navigation }: any) => {
     getDataUser()
   }, []);
 
-  const navigateToPropertyReservations = (propertyId: string) => {
-    navigation.navigate('PropertyReservations', { propertyId });
+  const navigateToPropertyReservations = (propertyId: string, propertyPrice: number) => {
+    navigation.navigate('PropertyReservations', { propertyId, propertyPrice });
   };
 
   const deleteProperty = async (index: number) => {
@@ -119,7 +119,7 @@ const HostModePropertiesList = ({ navigation }: any) => {
                             <TouchableOpacity style={styles.optionDelete} onPress={() => deleteProperty(index)}>
                               <Text style={styles.optionsTitle}>Delete</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.optionReservations} onPress={() => navigateToPropertyReservations(property.id)}>
+                            <TouchableOpacity style={styles.optionReservations} onPress={() => navigateToPropertyReservations(property.id, property.price)}>
                               <Text style={styles.optionsTitle}>Reservations</Text>
                             </TouchableOpacity>
                           </View>
