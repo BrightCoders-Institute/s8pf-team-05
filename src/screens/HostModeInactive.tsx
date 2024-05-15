@@ -34,6 +34,7 @@ const HostModeInactiveScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const [imgUser, setImgUser] = useState<string>('');
+  const [previousImage, setPreviousImage] = useState(false);
   const [phone, setPhone] = useState<string>('');
   const [birthDay, setBirthDay] = useState<string>('');
   const [aboutYou, setAboutYou] = useState<string>('');
@@ -47,7 +48,10 @@ const HostModeInactiveScreen: React.FC = () => {
         .doc(auth().currentUser?.uid)
         .get();
       const user = data.data();
-      setImgUser(user?.profileImage);
+      if (user?.profileImage !== '') {
+        setImgUser(user?.profileImage);
+        setPreviousImage(true);
+      }
       setPhone(user?.phoneNumber);
     }
     getInfoUser();
@@ -63,6 +67,7 @@ const HostModeInactiveScreen: React.FC = () => {
         const {assets} = result;
         const newImage = assets.map(asset => asset.uri);
         setImgUser(newImage[0]);
+        setPreviousImage(false);
       }
     } catch (error) {
       console.error('Error selecting images: ', error);
@@ -85,27 +90,44 @@ const HostModeInactiveScreen: React.FC = () => {
       hideModal();
       setLoading(true);
 
-      const imageName = 'userImageProfile';
-      const imageRef = storage().ref(
-        `users/${auth().currentUser?.uid}/${imageName}`,
-      );
-      await imageRef.putFile(imgUser);
-      const imageUrl = await imageRef.getDownloadURL();
+      if (!previousImage) {
+        const imageName = 'userImageProfile';
+        const imageRef = storage().ref(
+          `users/${auth().currentUser?.uid}/${imageName}`,
+        );
 
-      firestore()
-        .collection('users')
-        .doc(auth().currentUser?.uid)
-        .update({
-          birthday: birthDay,
-          description: aboutYou,
-          phoneNumber: phone,
-          profileImage: imageUrl,
-          HostMode: true,
-        })
-        .then(() => {
-          Alert.alert('Success', 'Information Correctly Updated');
-          navigation.navigate('Main');
-        });
+        await imageRef.putFile(imgUser);
+        const imageUrl = await imageRef.getDownloadURL();
+
+        firestore()
+          .collection('users')
+          .doc(auth().currentUser?.uid)
+          .update({
+            birthday: birthDay,
+            description: aboutYou,
+            phoneNumber: phone,
+            profileImage: imageUrl,
+            HostMode: true,
+          })
+          .then(() => {
+            Alert.alert('Success', 'Information Correctly Updated');
+            navigation.navigate('Main');
+          });
+      } else {
+        firestore()
+          .collection('users')
+          .doc(auth().currentUser?.uid)
+          .update({
+            birthday: birthDay,
+            description: aboutYou,
+            phoneNumber: phone,
+            HostMode: true,
+          })
+          .then(() => {
+            Alert.alert('Success', 'Information Correctly Updated');
+            navigation.navigate('Main');
+          });
+      }
     }
   };
 

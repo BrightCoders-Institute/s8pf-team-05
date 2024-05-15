@@ -11,7 +11,7 @@ import CardTrip from '../components/TripsScreenComponents/CardTrip';
 import EmptyState from '../components/EmptyState';
 import firebase from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import CloseButton from '../components/Date/CloseButton';
 import ModalReservationDetails from '../components/TripsScreenComponents/ModalReservationDetails';
 
@@ -26,7 +26,7 @@ type Reservations = {
   departure_date: Date;
   guestAdults: number;
   guestKids: number;
-}
+};
 
 const Trips = () => {
   const isFocused = useIsFocused();
@@ -109,7 +109,7 @@ const Trips = () => {
       ) : (
         <>
           <ScrollView>
-          <View style={styles.sectionContainer}>
+            <View style={styles.sectionContainer}>
               <Text style={styles.title}>Next trips</Text>
               {futureTrips.length === 0 ? (
                 <EmptyState
