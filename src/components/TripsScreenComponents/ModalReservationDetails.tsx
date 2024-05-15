@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     flex: 1,
-    marginTop: '47%',
+    marginTop: '30%',
     backgroundColor: 'white',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -238,12 +238,12 @@ const styles = StyleSheet.create({
   sectionRowContainer: {
     flexDirection: 'row',
     marginTop: 10,
-    marginBottom: 50,
+    marginBottom: 10,
   },
   cardsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: -30,
+    marginTop: 10,
   },
   imgUser: {
     width: 70,
